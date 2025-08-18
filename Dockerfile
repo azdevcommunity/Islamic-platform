@@ -16,6 +16,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
+
 # ---- runtime (standalone) ----
 FROM node:20-alpine AS runner
 WORKDIR /app
