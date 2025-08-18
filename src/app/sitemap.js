@@ -1,105 +1,65 @@
-import { getAllCategories } from "@/util/FetchUtil"
-import { BASE_URL } from "@/util/Const"
+// app/sitemap.js
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-export default async function sitemap() {
-  // Varsayılan statik sayfalar
-  const defaultPages = [
-    {
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "daily",
-      priority: 1,
-    },
-    {
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/about`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/contact`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/videos`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/articles`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/questions`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/books`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-  ]
+const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az';
+const API = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || '';
 
-  // Dinamik içerikler
-  let articles = []
-  let categories = []
-  let questions = []
-
+// küçük yardımcı: güvenli fetch (timeout + no-store)
+async function safeJson(url, { timeoutMs = 5000 } = {}) {
+  if (!url) return [];
   try {
-    const articleRes = await fetch(`${BASE_URL}/articles/all`)
-    if (articleRes.ok) articles = await articleRes.json()
-  } catch (error) {
-    console.error("Sitemap: Failed to fetch articles", error)
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store', next: { revalidate: 0 } });
+    clearTimeout(t);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
   }
-
-  try {
-    const categoriesRes = await getAllCategories()
-    if (categoriesRes) categories = categoriesRes
-  } catch (error) {
-    console.error("Sitemap: Failed to fetch categories", error)
-  }
-
-  try {
-    // Fetch all question IDs/slugs (adjust endpoint if needed)
-    const questionRes = await fetch(`${BASE_URL}/questions/all`);
-    if(questionRes.ok) questions = await questionRes.json();
-  } catch (error) {
-      console.error("Sitemap: Failed to fetch questions", error);
-  }
-
-  const sitemap = [
-    ...defaultPages,
-    // Makaleleri sitemap'e ekle
-    ...(articles || []).map((item) => ({
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/articles/${item.id}`,
-      lastModified: item.updatedAt || item.publishedAt || new Date().toISOString(),
-      changeFrequency: "daily",
-      priority: 0.8,
-    })),
-    // Kategorileri sitemap'e ekle
-    ...(categories || []).map((item) => ({
-      url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/search?categoryId=${item.id}`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    })),
-    // Soruları sitemap'e ekle
-    ...(questions || []).map((item) => ({
-        url: `${process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az'}/questions/${item.id}`,
-        lastModified: item.updatedAt || item.createdDate || new Date().toISOString(),
-        changeFrequency: "weekly",
-        priority: 0.7,
-    })),
-  ]
-
-  return sitemap
 }
 
+export default async function sitemap() {
+  const now = new Date().toISOString();
+
+  const defaultPages = [
+    { url: `${DOMAIN}`,                lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
+    { url: `${DOMAIN}/about`,          lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${DOMAIN}/contact`,        lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${DOMAIN}/videos`,         lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${DOMAIN}/articles`,       lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
+    { url: `${DOMAIN}/questions`,      lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${DOMAIN}/books`,          lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+  ];
+
+  // API kapalıysa hepsi boş dizi döner, build kırılmaz
+  const [articles, categories, questions] = await Promise.all([
+    safeJson(`${API}/articles/all`),
+    safeJson(`${API}/categories/all`),      // getAllCategories yerine doğrudan endpoint; yoksa boş kalır
+    safeJson(`${API}/questions/all`),
+  ]);
+
+  return [
+    ...defaultPages,
+    ...(articles || []).map((a) => ({
+      url: `${DOMAIN}/articles/${a.id}`,
+      lastModified: a.updatedAt || a.publishedAt || now,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    })),
+    ...(categories || []).map((c) => ({
+      url: `${DOMAIN}/search?categoryId=${c.id}`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    })),
+    ...(questions || []).map((q) => ({
+      url: `${DOMAIN}/questions/${q.id}`,
+      lastModified: q.updatedAt || q.createdDate || now,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    })),
+  ];
+}
