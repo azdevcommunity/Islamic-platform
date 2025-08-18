@@ -45,6 +45,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
+            NEXT_PUBLIC_BASE_URL_YTB=${{ secrets.NEXT_PUBLIC_BASE_URL_YTB }}
+            DEFAULT_PLAYLIST_ID=${{ secrets.DEFAULT_PLAYLIST_ID }}
 
   deploy:
     runs-on: ubuntu-latest
