@@ -8,7 +8,9 @@ export const revalidate = 60
 export async function generateStaticParams() {
     try {
         const postsJson = await fetch(`${BASE_URL}/articles/all`)
-        const posts = await postsJson.json()
+        const posts = await postsJson.json().catch(() => []);
+
+
 
         return posts.map((post) => ({
             id: String(post.id),
