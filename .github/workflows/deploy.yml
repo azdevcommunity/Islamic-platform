@@ -9,6 +9,7 @@ env:
   # Dış dünyaya açılacak port (host): container 3000'e map edeceğiz
   APP_PORT: 8086
 
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
