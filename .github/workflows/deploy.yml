@@ -5,7 +5,7 @@ on:
     branches: [ "master" ]
 
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/Islamic-platform
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/islamic-platform
   APP_PORT: 8086        # host port → container 3000’e map edilir
 
 jobs:
