@@ -2,6 +2,8 @@ import HomePage from "@/layouts/HomePage"
 import Head from "next/head"
 import Script from "next/script"
 
+export const revalidate = 60;
+
 export default function Home() {
   const schemaData = {
     "@context": "https://schema.org",
