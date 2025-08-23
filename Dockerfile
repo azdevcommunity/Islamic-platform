@@ -18,7 +18,7 @@ ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL \
     NEXT_TELEMETRY_DISABLED=1
 
 # (İstersen debug için bir kere yazdır)
-# RUN node -e "console.log('EX:', process.env.NEXT_PUBLIC_BASE_URL, 'YTB:', process.env.NEXT_PUBLIC_BASE_URL_YTB)"
+RUN node -e "console.log('EX:', process.env.NEXT_PUBLIC_BASE_URL, 'YTB:', process.env.NEXT_PUBLIC_BASE_URL_YTB)"
 
 RUN npm run build
 
