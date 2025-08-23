@@ -22,7 +22,7 @@ class HttpClient {
     const customHeaders = headers ?? {}
     const url = this._getUrl(path, customBaseUrl);
 
-    console.log(url);
+
 
 
 

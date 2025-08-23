@@ -4,6 +4,7 @@ import HomeArticleCard from "@/components/articles/HomeArticleCard";
 
 export default async function Articles() {
 
+
     console.log(BASE_URL);
 
     const res = await fetch(`${BASE_URL}/articles/popular`, {
