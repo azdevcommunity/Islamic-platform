@@ -14,6 +14,7 @@ class HttpClient {
     // but handle cases where one or both might be missing.
     const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
     const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    console.log(`Base url ${cleanBase}`);
     return `${cleanBase}/${cleanPath}`;
   }
 
@@ -21,7 +22,9 @@ class HttpClient {
     const customHeaders = headers ?? {}
     const url = this._getUrl(path, customBaseUrl);
 
-    console.log(`GET Request to: ${url}`);
+    console.log(url);
+
+
 
     return fetch(url, {
       method: "GET",

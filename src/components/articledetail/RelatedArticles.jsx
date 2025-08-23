@@ -97,6 +97,8 @@ async function RelatedArticles({ article }) {
         // Update fetchUrl if you have a dedicated endpoint for related articles
         const fetchUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/articles/popular`; // Fallback: Use popular
 
+        console.log(fetchUrl);
+
         try {
             const dataJson = await fetch(`${BASE_URL}/articles/popular`);
             const data = await dataJson.json();
