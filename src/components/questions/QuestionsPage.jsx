@@ -1,6 +1,6 @@
 // Usage example in QuestionsPage
 "use client"
-import React, {useState, useEffect, useCallback, useRef, memo} from "react";
+import React, { useState, useEffect, useCallback, useRef, memo } from "react";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import HttpClient from "@/util/HttpClient";
 import useDebounce from "@/hooks/useDebounce";
@@ -21,7 +21,7 @@ export default function QuestionsPage() {
         tags: [],
         searchQuery: ""
     });
-    // const debouncedSearchQuery = useDebounce(filters.searchQuery, 300);
+    const [isFiltersInitialized, setIsFiltersInitialized] = useState(false);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const searchInputRef = useRef(null);
@@ -71,25 +71,32 @@ export default function QuestionsPage() {
         }
     }, [page, filters.searchQuery, filters.categories, filters.tags]);
 
-    // Fetch questions when relevant state changes
+    // Fetch questions only after filters are initialized
     useEffect(() => {
-        fetchQuestions();
-    }, [fetchQuestions]);
+        if (isFiltersInitialized) {
+            fetchQuestions();
+        }
+    }, [fetchQuestions, isFiltersInitialized]);
 
-    // Reset page when filters change
-// Add a guard to prevent unnecessary state updates
+    // Reset page when filters change (but not on initial load)
     useEffect(() => {
-        // Only reset the page when filters change, not when the page itself changes
-        setPage(0);
-    }, [filters.searchQuery, filters.categories, filters.tags]); // REMOVE 'page' from here
+        if (isFiltersInitialized) {
+            setPage(0);
+        }
+    }, [filters.searchQuery, filters.categories, filters.tags, isFiltersInitialized]);
 
     // Handle filter changes
     const handleFiltersChange = useCallback((newFilters) => {
+        // Mark filters as initialized on first call
+        if (!isFiltersInitialized) {
+            setIsFiltersInitialized(true);
+        }
+
         // Only update if the filters have actually changed
         if (JSON.stringify(filters) !== JSON.stringify(newFilters)) {
             setFilters(newFilters);
         }
-    }, [filters]); // Add filters as dependency
+    }, [filters, isFiltersInitialized]);
 
     // Pagination handler
     const paginate = useCallback((newPage) => {

@@ -23,6 +23,7 @@ export const FilterProvider = ({
                                }) => {
     // Flag to track if we're in a reset operation
     const isResettingRef = useRef(false);
+    const isInitializedRef = useRef(false);
 
     // Use our custom hook for all filter data
     const {
@@ -36,18 +37,7 @@ export const FilterProvider = ({
         clearFilters
     } = useFilterData({
         initialCategories,
-        initialTags,
-        onChange: ({ categories, tags }) => {
-            // Skip callback during reset operations
-            if (isResettingRef.current) return;
-
-            // Pass the updated filters to the parent (categories and tags)
-            onFiltersChange({
-                categories,
-                tags,
-                searchQuery
-            });
-        }
+        initialTags
     });
 
     // Get search query and setter from Zustand store
@@ -65,10 +55,31 @@ export const FilterProvider = ({
         setSearchQuery(event.target.value);
     }, [setSearchQuery]);
 
-    // Notify parent of search changes
+    // Single initialization effect that waits for all data to be ready
     useEffect(() => {
-        // Skip callback during reset operations
-        if (isResettingRef.current) return;
+        // Wait for the hook to finish loading and have all data ready
+        if (!loading && !isInitializedRef.current) {
+            // Small delay to ensure Zustand store is fully hydrated
+            const timer = setTimeout(() => {
+                // Mark as initialized
+                isInitializedRef.current = true;
+                
+                // Notify parent with the current state (including persisted data)
+                onFiltersChange({
+                    categories: selectedCategories,
+                    tags: selectedTags,
+                    searchQuery
+                });
+            }, 100);
+
+            return () => clearTimeout(timer);
+        }
+    }, [loading, selectedCategories, selectedTags, searchQuery, onFiltersChange]);
+
+    // Notify parent of changes only after initialization
+    useEffect(() => {
+        // Skip callback during reset operations or before initialization
+        if (isResettingRef.current || !isInitializedRef.current) return;
 
         onFiltersChange({
             categories: selectedCategories,
@@ -111,7 +122,7 @@ export const FilterProvider = ({
                 if (focusSearch && searchInputRef?.current) {
                     searchInputRef.current.focus();
                 }
-            }, 50);
+            }, 100);
         });
     }, [clearAllFiltersFn, onFiltersChange, searchInputRef]);
 
