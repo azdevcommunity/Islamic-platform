@@ -1,3 +1,4 @@
+/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,12 +22,188 @@
 /*}*/
 html {
   scroll-behavior: smooth !important;
+  transition: color-scheme 0.3s ease;
 }
 
 body {
   font-family: "Inter", sans-serif;
   color: #1a1a1a;
   background-color: #f8f9fa;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth theme transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Admin theme specific styles */
+.admin-theme-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Force dark mode styles */
+.dark {
+  color-scheme: dark !important;
+}
+
+.dark body {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+/* Ensure proper dark mode for admin components */
+.dark .bg-white\/95 {
+  background-color: rgba(2, 6, 23, 0.95) !important;
+}
+
+.dark .bg-slate-950\/95 {
+  background-color: rgba(2, 6, 23, 0.95) !important;
+}
+
+/* Fix main content area dark mode */
+.dark main,
+[data-theme="dark"] main {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
+}
+
+/* Fix card backgrounds in dark mode */
+.dark .bg-white,
+[data-theme="dark"] .bg-white {
+  background-color: #1e293b !important;
+}
+
+.dark .bg-slate-50,
+[data-theme="dark"] .bg-slate-50 {
+  background-color: #334155 !important;
+}
+
+.dark .bg-slate-100,
+[data-theme="dark"] .bg-slate-100 {
+  background-color: #475569 !important;
+}
+
+/* Fix border colors in dark mode */
+.dark .border-slate-200,
+[data-theme="dark"] .border-slate-200 {
+  border-color: #475569 !important;
+}
+
+.dark .border-muted,
+[data-theme="dark"] .border-muted {
+  border-color: #475569 !important;
+}
+
+/* Fix text colors in dark mode */
+.dark .text-slate-900,
+[data-theme="dark"] .text-slate-900 {
+  color: #f1f5f9 !important;
+}
+
+.dark .text-slate-700,
+[data-theme="dark"] .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-600,
+[data-theme="dark"] .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+/* Fix muted backgrounds in dark mode */
+.dark .bg-muted,
+[data-theme="dark"] .bg-muted {
+  background-color: #334155 !important;
+}
+
+.dark .hover\:bg-muted\/30:hover,
+[data-theme="dark"] .hover\:bg-muted\/30:hover {
+  background-color: rgba(51, 65, 85, 0.3) !important;
+}
+
+/* Additional dark mode fixes */
+.dark .bg-gradient-to-br,
+[data-theme="dark"] .bg-gradient-to-br {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+}
+
+/* Fix dropdown and popover backgrounds */
+.dark [data-radix-popper-content-wrapper],
+[data-theme="dark"] [data-radix-popper-content-wrapper] {
+  background-color: #1e293b !important;
+  border-color: #475569 !important;
+}
+
+/* Fix button hover states in dark mode */
+.dark .hover\:bg-slate-50:hover,
+[data-theme="dark"] .hover\:bg-slate-50:hover {
+  background-color: #334155 !important;
+}
+
+.dark .hover\:bg-slate-700:hover,
+[data-theme="dark"] .hover\:bg-slate-700:hover {
+  background-color: #475569 !important;
+}
+
+.dark .hover\:border-slate-300:hover,
+[data-theme="dark"] .hover\:border-slate-300:hover {
+  border-color: #64748b !important;
+}
+
+.dark .hover\:border-slate-600:hover,
+[data-theme="dark"] .hover\:border-slate-600:hover {
+  border-color: #64748b !important;
+}
+
+/* Fix outline button variant in dark mode */
+.dark .border-input,
+[data-theme="dark"] .border-input {
+  border-color: #475569 !important;
+}
+
+.dark .bg-background,
+[data-theme="dark"] .bg-background {
+  background-color: #1e293b !important;
+}
+
+/* Fix group hover effects in dark mode */
+.dark .group-hover\:bg-indigo-500:hover,
+[data-theme="dark"] .group-hover\:bg-indigo-500:hover {
+  background-color: #6366f1 !important;
+}
+
+.dark .group-hover\:text-white:hover,
+[data-theme="dark"] .group-hover\:text-white:hover {
+  color: #ffffff !important;
+}
+
+/* Fix button text colors in dark mode */
+.dark button,
+[data-theme="dark"] button {
+  color: inherit;
+}
+
+.dark .text-foreground,
+[data-theme="dark"] .text-foreground {
+  color: #f1f5f9 !important;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #6B7280;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* ShadCN UI Dark Mode Enhancements */
+.dark {
+  color-scheme: dark;
 }
 
 /* Custom scrollbar */
@@ -54,6 +231,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -68,6 +246,7 @@ body {
     transform: translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -186,6 +365,7 @@ body {
   background-color: #059669;
   transform: translateY(-2px);
 }
+
 .homePageGalleryItem {
   transition: all 0.5s ease;
   cursor: pointer;
@@ -196,6 +376,7 @@ body {
   z-index: 10;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
+
 .whereWeAreTitle {
   text-align: center;
   font-size: 28px;
@@ -244,10 +425,12 @@ nav {
 }
 
 .submenu {
-  display: none; /* Hover'dan tıkla açılmaya geçiyoruz */
+  display: none;
+  /* Hover'dan tıkla açılmaya geçiyoruz */
   background: white;
   position: absolute;
-  left: 80%; /* Sağda görünmesi için */
+  left: 80%;
+  /* Sağda görünmesi için */
   top: 100%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
@@ -321,6 +504,7 @@ nav {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -330,8 +514,10 @@ nav {
 .animate-fadeInUp {
   /* Apply the animation */
   animation-name: fadeInUp;
-  animation-duration: 0.5s; /* Adjust duration as needed */
-  animation-fill-mode: forwards; /* Keep the state after animation finishes */
+  animation-duration: 0.5s;
+  /* Adjust duration as needed */
+  animation-fill-mode: forwards;
+  /* Keep the state after animation finishes */
   animation-timing-function: ease-out;
   /* Start with opacity 0 before animation begins if not handled by fill-mode */
   opacity: 0;
@@ -339,11 +525,13 @@ nav {
 
 /* .trigger-fadeInUp sinifi konteynerə (məsələn, grid) əlavə edildikdə... */
 /* ...içindəki .related-article-card elementlərinə animasiyanı tətbiq et */
-.trigger-fadeInUp > .related-article-card {
+.trigger-fadeInUp>.related-article-card {
   /* Animasiya xüsusiyyətləri */
   animation-name: fadeInUp;
-  animation-duration: 0.5s; /* Müddəti tənzimləyin */
-  animation-fill-mode: forwards; /* Animasiya bitdikdən sonra vəziyyəti saxla */
+  animation-duration: 0.5s;
+  /* Müddəti tənzimləyin */
+  animation-fill-mode: forwards;
+  /* Animasiya bitdikdən sonra vəziyyəti saxla */
   animation-timing-function: ease-out;
 
   /* Başlanğıcda görünməz olsunlar */
@@ -354,22 +542,41 @@ nav {
 }
 
 /* Pilləli (staggered) gecikmələri nth-child ilə tətbiq edin */
-.trigger-fadeInUp > .related-article-card:nth-child(1) { animation-delay: 0.0s; }
-.trigger-fadeInUp > .related-article-card:nth-child(2) { animation-delay: 0.1s; }
-.trigger-fadeInUp > .related-article-card:nth-child(3) { animation-delay: 0.2s; }
+.trigger-fadeInUp>.related-article-card:nth-child(1) {
+  animation-delay: 0.0s;
+}
+
+.trigger-fadeInUp>.related-article-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.trigger-fadeInUp>.related-article-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
 /* Ehtiyac olarsa daha çox əlavə edin */
-.trigger-fadeInUp > .related-article-card:nth-child(4) { animation-delay: 0.3s; }
-.trigger-fadeInUp > .related-article-card:nth-child(5) { animation-delay: 0.4s; }
-.trigger-fadeInUp > .related-article-card:nth-child(6) { animation-delay: 0.5s; }
+.trigger-fadeInUp>.related-article-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.trigger-fadeInUp>.related-article-card:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.trigger-fadeInUp>.related-article-card:nth-child(6) {
+  animation-delay: 0.5s;
+}
 
 
 /* Əvvəlki hover keçidləri (dəyişməz qalır) */
 .related-article-card {
   transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
+
 .related-article-card-image {
   transition: transform 0.3s ease-in-out;
 }
+
 .related-article-card-title {
   transition: color 0.2s ease-in-out;
 }
@@ -380,14 +587,17 @@ nav {
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 3px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #aaa;
 }
@@ -411,6 +621,7 @@ nav {
   transition: background-color 0.3s ease, opacity 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 .videoSlider .swiper-button-prev:hover,
 .videoSlider .swiper-button-next:hover {
   /*background-color: rgba(255, 255, 255, 0.85);*/
@@ -429,14 +640,17 @@ nav {
   font-size: 18px;
   font-weight: bold;
 }
+
 .videoSlider .swiper-pagination-bullet {
   background-color: rgba(255, 255, 255, 0.5);
   opacity: 1;
   transition: background-color 0.3s ease;
 }
+
 .videoSlider .swiper-pagination-bullet-active {
   background-color: #ffffff;
 }
+
 /*---break---*/
 @layer base {
   :root {
@@ -465,46 +679,294 @@ nav {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --brand: oklch(0.623 0.214 259.815);
+    --highlight: oklch(0.852 0.199 91.936);
   }
+
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
-    --primary: 60 9.1% 97.8%;
-    --primary-foreground: 24 9.8% 10%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 84% 4.9%;
+    --secondary: 217 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 24 5.7% 82.9%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 32.6% 17.5%;
+    --input: 217 32.6% 17.5%;
+    --ring: 212 72% 59%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --brand: oklch(0.707 0.165 254.624);
+    --highlight: oklch(0.852 0.199 91.936);
   }
 }
+
 /*---break---*/
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
+/* Lexical Editor Link Styles */
+.link-editor {
+  position: absolute;
+  z-index: 100;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  max-width: 300px;
+  width: 100%;
+  opacity: 0;
+  background-color: #fff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  transition: opacity 0.5s;
+}
 
+.dark .link-editor {
+  background-color: #1e293b;
+  border: 1px solid #475569;
+}
 
+.link-input {
+  display: block;
+  width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 8px 12px;
+  padding: 8px 12px;
+  border-radius: 15px;
+  background-color: #eee;
+  font-size: 15px;
+  color: rgb(5, 5, 5);
+  border: 0;
+  outline: 0;
+  position: relative;
+  font-family: inherit;
+}
 
+.dark .link-input {
+  background-color: #334155;
+  color: #f1f5f9;
+}
 
+.link-input a {
+  color: rgb(33, 111, 219);
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-right: 30px;
+  text-overflow: ellipsis;
+}
 
+.dark .link-input a {
+  color: #60a5fa;
+}
 
+.link-input a:hover {
+  text-decoration: underline;
+}
+
+.link-edit {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z'/%3e%3cpath d='M5.92993 18.95L3.46994 16.49C2.98994 16.01 2.98994 15.24 3.46994 14.76L13.0699 5.16002C13.5499 4.68002 14.3199 4.68002 14.7999 5.16002L17.2599 7.62002C17.7399 8.10002 17.7399 8.87002 17.2599 9.35002L7.65993 18.95C7.17993 19.43 6.40993 19.43 5.92993 18.95V18.95Z'/%3e%3c/svg%3e");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 35px;
+  vertical-align: -0.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+.link-input-field {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.link-confirm {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M20 6L9 17L4 12'/%3e%3c/svg%3e");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 35px;
+  vertical-align: -0.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+/* Link node styles */
+.editor-link {
+  color: rgb(33, 111, 219);
+  text-decoration: none;
+}
+
+.dark .editor-link {
+  color: #60a5fa;
+}
+
+.editor-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}/*
+ Link Editor Styles */
+.link-editor {
+  position: absolute;
+  z-index: 100;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  max-width: 300px;
+  width: 100%;
+  opacity: 0;
+  background-color: #fff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  transition: opacity 0.5s;
+}
+
+.link-input {
+  display: block;
+  width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 8px 12px;
+  padding: 8px 12px;
+  border-radius: 15px;
+  background-color: #eee;
+  font-size: 15px;
+  color: rgb(5, 5, 5);
+  border: 0;
+  outline: 0;
+  position: relative;
+  font-family: inherit;
+}
+
+.link-input a {
+  color: rgb(33, 111, 219);
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-right: 30px;
+  text-overflow: ellipsis;
+}
+
+.link-input a:hover {
+  text-decoration: underline;
+}
+
+.link-input-field {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.link-edit {
+  background-image: url("data:image/svg+xml,%3csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z'/%3e%3cpath d='M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z'/%3e%3c/svg%3e");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 35px;
+  vertical-align: -0.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+.link-confirm {
+  background-image: url("data:image/svg+xml,%3csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3e%3c/svg%3e");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 35px;
+  vertical-align: -0.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+/* Dark mode styles for link editor */
+.dark .link-editor {
+  background-color: #1f2937;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.6);
+}
+
+.dark .link-input {
+  background-color: #374151;
+  color: #f9fafb;
+}
+
+.dark .link-input a {
+  color: #60a5fa;
+}/* Floatin
+g Link Editor Styles */
+.floating-link-editor {
+  position: absolute;
+  z-index: 100;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.floating-link-editor.hidden {
+  opacity: 0;
+  transform: translate(-10000px, -10000px);
+}
+
+/* Floating Link Editor Styles */
+.floating-link-editor {
+  position: absolute;
+  z-index: 100;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.floating-link-editor.hidden {
+  opacity: 0;
+  transform: translate(-10000px, -10000px);
+}
+
+/* Dark mode styles for floating link editor */
+.dark .floating-link-editor {
+  background-color: #1f2937;
+  border-color: #374151;
+}

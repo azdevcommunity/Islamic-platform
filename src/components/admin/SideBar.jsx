@@ -128,7 +128,6 @@ const sidebarItems = [
 // This component now acts as the main layout wrapper for the admin area
 function AdminLayoutWrapper({ children }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  const [theme, setTheme] = useTheme();
   const router = useRouter();
 
   const handleMobileSidebarToggle = () => {
@@ -145,29 +144,9 @@ function AdminLayoutWrapper({ children }) {
     router.push('/admin/login');
   };
 
-  // Revalidation logic remains unchanged for now
-  const [revalidateDisabled, setRevalidateDisabled] = useState(false)
-  const revalidate = () => {
-    setRevalidateDisabled(true)
-    const secret = process.env.NEXT_PUBLIC_REVALIDATE_SECRET
-    const paths = ["/articles", "/videos", "/", "/videos/**", "/articles/**"]
-    Promise.all(
-      paths.map((path) =>
-        fetch(`/api/revalidate?path=${encodeURIComponent(path)}&secret=${secret}`)
-          .then(() => console.log(`Revalidated ${path} successfully.`))
-          .catch((err) => console.error(`Failed to revalidate ${path}.`, err)),
-      ),
-    )
-      .then(() => console.log("All revalidation calls finished."))
-      .catch((err) => console.error("Some revalidation calls failed.", err))
-      .finally(() => setRevalidateDisabled(false))
-  }
-
   return (
     <>
       <AdminNavbar
-        theme={theme}
-        onThemeChange={setTheme}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onMobileSidebarToggle={handleMobileSidebarToggle}
         onLogout={handleLogout}
@@ -178,14 +157,14 @@ function AdminLayoutWrapper({ children }) {
           onLinkClick={handleSidebarLinkClick}
       />
 
-      <main className="p-4 sm:ml-64 mt-16">
+      <main className="sm:ml-72 mt-20 min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
         {children}
       </main>
 
       {/* Mobile Sidebar Overlay */}
       {isMobileSidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-gray-900/50 dark:bg-gray-900/80 sm:hidden"
+          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm sm:hidden"
           onClick={handleMobileSidebarToggle}
         ></div>
       )}

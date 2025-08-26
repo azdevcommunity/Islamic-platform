@@ -12,7 +12,8 @@ import { LayoutContext } from "@/components/layout/context/layoutcontext"
 const AppConfig = (props) => {
   const { layoutConfig, setLayoutConfig, layoutState, setLayoutState, isSlim, isSlimPlus, isHorizontal } =
     useContext(LayoutContext)
-  const { changeTheme } = useContext(PrimeReactContext)
+  const primeReactContext = useContext(PrimeReactContext)
+  const { changeTheme } = primeReactContext || {}
   const scales = [12, 13, 14, 15, 16]
   const componentThemes = [
     { name: "indigo", color: "#6366F1" },

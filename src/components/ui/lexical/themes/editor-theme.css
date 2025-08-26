@@ -1,0 +1,200 @@
+/* Lexical Editor Theme Styles */
+
+.EditorTheme__code {
+  background-color: rgb(240, 242, 245);
+  font-family: Menlo, Consolas, Monaco, monospace;
+  display: block;
+  padding: 8px 8px 8px 52px;
+  line-height: 1.53;
+  font-size: 13px;
+  margin: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  position: relative;
+  tab-size: 2;
+}
+
+.EditorTheme__code:before {
+  content: attr(data-gutter);
+  position: absolute;
+  background-color: #eee;
+  left: 0;
+  top: 0;
+  border-right: 1px solid #ccc;
+  padding: 8px;
+  color: #777;
+  white-space: pre-wrap;
+  text-align: right;
+  min-width: 25px;
+}
+
+.EditorTheme__tokenComment {
+  color: slategray;
+}
+
+.EditorTheme__tokenPunctuation {
+  color: #999;
+}
+
+.EditorTheme__tokenProperty {
+  color: #905;
+}
+
+.EditorTheme__tokenSelector {
+  color: #690;
+}
+
+.EditorTheme__tokenOperator {
+  color: #9a6e3a;
+}
+
+.EditorTheme__tokenAttr {
+  color: #07a;
+}
+
+.EditorTheme__tokenVariable {
+  color: #e90;
+}
+
+.EditorTheme__tokenFunction {
+  color: #dd4a68;
+}
+
+.editor-image {
+  cursor: default;
+  display: inline-block;
+  position: relative;
+  user-select: none;
+}
+
+.inline-editor-image {
+  cursor: default;
+  display: inline-block;
+  position: relative;
+  user-select: none;
+}
+
+.EditorTheme__table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  table-layout: fixed;
+  width: max-content;
+}
+
+.EditorTheme__tableCell {
+  border: 1px solid #bbb;
+  width: 75px;
+  min-width: 75px;
+  vertical-align: top;
+  text-align: start;
+  padding: 6px 8px;
+  position: relative;
+  outline: none;
+}
+
+.EditorTheme__tableCellHeader {
+  background-color: #f2f3f5;
+  text-align: start;
+}
+
+.EditorTheme__tableCellSelected {
+  background-color: #c9dbf0;
+}
+
+.EditorTheme__tableCellPrimarySelected {
+  border: 2px solid #0969da;
+  display: block;
+  height: calc(100% - 2px);
+  position: absolute;
+  width: calc(100% - 2px);
+  left: -1px;
+  right: -1px;
+  top: -1px;
+  bottom: -1px;
+  z-index: 2;
+}
+
+.EditorTheme__tableCellEditing {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+}
+
+.EditorTheme__tableSelected {
+  outline: 2px solid rgb(60, 132, 244);
+}
+
+.EditorTheme__tableCellResizer {
+  position: absolute;
+  right: -4px;
+  height: 100%;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 10;
+  top: 0;
+}
+
+.EditorTheme__tableCellHeader .EditorTheme__tableCellResizer {
+  right: -4px;
+}
+
+.EditorTheme__tableCellSortedIndicator {
+  display: block;
+  opacity: 0.5;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #999;
+}
+
+.EditorTheme__tableCellResizeRuler {
+  display: block;
+  position: absolute;
+  width: 1px;
+  background-color: rgb(60, 132, 244);
+  height: 100%;
+  top: 0;
+}
+
+.EditorTheme__tableCellActionButtonContainer {
+  display: block;
+  right: 5px;
+  top: 6px;
+  position: absolute;
+  z-index: 4;
+  width: 20px;
+  height: 20px;
+}
+
+.EditorTheme__tableCellActionButton {
+  background-color: #eee;
+  display: block;
+  border: 0;
+  border-radius: 20px;
+  width: 20px;
+  height: 20px;
+  color: #222;
+  cursor: pointer;
+}
+
+.EditorTheme__tableCellActionButton:hover {
+  background-color: #ddd;
+}
+
+.EditorTheme__tableRowStriping {
+  background-color: #f2f3f5;
+}
+
+.ContentEditable__root {
+  border: 0;
+  font-size: 15px;
+  display: block;
+  position: relative;
+  outline: 0;
+  padding: 8px 28px 40px;
+  min-height: 200px;
+}

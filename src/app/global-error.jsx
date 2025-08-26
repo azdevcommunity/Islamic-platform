@@ -45,8 +45,9 @@ export default function GlobalError({error, reset}) {
                         <p className="text-sm text-red-200 mb-2">
                             <strong>Növ:</strong> Global Application Error
                         </p>
-                        {error?.message && (
+                        {(error?.message && process.env.APP_ENV_NODE_ENV == 'development') && (
                             <p className="text-sm text-red-200 mb-2 break-words">
+                 
                                 <strong>Mesaj:</strong> {error.message}
                             </p>
                         )}

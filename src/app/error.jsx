@@ -16,8 +16,8 @@ export default function Error({ error, reset }) {
         <div className="mb-8">
           <div className="relative mx-auto w-48 h-48 mb-6">
             <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-red-200 rounded-full opacity-20 animate-pulse"></div>
-            <div className="absolute inset-4 bg-gradient-to-br from-red-200 to-red-300 rounded-full opacity-30 animate-pulse" style={{animationDelay: '0.2s'}}></div>
-            <div className="absolute inset-8 bg-gradient-to-br from-red-300 to-red-400 rounded-full opacity-40 animate-pulse" style={{animationDelay: '0.4s'}}></div>
+            <div className="absolute inset-4 bg-gradient-to-br from-red-200 to-red-300 rounded-full opacity-30 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+            <div className="absolute inset-8 bg-gradient-to-br from-red-300 to-red-400 rounded-full opacity-40 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <i className="fas fa-exclamation-triangle text-6xl text-red-600 animate-bounce"></i>
             </div>
@@ -30,7 +30,7 @@ export default function Error({ error, reset }) {
             Xəta Baş Verdi
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed">
-            Təəssüf ki, səhifə yüklənərkən xəta baş verdi. 
+            Təəssüf ki, səhifə yüklənərkən xəta baş verdi.
             Zəhmət olmasa yenidən cəhd edin.
           </p>
         </div>
@@ -45,7 +45,7 @@ export default function Error({ error, reset }) {
             <p className="text-sm text-gray-600 mb-2">
               <strong>Xəta növü:</strong> Client-side Error
             </p>
-            {error?.message && (
+            {(error?.message && process.env.APP_ENV_NODE_ENV == 'development') && (
               <p className="text-sm text-gray-600 mb-2">
                 <strong>Mesaj:</strong> {error.message}
               </p>
@@ -65,7 +65,7 @@ export default function Error({ error, reset }) {
             <i className="fas fa-redo mr-2"></i>
             Yenidən Cəhd Et
           </button>
-          
+
           <div className="flex space-x-3">
             <button
               onClick={() => window.location.reload()}
@@ -74,7 +74,7 @@ export default function Error({ error, reset }) {
               <i className="fas fa-sync-alt mr-1"></i>
               Səhifəni Yenilə
             </button>
-            <Link 
+            <Link
               href="/"
               className="flex-1 px-4 py-2 bg-white text-red-600 border border-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200 font-medium text-center"
             >
