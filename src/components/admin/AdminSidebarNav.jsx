@@ -83,7 +83,7 @@ const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
             <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
               Əsas Bölmələr
             </h2>
-            <div className="w-12 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 mt-2 rounded-full"></div>
+            <div className="w-12 h-0.5 bg-gradient-to-r from-emerald-500 to-emerald-600 mt-2 rounded-full"></div>
           </div>
           {sidebarItems.map((item, index) => {
             const IconComponent = item.icon;
@@ -97,13 +97,13 @@ const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
                 className={cn(
                   "group flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-300 relative overflow-hidden hover:scale-[1.02]",
                   isActive
-                    ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-xl shadow-indigo-500/25'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-100'
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-xl shadow-emerald-500/25'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-emerald-50/80 dark:hover:bg-emerald-900/20 hover:text-emerald-900 dark:hover:text-emerald-100'
                 )}
               >
                 {isActive && (
                   <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 rounded-2xl" />
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full" />
                   </>
                 )}
@@ -111,7 +111,7 @@ const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
                   "p-2.5 rounded-xl transition-all duration-300 relative z-10 group-hover:scale-110",
                   isActive
                     ? 'bg-white/20 shadow-lg'
-                    : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 group-hover:shadow-md'
+                    : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/30 group-hover:shadow-md'
                 )}>
                   <IconComponent className="h-5 w-5 flex-shrink-0" />
                 </div>

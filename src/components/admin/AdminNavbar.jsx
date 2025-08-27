@@ -106,12 +106,12 @@ const AdminNavbar = ({
             {/* Logo and Title */}
             <Link href="/admin" className="flex ms-3 md:me-24 items-center group">
               <div className="relative mr-4">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-0.5 group-hover:scale-105 transition-transform duration-200">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 group-hover:scale-105 transition-transform duration-200">
                   <div className="w-full h-full rounded-lg bg-white dark:bg-slate-950 flex items-center justify-center">
                     <img src="/esm_logo.png" className="h-6 w-6" alt="Esm Logo" />
                   </div>
                 </div>
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-200"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-200"></div>
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white bg-clip-text text-transparent">
@@ -158,7 +158,7 @@ const AdminNavbar = ({
                   disabled={isRefreshing}
                   className="h-10 w-10 rounded-xl hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
                 >
-                  <RefreshCw className={`h-4 w-4 transition-colors ${isRefreshing ? 'animate-spin text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}`} />
+                  <RefreshCw className={`h-4 w-4 transition-colors ${isRefreshing ? 'animate-spin text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-400'}`} />
                   <span className="sr-only">Refresh Options</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -223,8 +223,8 @@ const AdminNavbar = ({
                   onClick={() => setTheme('system')}
                   className="flex items-center gap-3 py-2.5"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-                    <Monitor className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                    <Monitor className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
                     <div className="font-medium">System</div>
@@ -238,7 +238,7 @@ const AdminNavbar = ({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="relative h-10 w-10 rounded-xl hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-all duration-200 hover:scale-105 ml-2">
-                  <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                  <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
                     <User className="h-4 w-4 text-white" />
                   </div>
                   <span className="sr-only">Open user menu</span>
@@ -246,8 +246,8 @@ const AdminNavbar = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-72 border-slate-200/60 dark:border-slate-800/60 shadow-xl">
                 <DropdownMenuLabel className="font-normal p-0">
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-t-lg">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                  <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-emerald-50/50 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-800/20 rounded-t-lg">
+                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
                       <User className="h-6 w-6 text-white" />
                     </div>
                     <div className="flex flex-col space-y-1">
@@ -263,8 +263,8 @@ const AdminNavbar = ({
                 <div className="p-2">
                   <DropdownMenuItem asChild>
                     <Link href="/admin" className="flex items-center gap-3 cursor-pointer py-2.5 px-3 rounded-lg">
-                      <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                        <LayoutDashboard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                        <LayoutDashboard className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       </div>
                       <div>
                         <div className="font-medium">Dashboard</div>

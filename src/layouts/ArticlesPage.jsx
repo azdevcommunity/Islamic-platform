@@ -110,6 +110,7 @@ export default function ArticlesPage() {
             </div>
 
             <div className="container mx-auto px-4 py-12">
+                
                 {/* Use FilterProvider component */}
                 <FilterProvider
                     searchPlaceholder="Məqalələr arasında axtar..."
@@ -286,10 +287,10 @@ const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, 
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center justify-center transition-colors ${
+                className={`px-3 py-2 rounded-xl text-sm font-semibold flex items-center justify-center transition-all duration-200 ${
                     currentPage === 1
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
+                        ? "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                        : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-sm hover:scale-105 backdrop-blur-sm"
                 }`}
                 aria-label="Əvvəlki səhifə"
                 aria-disabled={currentPage === 1}
@@ -301,7 +302,7 @@ const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, 
             {startPage > 1 && (
                 <button
                     onClick={() => onPageChange(1)}
-                    className="px-4 py-2 rounded-md text-sm font-medium min-w-[36px] transition-colors bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
+                    className="px-4 py-2 rounded-xl text-sm font-semibold min-w-[36px] transition-all duration-200 bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-sm hover:scale-105 backdrop-blur-sm"
                     aria-label="Birinci səhifə"
                 >
                     1
@@ -339,7 +340,7 @@ const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, 
             {endPage < totalPages && (
                 <button
                     onClick={() => onPageChange(totalPages)}
-                    className="px-4 py-2 rounded-md text-sm font-medium min-w-[36px] transition-colors bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
+                    className="px-4 py-2 rounded-xl text-sm font-semibold min-w-[36px] transition-all duration-200 bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-sm hover:scale-105 backdrop-blur-sm"
                     aria-label="Sonuncu səhifə"
                 >
                     {totalPages}
@@ -349,10 +350,10 @@ const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, 
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center justify-center transition-colors ${
+                className={`px-3 py-2 rounded-xl text-sm font-semibold flex items-center justify-center transition-all duration-200 ${
                     currentPage === totalPages
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
+                        ? "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                        : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-sm hover:scale-105 backdrop-blur-sm"
                 }`}
                 aria-label="Növbəti səhifə"
                 aria-disabled={currentPage === totalPages}

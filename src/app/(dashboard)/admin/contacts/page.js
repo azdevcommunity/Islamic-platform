@@ -120,30 +120,44 @@ const ContactUsTable = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 md:p-8 space-y-8 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 space-y-8">
       {/* Header */}
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
-              İletişim Mesajları
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Kullanıcılardan gelen iletişim mesajlarını yönetin
-            </p>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4" />
-              <span>Toplam: <span className="font-semibold text-foreground">{totalRecords}</span></span>
+      <div className="relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-emerald-600/10 to-emerald-500/10" />
+        <div className="relative z-10 p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 shadow-xl">
+                  <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
+                    <MessageSquare className="h-8 w-8 text-emerald-600" />
+                  </div>
+                </div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl opacity-20 blur-xl" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Əlaqə Mesajları
+                </h1>
+                <p className="text-gray-600 mt-2 text-lg">
+                  İstifadəçilərdən gələn əlaqə mesajlarını idarə edin
+                </p>
+              </div>
             </div>
-            {updatedContacts.length > 0 && (
-              <Badge variant="secondary" className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                {updatedContacts.length} değişiklik
-              </Badge>
-            )}
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4" />
+                <span>Ümumi: <span className="font-semibold text-foreground">{totalRecords}</span></span>
+              </div>
+              {updatedContacts.length > 0 && (
+                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 border-emerald-200">
+                  {updatedContacts.length} dəyişiklik
+                </Badge>
+              )}
+            </div>
           </div>
         </div>
+      </div>
 
         {/* Save Changes Button */}
         {updatedContacts.length > 0 && (
@@ -151,7 +165,7 @@ const ContactUsTable = () => {
             <Button 
               onClick={saveChanges}
               disabled={saving}
-              className="gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             >
               {saving ? (
                 <>
@@ -180,11 +194,12 @@ const ContactUsTable = () => {
       )}
 
       {/* Content */}
-      <Card className="border-2 shadow-xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+        <CardHeader className="relative z-10">
+          <CardTitle className="flex items-center gap-2 text-gray-900">
             <MessageSquare className="h-5 w-5" />
-            İletişim Mesajları
+            Əlaqə Mesajları
           </CardTitle>
         </CardHeader>
         <CardContent>

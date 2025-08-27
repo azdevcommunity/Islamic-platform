@@ -157,7 +157,7 @@ function AdminLayoutWrapper({ children }) {
           onLinkClick={handleSidebarLinkClick}
       />
 
-      <main className="sm:ml-72 mt-20 min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <main className="sm:ml-72 mt-20 min-h-screen bg-gradient-to-b from-gray-50 via-white to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
         {children}
       </main>
 

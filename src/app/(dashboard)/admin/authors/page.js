@@ -61,19 +61,19 @@ const Page = () => {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 md:p-8 space-y-8 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 space-y-8 transition-colors duration-300">
       {/* Header */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Yazar Yönetimi
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-gray-600">
               Platformdakı yazarları idarə edin və yenilərini əlavə edin
             </p>
           </div>
-          <Button asChild className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Button asChild className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
             <Link href="/admin/authors/create">
               <Plus className="h-4 w-4" />
               Yeni Yazar
@@ -89,7 +89,7 @@ const Page = () => {
               placeholder="Yazarlarda ara..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pl-10 h-11 border-2 focus:border-blue-300 dark:focus:border-blue-700 transition-colors"
+              className="pl-10 h-11 border-2 focus:border-emerald-300 transition-colors"
             />
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">

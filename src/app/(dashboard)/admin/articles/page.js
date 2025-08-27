@@ -224,95 +224,112 @@ export default function ArticlesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 md:p-8 space-y-8 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 space-y-8">
       {/* Header */}
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
-              Makale Yönetimi
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Tüm makalelerinizi yönetin ve düzenleyin
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                fetchArticles()
-                fetchCategories()
-                fetchAuthors()
-              }}
-              className="gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:hover:bg-blue-900/20 transition-colors"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Yenilə
-            </Button>
-            <Button asChild className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-              <Link href="/admin/articles/create">
-                <Plus className="h-4 w-4" />
-                Yeni Makale
-              </Link>
-            </Button>
+      <div className="relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-emerald-600/10 to-emerald-500/10" />
+        <div className="relative z-10 p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 shadow-xl">
+                  <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
+                    <FileText className="h-8 w-8 text-emerald-600" />
+                  </div>
+                </div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl opacity-20 blur-xl" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Məqalə İdarəsi
+                </h1>
+                <p className="text-gray-600 mt-2 text-lg">
+                  Bütün məqalələrinizi idarə edin və təşkil edin
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  fetchArticles()
+                  fetchCategories()
+                  fetchAuthors()
+                }}
+                className="gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-colors"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Yenilə
+              </Button>
+              <Button asChild className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                <Link href="/admin/articles/create">
+                  <Plus className="h-4 w-4" />
+                  Yeni Məqalə
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-2 hover:shadow-lg transition-shadow duration-300">
-          <CardContent className="p-6">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Toplam Makale</p>
-                <p className="text-3xl font-bold text-blue-600">{stats.total}</p>
+                <p className="text-sm font-medium text-muted-foreground">Ümumi Məqalə</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.total}</p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 flex items-center justify-center">
-                <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <FileText className="h-6 w-6 text-emerald-600" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-2 hover:shadow-lg transition-shadow duration-300">
-          <CardContent className="p-6">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Filtrlənmiş</p>
                 <p className="text-3xl font-bold text-emerald-600">{stats.filtered}</p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-green-100 dark:from-emerald-900/50 dark:to-green-900/50 flex items-center justify-center">
-                <Filter className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <Filter className="h-6 w-6 text-emerald-600" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-2 hover:shadow-lg transition-shadow duration-300">
-          <CardContent className="p-6">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Kateqoriyalar</p>
-                <p className="text-3xl font-bold text-amber-600">{stats.categories}</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.categories}</p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/50 dark:to-orange-900/50 flex items-center justify-center">
-                <FolderOpen className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <FolderOpen className="h-6 w-6 text-emerald-600" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-2 hover:shadow-lg transition-shadow duration-300">
-          <CardContent className="p-6">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Yazarlar</p>
-                <p className="text-3xl font-bold text-purple-600">{stats.authors}</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.authors}</p>
               </div>
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900/50 dark:to-violet-900/50 flex items-center justify-center">
-                <User className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <User className="h-6 w-6 text-emerald-600" />
               </div>
             </div>
           </CardContent>
@@ -340,10 +357,11 @@ export default function ArticlesPage() {
       )}
 
       {/* Search and Filter Controls */}
-      <Card className="border-2 shadow-xl">
-        <CardHeader className="border-b bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
+      <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+        <CardHeader className="relative z-10 border-b bg-gradient-to-r from-emerald-50/50 to-emerald-100/50">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900">
               <Search className="h-5 w-5" />
               Axtarış və Filtr
             </CardTitle>
@@ -352,7 +370,7 @@ export default function ArticlesPage() {
                 variant={viewMode === 'card' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('card')}
-                className={`gap-2 ${viewMode === 'card' ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white' : ''}`}
+                className={`gap-2 ${viewMode === 'card' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' : 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300'}`}
               >
                 <Eye className="h-4 w-4" />
                 Kart
@@ -361,7 +379,7 @@ export default function ArticlesPage() {
                 variant={viewMode === 'table' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('table')}
-                className={`gap-2 ${viewMode === 'table' ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white' : ''}`}
+                className={`gap-2 ${viewMode === 'table' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' : 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300'}`}
               >
                 <Settings className="h-4 w-4" />
                 Cədvəl

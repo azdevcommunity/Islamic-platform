@@ -139,19 +139,34 @@ const AdminDashboardPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 md:p-8 space-y-8 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 space-y-8 transition-colors duration-300">
       {/* Header */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-              Admin Dashboard
-            </h1>
-            <p className="text-lg text-muted-foreground">İslami platformun idarə paneli</p>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Clock className="h-4 w-4" />
-            Son yenilənmə: {new Date().toLocaleTimeString('az-AZ')}
+      <div className="relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-emerald-600/10 to-emerald-500/10" />
+        <div className="relative z-10 p-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 shadow-xl">
+                  <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
+                    <Activity className="h-8 w-8 text-emerald-600" />
+                  </div>
+                </div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl opacity-20 blur-xl" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Admin Dashboard
+                </h1>
+                <p className="text-gray-600 mt-2 text-lg">
+                  İslami platformun idarə paneli
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              Son yenilənmə: {new Date().toLocaleTimeString('az-AZ')}
+            </div>
           </div>
         </div>
       </div>
@@ -161,8 +176,8 @@ const AdminDashboardPage = () => {
         {statCards.map((stat, index) => {
           const IconComponent = stat.icon;
           return (
-            <Card key={index} className={`group relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-slate-800/50 hover:-translate-y-1 ${stat.borderColor} border-2`}>
-              <div className={`absolute inset-0 ${stat.bgColor} opacity-50`} />
+            <Card key={index} className="group relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1 border border-gray-200 hover:border-emerald-300">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-3">
                 <div className="space-y-1">
                   <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -170,17 +185,17 @@ const AdminDashboardPage = () => {
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <span className="text-3xl font-bold">{stat.value}</span>
-                    <Badge variant="secondary" className="text-xs font-medium">
+                    <Badge variant="secondary" className="text-xs font-medium bg-emerald-100 text-emerald-700 border-emerald-200">
                       {stat.change}
                     </Badge>
                   </div>
                 </div>
-                <div className={`p-3 rounded-xl ${stat.bgColor} border ${stat.borderColor} group-hover:scale-110 transition-transform duration-300`}>
-                  <IconComponent className={`h-6 w-6 ${stat.color}`} />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-200 border border-emerald-200 group-hover:scale-110 transition-transform duration-300">
+                  <IconComponent className="h-6 w-6 text-emerald-600" />
                 </div>
               </CardHeader>
               <CardContent className="relative pt-0">
-                <Button asChild size="sm" variant="ghost" className="w-full justify-between group-hover:bg-white/50 dark:group-hover:bg-slate-700/50">
+                <Button asChild size="sm" variant="ghost" className="w-full justify-between hover:bg-emerald-50 hover:text-emerald-700">
                   <Link href={stat.href} className="flex items-center gap-2">
                     <span>İdarə et</span>
                     <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -195,19 +210,20 @@ const AdminDashboardPage = () => {
       {/* Content Overview and Quick Actions */}
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Statistics Overview */}
-        <Card className="lg:col-span-2 border-2 shadow-lg">
-          <CardHeader className="pb-4">
+        <Card className="lg:col-span-2 relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+          <CardHeader className="relative z-10 pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50 border border-blue-200 dark:border-blue-800">
-                  <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                  <BarChart3 className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Məzmun Baxışı</CardTitle>
-                  <CardDescription className="text-base">Platformdakı məzmun statistikası</CardDescription>
+                  <CardTitle className="text-xl font-bold text-gray-900">Məzmun Baxışı</CardTitle>
+                  <CardDescription className="text-gray-600">Platformdakı məzmun statistikası</CardDescription>
                 </div>
               </div>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300">
                 <Eye className="h-4 w-4" />
                 Detallı Baxış
               </Button>
@@ -245,15 +261,16 @@ const AdminDashboardPage = () => {
         </Card>
 
         {/* Quick Actions */}
-        <Card className="border-2 shadow-lg">
-          <CardHeader className="pb-4">
+        <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+          <CardHeader className="relative z-10 pb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950/50 dark:to-emerald-900/50 border border-emerald-200 dark:border-emerald-800">
-                <Activity className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                <Activity className="h-5 w-5 text-white" />
               </div>
               <div>
-                <CardTitle className="text-xl">Tez Əməliyyatlar</CardTitle>
-                <CardDescription>Tez-tez istifadə olunan əməliyyatlar</CardDescription>
+                <CardTitle className="text-xl font-bold text-gray-900">Tez Əməliyyatlar</CardTitle>
+                <CardDescription className="text-gray-600">Tez-tez istifadə olunan əməliyyatlar</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -262,9 +279,9 @@ const AdminDashboardPage = () => {
               {quickActions.map((action, index) => {
                 const IconComponent = action.icon;
                 return (
-                  <Button key={index} asChild variant="outline" className="w-full justify-start h-12 group hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200">
+                  <Button key={index} asChild variant="outline" className="w-full justify-start h-12 group hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-200">
                     <Link href={action.href} className="flex items-center gap-3">
-                      <div className="p-1.5 rounded-md bg-muted group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-200">
+                      <div className="p-1.5 rounded-md bg-muted group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-200">
                         <Plus className="h-3 w-3" />
                       </div>
                       <IconComponent className="h-4 w-4" />
@@ -282,19 +299,20 @@ const AdminDashboardPage = () => {
       {/* Recent Activity */}
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Recent Articles */}
-        <Card className="border-2 shadow-lg">
-          <CardHeader className="pb-4">
+        <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+          <CardHeader className="relative z-10 pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50 border border-blue-200 dark:border-blue-800">
-                  <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                  <FileText className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Son Məqalələr</CardTitle>
-                  <CardDescription>Ən son əlavə edilən məqalələr</CardDescription>
+                  <CardTitle className="text-xl font-bold text-gray-900">Son Məqalələr</CardTitle>
+                  <CardDescription className="text-gray-600">Ən son əlavə edilən məqalələr</CardDescription>
                 </div>
               </div>
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs bg-emerald-100 text-emerald-700 border-emerald-200">
                 {stats.recentArticles.length} məqalə
               </Badge>
             </div>
@@ -353,19 +371,20 @@ const AdminDashboardPage = () => {
         </Card>
 
         {/* Recent Questions */}
-        <Card className="border-2 shadow-lg">
-          <CardHeader className="pb-4">
+        <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+          <CardHeader className="relative z-10 pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950/50 dark:to-emerald-900/50 border border-emerald-200 dark:border-emerald-800">
-                  <HelpCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                  <HelpCircle className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl">Son Suallar</CardTitle>
-                  <CardDescription>Ən son əlavə edilən suallar</CardDescription>
+                  <CardTitle className="text-xl font-bold text-gray-900">Son Suallar</CardTitle>
+                  <CardDescription className="text-gray-600">Ən son əlavə edilən suallar</CardDescription>
                 </div>
               </div>
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs bg-emerald-100 text-emerald-700 border-emerald-200">
                 {stats.recentQuestions.length} sual
               </Badge>
             </div>

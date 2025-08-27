@@ -24,7 +24,6 @@ const HomePage = () => {
 
             <section id="books" className="py-16 md:py-24 bg-white">
                 <div className="container mx-auto px-4">
-                    {/* Title moved inside the section for better structure */}
                     <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">
                         Kitablarımız
                     </h2>
@@ -57,7 +56,6 @@ const HomePage = () => {
                     <Feedbacks />
                 </div>
             </section>
-
         </main>
     );
 };
