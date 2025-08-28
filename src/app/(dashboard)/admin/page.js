@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import HttpClient from '@/util/HttpClient';
 import DashboardSkeleton from '@/components/admin/DashboardSkeleton';
 import {
@@ -49,19 +48,21 @@ const AdminDashboardPage = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // You can replace these with actual API calls
-      const [articlesRes, questionsRes, authorsRes, tagsRes] = await Promise.allSettled([
+      // Fetch statistics and recent data
+      const [statisticsRes, articlesRes, questionsRes, authorsRes] = await Promise.allSettled([
+        HttpClient.get('/questions/statistics').then(res => res.json()).catch(() => ({})),
         HttpClient.get('/articles').then(res => res.json()).catch(() => ({ length: 0 })),
         HttpClient.get('/questions').then(res => res.json()).catch(() => ({ length: 0 })),
-        HttpClient.get('/authors').then(res => res.json()).catch(() => ({ length: 0 })),
-        HttpClient.get('/tags').then(res => res.json()).catch(() => ({ length: 0 }))
+        HttpClient.get('/authors').then(res => res.json()).catch(() => ({ length: 0 }))
       ]);
+
+      const statisticsData = statisticsRes.status === 'fulfilled' ? statisticsRes.value : {};
 
       setStats({
         articles: articlesRes.status === 'fulfilled' ? (Array.isArray(articlesRes.value) ? articlesRes.value.length : articlesRes.value.total || 0) : 0,
-        questions: questionsRes.status === 'fulfilled' ? (Array.isArray(questionsRes.value) ? questionsRes.value.length : questionsRes.value.total || 0) : 0,
+        questions: statisticsData.totalQuestions || 0,
         authors: authorsRes.status === 'fulfilled' ? (Array.isArray(authorsRes.value) ? authorsRes.value.length : authorsRes.value.total || 0) : 0,
-        tags: tagsRes.status === 'fulfilled' ? (Array.isArray(tagsRes.value) ? tagsRes.value.length : tagsRes.value.total || 0) : 0,
+        tags: statisticsData.totalTags || 0,
         recentArticles: articlesRes.status === 'fulfilled' && Array.isArray(articlesRes.value) ? articlesRes.value.slice(0, 5) : [],
         recentQuestions: questionsRes.status === 'fulfilled' && Array.isArray(questionsRes.value) ? questionsRes.value.slice(0, 5) : []
       });

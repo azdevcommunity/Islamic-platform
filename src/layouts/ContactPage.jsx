@@ -61,7 +61,7 @@ export default function ContactPage() {
 
                         {/* Contact Information Sidebar */}
                         <div className="lg:col-span-4">
-                            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 sticky top-8">
+                            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/20 sticky top-20">
                                 <ContactAndSupportSidebar />
                             </div>
                         </div>

@@ -3,15 +3,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import HttpClient from "@/util/HttpClient";
-import { 
-    Search, 
-    Grid3X3, 
-    List, 
-    Calendar, 
-    Eye, 
-    MessageCircle, 
-    Tag, 
-    BookOpen, 
+import {
+    Search,
+    Grid3X3,
+    List,
+    Calendar,
+    Eye,
+    MessageCircle,
+    Tag,
+    BookOpen,
     ArrowRight,
     TrendingUp,
     X,
@@ -24,8 +24,8 @@ import { OptimizedPagination } from "./QuestionComponents";
 // Modern Question Card Component
 const ModernQuestionCard = ({ question, index, layout }) => {
     const formattedDate = formatDate(question.createdDate);
-    const answerPreview = question.answer?.length > 120 
-        ? question.answer.substring(0, 120) + "..." 
+    const answerPreview = question.answer?.length > 120
+        ? question.answer.substring(0, 120) + "..."
         : question.answer || "Cavab mövcud deyil.";
 
     if (layout === 'list') {
@@ -65,7 +65,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
                             {/* Categories and Tags */}
                             <div className="flex flex-wrap gap-2 mb-4">
                                 {question.categories?.slice(0, 2).map(category => (
-                                    <span 
+                                    <span
                                         key={category.id}
                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 text-sm font-medium rounded-lg hover:bg-green-100 transition-colors duration-200"
                                     >
@@ -74,7 +74,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
                                     </span>
                                 ))}
                                 {question.tags?.slice(0, 3).map(tag => (
-                                    <span 
+                                    <span
                                         key={tag.id}
                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors duration-200"
                                     >
@@ -99,7 +99,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
                                     )}
                                 </div>
 
-                                <Link 
+                                <Link
                                     href={`/questions/${question.id}`}
                                     className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white text-sm font-medium rounded-xl transition-all duration-200 group/btn"
                                 >
@@ -155,7 +155,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
             <div className="px-6 pb-4">
                 <div className="flex flex-wrap gap-2">
                     {question.categories?.slice(0, 2).map(category => (
-                        <span 
+                        <span
                             key={category.id}
                             className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-lg"
                         >
@@ -187,7 +187,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
                         )}
                     </div>
 
-                    <Link 
+                    <Link
                         href={`/questions/${question.id}`}
                         className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white text-xs font-medium rounded-lg transition-all duration-200 group/btn"
                     >
@@ -201,11 +201,11 @@ const ModernQuestionCard = ({ question, index, layout }) => {
 };
 
 // Modern Header Component
-const ModernHeader = ({ 
-    questionsCount, 
-    layout, 
-    onLayoutChange, 
-    searchQuery, 
+const ModernHeader = ({
+    questionsCount,
+    layout,
+    onLayoutChange,
+    searchQuery,
     onSearchChange
 }) => {
     const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -258,22 +258,20 @@ const ModernHeader = ({
                     <div className="flex border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
                         <button
                             onClick={() => onLayoutChange('list')}
-                            className={`px-4 py-3 flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
-                                layout === 'list' 
-                                    ? 'bg-green-600 text-white shadow-sm' 
-                                    : 'text-gray-600 hover:text-gray-900 hover:bg-white'
-                            }`}
+                            className={`px-4 py-3 flex items-center gap-2 text-sm font-medium transition-all duration-200 ${layout === 'list'
+                                ? 'bg-green-600 text-white shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900 hover:bg-white'
+                                }`}
                         >
                             <List className="w-4 h-4" />
                             <span className="hidden sm:inline">List</span>
                         </button>
                         <button
                             onClick={() => onLayoutChange('grid')}
-                            className={`px-4 py-3 flex items-center gap-2 text-sm font-medium transition-all duration-200 ${
-                                layout === 'grid' 
-                                    ? 'bg-green-600 text-white shadow-sm' 
-                                    : 'text-gray-600 hover:text-gray-900 hover:bg-white'
-                            }`}
+                            className={`px-4 py-3 flex items-center gap-2 text-sm font-medium transition-all duration-200 ${layout === 'grid'
+                                ? 'bg-green-600 text-white shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900 hover:bg-white'
+                                }`}
                         >
                             <Grid3X3 className="w-4 h-4" />
                             <span className="hidden sm:inline">Grid</span>
@@ -288,9 +286,8 @@ const ModernHeader = ({
 // Skeleton Loader
 const SkeletonLoader = ({ layout, count = 6 }) => {
     const skeletonItems = Array.from({ length: count }).map((_, index) => (
-        <div key={index} className={`bg-white rounded-2xl border border-gray-100 animate-pulse ${
-            layout === 'grid' ? 'h-[420px] flex flex-col' : ''
-        }`}>
+        <div key={index} className={`bg-white rounded-2xl border border-gray-100 animate-pulse ${layout === 'grid' ? 'h-[420px] flex flex-col' : ''
+            }`}>
             {layout === 'grid' ? (
                 <>
                     <div className="p-6 pb-4">
@@ -379,7 +376,7 @@ const NoResults = ({ onReset, hasFilters }) => (
                 {hasFilters ? 'Heç bir nəticə tapılmadı' : 'Hələ sual yoxdur'}
             </h3>
             <p className="text-gray-600 mb-6">
-                {hasFilters 
+                {hasFilters
                     ? 'Axtarış kriteriyalarınızı dəyişdirməyi cəhd edin'
                     : 'Tezliklə suallar əlavə ediləcək'
                 }
@@ -412,12 +409,36 @@ export default function NewQuestionsPage() {
     const [isFiltersInitialized, setIsFiltersInitialized] = useState(false);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    const [statistics, setStatistics] = useState({
+        totalQuestions: 0,
+        totalCategories: 0,
+        totalTags: 0,
+        totalViewCount: 0
+    });
 
     // Data Fetching
+    const fetchStatistics = useCallback(async () => {
+        try {
+            const response = await HttpClient.get('/questions/statistics');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+
+            setStatistics({
+                totalQuestions: data.totalQuestions || 0,
+                totalCategories: data.totalCategories || 0,
+                totalTags: data.totalTags || 0,
+                totalViewCount: data.totalViewCount || 0
+            });
+        } catch (err) {
+            console.error("Error fetching statistics:", err);
+            // Keep default values if API fails
+        }
+    }, []);
+
     const fetchQuestions = useCallback(async () => {
         setLoading(true);
         setError(null);
-        
+
         try {
             const params = new URLSearchParams({
                 page: page.toString(),
@@ -462,6 +483,11 @@ export default function NewQuestionsPage() {
     }, [page, filters.searchQuery, filters.categories, filters.tags, layout]);
 
     // Effects
+    useEffect(() => {
+        // Fetch statistics on component mount
+        fetchStatistics();
+    }, [fetchStatistics]);
+
     useEffect(() => {
         if (isFiltersInitialized) {
             fetchQuestions();
@@ -511,7 +537,7 @@ export default function NewQuestionsPage() {
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30">
             {/* Hero Section */}
-            <section className="relative py-20 bg-gradient-to-br from-green-600 via-green-700 to-green-800 overflow-hidden">
+            <section className="relative py-20 md:py-28 bg-gradient-to-br from-[#43b365] via-[#2d7a47] to-[#1e5a32] overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
@@ -521,70 +547,66 @@ export default function NewQuestionsPage() {
                 </div>
 
                 <div className="container mx-auto px-4 max-w-7xl relative">
-                    <motion.div 
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center space-y-8"
-                    >
+                    <div className="text-center space-y-8">
                         {/* Badge */}
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full text-white/90 font-medium"
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 font-medium text-sm"
                         >
-                            <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                            İslami Elm və Hikmət Mərkəzi
+                            <span className="w-2 h-2 bg-white rounded-full"></span>
+                            Sual və Cavablar Arxivi
                         </motion.div>
 
                         {/* Main Title */}
-                        <div className="space-y-6">
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-                                Sual və Cavablar
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="space-y-6"
+                        >
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                                Dini Suallar və
                                 <span className="block text-transparent bg-gradient-to-r from-yellow-200 to-yellow-400 bg-clip-text">
-                                    Platforması
+                                    Mütəxəssis Cavabları
                                 </span>
                             </h1>
                             <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                                Dini məsələlər haqqında suallarınızın cavablarını tapın və İslami elm dünyasına qoşulun
+                                İslami elm və hikmətdən doğan suallarınızın cavablarını tapın və mənəvi inkişafınıza töhfə verin
                             </p>
-                        </div>
+                        </motion.div>
 
-                        {/* Quick Stats */}
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
+                        {/* Stats */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12"
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12"
                         >
                             {[
-                                { label: "Aktiv Suallar", count: questions.length || "200+", icon: MessageCircle },
-                                { label: "Kateqoriyalar", count: "15+", icon: BookOpen },
-                                { label: "Cavablar", count: "180+", icon: Eye },
-                                { label: "Oxunma", count: "10K+", icon: TrendingUp }
+                                { label: "Suallar", count: statistics.totalQuestions },
+                                { label: "Kateqoriyalar", count: statistics.totalCategories },
+                                { label: "Teqlər", count: statistics.totalQuestions }, // Assuming answered questions = total questions
+                                { label: "Oxunma", count: statistics.totalViewCount > 1000 ? `${Math.floor(statistics.totalViewCount / 1000)}K+` : `${statistics.totalViewCount}+` }
                             ].map((stat, index) => (
-                                <motion.div
+                                <div
                                     key={index}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                                    className="p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                                    className="group p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
                                 >
-                                    <div className="text-center space-y-3">
-                                        <stat.icon className="w-8 h-8 text-white/80 mx-auto" />
-                                        <div className="text-2xl font-bold text-white">{stat.count}</div>
-                                        <div className="text-sm text-white/70">{stat.label}</div>
+                                    <div className="text-center">
+                                        <div className="text-2xl md:text-3xl font-bold text-white">{stat.count}</div>
+                                        <div className="text-sm text-white/70 mt-1">{stat.label}</div>
                                     </div>
-                                </motion.div>
+                                </div>
                             ))}
                         </motion.div>
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* Decorative Elements */}
-                <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-400/10 rounded-full blur-xl animate-pulse"></div>
-                <div className="absolute bottom-20 right-10 w-32 h-32 bg-white/10 rounded-full blur-xl animate-pulse"></div>
+                <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-400/10 rounded-full blur-xl"></div>
+                <div className="absolute bottom-20 right-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
             </section>
 
             {/* Main Content */}
@@ -605,7 +627,7 @@ export default function NewQuestionsPage() {
                             transition={{ duration: 0.6 }}
                         >
                             <ModernHeader
-                                questionsCount={questions.length}
+                                questionsCount={statistics.totalQuestions}
                                 layout={layout}
                                 onLayoutChange={handleLayoutChange}
                                 searchQuery={searchQuery}
@@ -628,7 +650,7 @@ export default function NewQuestionsPage() {
                             )}
 
                             {loading ? (
-                                <SkeletonLoader 
+                                <SkeletonLoader
                                     layout={layout}
                                     count={layout === "grid" ? 9 : 6}
                                 />
@@ -643,9 +665,9 @@ export default function NewQuestionsPage() {
                                     {layout === "grid" ? (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                             {questions.map((question, index) => (
-                                                <ModernQuestionCard 
-                                                    key={question.id} 
-                                                    question={question} 
+                                                <ModernQuestionCard
+                                                    key={question.id}
+                                                    question={question}
                                                     index={index}
                                                     layout={layout}
                                                 />
@@ -654,9 +676,9 @@ export default function NewQuestionsPage() {
                                     ) : (
                                         <div className="space-y-6">
                                             {questions.map((question, index) => (
-                                                <ModernQuestionCard 
-                                                    key={question.id} 
-                                                    question={question} 
+                                                <ModernQuestionCard
+                                                    key={question.id}
+                                                    question={question}
                                                     index={index}
                                                     layout={layout}
                                                 />
@@ -666,7 +688,7 @@ export default function NewQuestionsPage() {
 
                                     {/* Pagination */}
                                     {totalPages > 1 && (
-                                        <motion.div 
+                                        <motion.div
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.5, delay: 0.3 }}

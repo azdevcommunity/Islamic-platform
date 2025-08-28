@@ -100,92 +100,83 @@ export default function BooksPage() {
     }, [totalPages]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
-            {/* Modern Hero Header */}
-            <div className="relative bg-gradient-to-r from-emerald-600 to-teal-600 overflow-hidden">
+        <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
+            {/* Hero Section */}
+            <section className="relative py-20 md:py-28 bg-gradient-to-br from-[#43b365] via-[#2d7a47] to-[#1e5a32] overflow-hidden">
                 {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+                        backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
+                        backgroundSize: '60px 60px'
                     }}></div>
                 </div>
-                
-                {/* Floating shapes */}
-                <div className="absolute top-10 right-20 w-32 h-32 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-                <div className="absolute bottom-10 left-16 w-24 h-24 bg-emerald-300/20 rounded-full blur-lg animate-bounce"></div>
-                
-                <div className="relative container mx-auto px-4 py-16 md:py-24">
-                    <div className="text-center max-w-4xl mx-auto">
-                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-emerald-100 text-sm font-medium mb-6">
-                            <BookOpen className="w-4 h-4" />
-                            <span>İslami Kitablar</span>
-                        </div>
-                        
-                        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                            Mədrəsəmizin 
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-teal-200 block sm:inline"> Kitabları</span>
-                        </h1>
-                        
-                        <p className="text-xl md:text-2xl text-emerald-100 mb-8 leading-relaxed max-w-3xl mx-auto">
-                            Əhli Sünnə təlimlərinin əsasında hazırlanmış elmi və mənəvi qaynaqları kəşf edin. 
-                            Hər səviyyədən oxucular üçün uyğun materiallar.
-                        </p>
-                        
-                        <div className="flex flex-wrap justify-center gap-6 text-emerald-200">
-                            <div className="flex items-center gap-2">
-                                <BookOpen className="w-5 h-5" />
-                                <span className="text-sm font-medium">Elmi Məzmun</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Star className="w-5 h-5" />
-                                <span className="text-sm font-medium">Keyfiyyətli Tərcümə</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Eye className="w-5 h-5" />
-                                <span className="text-sm font-medium">Asan Anlaşılan</span>
-                            </div>
-                        </div>
+
+                <div className="container mx-auto px-4 max-w-7xl relative">
+                    <div className="text-center space-y-8">
+                        {/* Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 font-medium text-sm"
+                        >
+                            <span className="w-2 h-2 bg-white rounded-full"></span>
+                            Kitablar Arxivi
+                        </motion.div>
+
+                        {/* Main Title */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="space-y-6"
+                        >
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                                İslami Elm və
+                                <span className="block text-transparent bg-gradient-to-r from-yellow-200 to-yellow-400 bg-clip-text">
+                                    Maarifləndirici Kitablar
+                                </span>
+                            </h1>
+                            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                                Əhli Sünnə təlimlərinin əsasında hazırlanmış elmi və mənəvi qaynaqları kəşf edin və ruhunuzu zənginləşdirin
+                            </p>
+                        </motion.div>
+
+                        {/* Stats */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12"
+                        >
+                            {[
+                                { label: "Kitablar", count: "4+" },
+                                { label: "Kateqoriyalar", count: "10+" },
+                                { label: "Müəlliflər", count: "2+" },
+                                { label: "Oxunma", count: "500+" }
+                            ].map((stat, index) => (
+                                <div
+                                    key={index}
+                                    className="group p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                                >
+                                    <div className="text-center">
+                                        <div className="text-2xl md:text-3xl font-bold text-white">{stat.count}</div>
+                                        <div className="text-sm text-white/70 mt-1">{stat.label}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </motion.div>
                     </div>
                 </div>
-            </div>
 
-            {/* Main Content */}
-            <div className="relative -mt-16 z-10">
-                <div className="container mx-auto px-4">
-                    {/* Stats Section */}
-                    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 mb-12">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                            <div className="group">
-                                <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    <BookOpen className="w-8 h-8 text-white" />
-                                </div>
-                                <div className="text-3xl font-bold text-gray-900 mb-1">{books.length}+</div>
-                                <div className="text-sm text-gray-600">Kitab</div>
-                            </div>
-                            <div className="group">
-                                <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    <Star className="w-8 h-8 text-white" />
-                                </div>
-                                <div className="text-3xl font-bold text-gray-900 mb-1">5</div>
-                                <div className="text-sm text-gray-600">Kateqoriya</div>
-                            </div>
-                            <div className="group">
-                                <div className="w-16 h-16 bg-gray-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    <Eye className="w-8 h-8 text-white" />
-                                </div>
-                                <div className="text-3xl font-bold text-gray-900 mb-1">1000+</div>
-                                <div className="text-sm text-gray-600">Oxunma</div>
-                            </div>
-                            <div className="group">
-                                <div className="w-16 h-16 bg-emerald-700 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    <ShoppingCart className="w-8 h-8 text-white" />
-                                </div>
-                                <div className="text-3xl font-bold text-gray-900 mb-1">Əlçatan</div>
-                                <div className="text-sm text-gray-600">Qiymət</div>
-                            </div>
-                        </div>
-                    </div>
+                {/* Decorative Elements */}
+                <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-400/10 rounded-full blur-xl"></div>
+                <div className="absolute bottom-20 right-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+            </section>
 
+            {/* Content Section */}
+            <section className="py-12 md:py-16">
+                <div className="container mx-auto px-4 max-w-7xl">
                     {/* Filter and Books Section */}
                     <FilterProvider
                         initialCategories={[]}
@@ -232,8 +223,8 @@ export default function BooksPage() {
                         </div>
                     </FilterProvider>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
     );
 }
 

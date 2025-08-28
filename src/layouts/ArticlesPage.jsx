@@ -19,6 +19,12 @@ export default function ArticlesPage() {
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    const [statistics, setStatistics] = useState({
+        totalArticles: 0,
+        totalCategories: 0,
+        totalAuthors: 0,
+        totalReadCount: 0
+    });
     const searchInputRef = useRef(null);
     const PAGE_SIZE = 12;
 
@@ -29,6 +35,17 @@ export default function ArticlesPage() {
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
     // --- Data Fetching ---
+    const fetchStatistics = useCallback(async () => {
+        try {
+            const response = await HttpClient.get('/articles/statistics');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            setStatistics(data);
+        } catch (err) {
+            console.error("Error fetching statistics:", err);
+            // Keep default values if API fails
+        }
+    }, []);
     const fetchArticles = useCallback(async () => {
         setLoading(true);
         setError(null);
@@ -63,6 +80,11 @@ export default function ArticlesPage() {
     useEffect(() => {
         fetchArticles();
     }, [fetchArticles]);
+
+    // Fetch statistics when component mounts
+    useEffect(() => {
+        fetchStatistics();
+    }, [fetchStatistics]);
 
     // Reset page when filters change
     useEffect(() => {
@@ -132,10 +154,10 @@ export default function ArticlesPage() {
                             className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12"
                         >
                             {[
-                                { label: "Məqalələr", count: "500+" },
-                                { label: "Kateqoriyalar", count: "20+" },
-                                { label: "Müəlliflər", count: "15+" },
-                                { label: "Oxunma", count: "50K+" }
+                                { label: "Məqalələr", count: statistics.totalArticles || 0 },
+                                { label: "Kateqoriyalar", count: statistics.totalCategories || 0 },
+                                { label: "Müəlliflər", count: statistics.totalAuthors || 0 },
+                                { label: "Oxunma", count: statistics.totalReadCount >= 1000 ? `${Math.floor(statistics.totalReadCount / 1000)}K+` : statistics.totalReadCount || 0 }
                             ].map((stat, index) => (
                                 <div
                                     key={index}
