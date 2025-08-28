@@ -159,29 +159,28 @@ const ContactUsTable = () => {
         </div>
       </div>
 
-        {/* Save Changes Button */}
-        {updatedContacts.length > 0 && (
-          <div className="flex justify-end">
-            <Button 
-              onClick={saveChanges}
-              disabled={saving}
-              className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              {saving ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Kaydediliyor...
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4" />
-                  Değişiklikleri Kaydet
-                </>
-              )}
-            </Button>
-          </div>
-        )}
-      </div>
+      {/* Save Changes Button */}
+      {updatedContacts.length > 0 && (
+        <div className="flex justify-end">
+          <Button 
+            onClick={saveChanges}
+            disabled={saving}
+            className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            {saving ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Kaydediliyor...
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4" />
+                Değişiklikleri Kaydet
+              </>
+            )}
+          </Button>
+        </div>
+      )}
 
       {/* Error Alert */}
       {error && (

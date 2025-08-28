@@ -107,17 +107,19 @@ export function QuestionForm({ initialData }) {
     setIsSubmitting(true)
     try {
       if (initialData) {
-        // In a real app, this would call a server action
-        console.log("Updating question:", initialData.id, formData)
+        // Update existing question
+        await HttpClient.put(`/questions/${initialData.id}`, formData)
+        console.log("Question updated successfully:", initialData.id)
       } else {
+        // Create new question
         await HttpClient.post("/questions", formData)
-        // In a real app, this would call a server action
-        console.log("Creating question:", formData)
+        console.log("Question created successfully")
       }
       router.push("/admin/questions")
       router.refresh()
     } catch (error) {
       console.error("Form gönderilirken hata oluştu:", error)
+      alert("İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.")
     } finally {
       setIsSubmitting(false)
     }

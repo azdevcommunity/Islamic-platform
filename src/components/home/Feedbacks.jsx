@@ -46,11 +46,13 @@ export default function Feedbacks() {
     return (
         // Container is now managed by the HomePage section
         // Removed max-w-4xl and px-4 from here
-        <div className="relative max-w-3xl mx-auto"> {/* Limit width for readability */}
+        <div className="relative max-w-4xl mx-auto">
 
             {/* Quotation Mark Icon */}
-            <div className="flex justify-center mb-6">
-                <FaQuoteLeft className="h-10 w-10 text-[#43b365]  opacity-80"/>
+            <div className="flex justify-center mb-8">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                    <FaQuoteLeft className="h-8 w-8 text-white"/>
+                </div>
             </div>
 
             <Swiper
@@ -71,15 +73,29 @@ export default function Feedbacks() {
             >
                 {testimonials.map((testimonial) => (
                     <SwiperSlide key={testimonial.id}>
-                        <div className="text-center px-4 sm:px-8">
+                        <div className="text-center px-4 sm:px-8 py-8">
                             {/* Star Rating */}
                             <StarRating rating={testimonial.rating}/>
+                            
                             {/* Testimonial Text */}
-                            <p className="mb-6 text-base md:text-lg text-gray-700 italic leading-relaxed">
-                                "{testimonial.text}"
-                            </p>
+                            <div className="relative mb-8">
+                                <p className="text-lg md:text-xl text-white leading-relaxed font-light italic">
+                                    "{testimonial.text}"
+                                </p>
+                            </div>
+                            
                             {/* Author */}
-                            <p className="font-semibold text-gray-800">{testimonial.author}</p>
+                            <div className="flex items-center justify-center gap-4">
+                                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                    <span className="text-white font-bold text-lg">
+                                        {testimonial.author.charAt(0)}
+                                    </span>
+                                </div>
+                                <div className="text-left">
+                                    <p className="font-semibold text-white text-lg">{testimonial.author}</p>
+                                    <p className="text-white/70 text-sm">Tələbə</p>
+                                </div>
+                            </div>
                         </div>
                     </SwiperSlide>
                 ))}

@@ -9,26 +9,57 @@ const stats = [
 
 const SocialMediaStats = () => {
     return (
-        // Container is managed by HomePage section
-        <div className="text-white  flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16">
-
+        <div className="text-white flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-20">
             {/* Left Section: Text */}
-            <div className="w-full lg:w-5/12 text-center lg:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">Bizi İzləyirsinizmi?</h2>
-                <p className="text-gray-300 text-justify leading-relaxed text-base md:text-lg">
+            <div className="w-full lg:w-5/12 text-center lg:text-left space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 font-medium text-sm mb-4">
+                    <span className="w-2 h-2 bg-white rounded-full"></span>
+                    Sosial Şəbəkələr
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                    Bizi İzləyirsinizmi?
+                </h2>
+                <p className="text-white/80 leading-relaxed text-lg md:text-xl">
                     Rəqəmsal platformalarda milyonlarla insana çatdıq, ürəklərə toxunduq. Hər paylaşım bir hekayənin başlanğıcı
-                    oldu. Sizinlə paylaşdığımız hər məzmun aramızda bir körpü qurdu. Əhli Sünnə Mədrəsəsi olaraq, milyonların
-                    ürəyində iman həqiqətlərinin yer alması bizə ümid verir.
+                    oldu. Sizinlə paylaşdığımız hər məzmun aramızda bir körpü qurdu.
+                </p>
+                <p className="text-white/70 leading-relaxed text-base md:text-lg">
+                    Əhli Sünnə Mədrəsəsi olaraq, milyonların ürəyində iman həqiqətlərinin yer alması bizə ümid verir.
                 </p>
             </div>
 
             {/* Right Section: Stats */}
-            <div className="w-full lg:w-6/12 grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-8">
-                {stats.map((stat) => (
-                    <div key={stat.platform} className="flex flex-col items-center text-center p-4 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-20 transition duration-300">
-                        <stat.icon className={`text-5xl md:text-6xl mb-3 ${stat.color}`} /> {/* Colored icons */}
-                        <p className="text-xl md:text-2xl font-semibold">{stat.count}</p>
-                        <p className="text-sm text-gray-300">{stat.platform}</p>
+            <div className="w-full lg:w-6/12 grid grid-cols-2 gap-6 lg:gap-8">
+                {stats.map((stat, index) => (
+                    <div 
+                        key={stat.platform} 
+                        className="group relative overflow-hidden"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                    >
+                        <div className="relative p-8 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+                            {/* Background gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl"></div>
+                            
+                            {/* Content */}
+                            <div className="relative flex flex-col items-center text-center space-y-4">
+                                <div className="relative">
+                                    <stat.icon className={`text-4xl md:text-5xl ${stat.color} group-hover:scale-110 transition-transform duration-300`} />
+                                    {/* Glow effect */}
+                                    <div className={`absolute inset-0 ${stat.color} opacity-20 blur-xl group-hover:opacity-40 transition-opacity duration-300`}></div>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-2xl md:text-3xl font-bold text-white group-hover:text-white transition-colors duration-300">
+                                        {stat.count}
+                                    </p>
+                                    <p className="text-sm md:text-base text-white/70 font-medium">
+                                        {stat.platform}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Hover border effect */}
+                            <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-white/30 transition-colors duration-300"></div>
+                        </div>
                     </div>
                 ))}
             </div>

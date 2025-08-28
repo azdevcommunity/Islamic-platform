@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import {
     Calendar,
     ChevronDown,
-    ChevronLeft,
     ChevronRight,
     ChevronUp,
     Clock,
@@ -16,6 +15,7 @@ import {
 import Link from "next/link";
 import { formatDate } from "@/util/DateUtil";
 import useFilterStore from "@/store/useFilterStore";
+import Pagination from "@/components/common/Pagination";
 
 // Modern Professional Question Card
 export const OptimizedQuestionCard = memo(function QuestionCard({ question }) {
@@ -33,15 +33,15 @@ export const OptimizedQuestionCard = memo(function QuestionCard({ question }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, type: "spring", stiffness: 120, damping: 25 }}
-            className="group bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:border-emerald-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+            className="group bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:border-[#43b365]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
         >
             <div className="p-5 md:p-6">
                 {/* Question Header with Icon */}
                 <div className="flex items-start gap-4 mb-3">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-sm">
-                        <MessageSquare className="w-5 h-5 text-white" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#43b365] to-[#2d7a47] rounded-xl flex items-center justify-center shadow-lg">
+                        <MessageSquare className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-emerald-700 transition-colors duration-200">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight group-hover:text-[#43b365] transition-colors duration-200">
                         {question.question}
                     </h2>
                 </div>
@@ -65,7 +65,7 @@ export const OptimizedQuestionCard = memo(function QuestionCard({ question }) {
                     {needsExpansion && (
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className="inline-flex items-center gap-2 mt-4 px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                            className="inline-flex items-center gap-2 mt-4 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             aria-expanded={isExpanded}
                         >
                             {isExpanded ? 'Daha az göstər' : 'Daha çox göstər'}
@@ -92,13 +92,13 @@ export const OptimizedQuestionCard = memo(function QuestionCard({ question }) {
                 <div className="flex flex-wrap items-center justify-between gap-y-3 gap-x-4 text-sm text-gray-600 pt-4 border-t border-gray-100 pl-14">
                     <div className="flex items-center gap-4">
                         <span className="flex items-center gap-2" title="Yaradılma tarixi">
-                            <Calendar className="w-4 h-4 text-emerald-500" />
+                            <Calendar className="w-4 h-4 text-blue-500" />
                             {formattedDate}
                         </span>
                         {question.categories && question.categories.length > 0 && (
                             <span className="flex items-center gap-2" title="Kateqoriyalar">
-                                <div className="w-4 h-4 bg-emerald-100 rounded-full flex items-center justify-center">
-                                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                <div className="w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                                 </div>
                                 {question.categories.length} kateqoriya
                             </span>
@@ -115,9 +115,9 @@ export const OptimizedQuestionCard = memo(function QuestionCard({ question }) {
             </div>
 
             {/* Enhanced Action Footer */}
-            <div className="bg-gradient-to-r from-gray-50 to-emerald-50 px-6 py-4 border-t border-gray-100">
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 px-6 py-4 border-t border-gray-100">
                 <Link href={`/questions/${question.id}`}
-                    className="inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-800 font-semibold text-sm group transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1">
+                    className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-semibold text-sm group transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1">
                     <span>Tam cavabı oxu</span>
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
@@ -200,16 +200,16 @@ export function NoQuestionsFound({ onReset, hasFilters }) {
     };
 
     return (
-        <div className="text-center py-20 px-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-100 shadow-sm my-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 text-emerald-500 mb-8 shadow-sm">
-                <Search className="w-10 h-10" />
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
+                <Search className="w-16 h-16 text-blue-600" />
             </div>
 
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">
                 {hasFilters ? "Nəticə tapılmadı" : "Hələ sual yoxdur"}
             </h3>
 
-            <p className="text-gray-600 max-w-lg mx-auto mb-8 text-base leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
                 {hasFilters
                     ? "Seçdiyiniz filtrlərə uyğun heç bir sual tapılmadı. Axtarış şərtlərini dəyişməyi və ya filtrləri sıfırlamağı yoxlayın."
                     : "Görünür, hələ heç bir sual əlavə edilməyib. Zəhmət olmasa daha sonra təkrar yoxlayın və ya özünüz sual əlavə edin."}
@@ -219,9 +219,9 @@ export function NoQuestionsFound({ onReset, hasFilters }) {
                 <button
                     onClick={handleReset}
                     disabled={isResetting}
-                    className={`inline-flex items-center gap-3 px-6 py-3 border border-transparent text-base font-semibold rounded-xl shadow-sm text-white transition-all duration-200 ${isResetting
-                        ? "bg-emerald-400 cursor-not-allowed"
-                        : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 hover:shadow-lg"
+                    className={`inline-flex items-center gap-3 px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg text-white transition-all duration-300 transform hover:scale-105 ${isResetting
+                        ? "bg-blue-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 hover:shadow-xl"
                         }`}
                 >
                     <RotateCcw className={`w-5 h-5 ${isResetting ? 'animate-spin' : ''}`} />
@@ -229,7 +229,7 @@ export function NoQuestionsFound({ onReset, hasFilters }) {
                 </button>
             ) : (
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <button className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                    <button className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105">
                         <MessageSquare className="w-5 h-5" />
                         Sual əlavə et
                     </button>
@@ -247,117 +247,13 @@ export function NoQuestionsFound({ onReset, hasFilters }) {
     );
 }
 
-// Enhanced Modern Pagination Component
-export const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, onPageChange }) {
-    if (totalPages <= 1) return null;
-
-    const pages = [];
-    const maxVisiblePages = 5;
-    let startPage, endPage;
-
-    if (totalPages <= maxVisiblePages) {
-        startPage = 1;
-        endPage = totalPages;
-    } else {
-        const maxPagesBeforeCurrent = Math.floor((maxVisiblePages - 1) / 2);
-        const maxPagesAfterCurrent = Math.ceil((maxVisiblePages - 1) / 2);
-
-        if (currentPage <= maxPagesBeforeCurrent) {
-            startPage = 1;
-            endPage = maxVisiblePages;
-        } else if (currentPage + maxPagesAfterCurrent >= totalPages) {
-            startPage = totalPages - maxVisiblePages + 1;
-            endPage = totalPages;
-        } else {
-            startPage = currentPage - maxPagesBeforeCurrent;
-            endPage = currentPage + maxPagesAfterCurrent;
-        }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-    }
-
-    const showFirstEllipsis = startPage > 2;
-    const showLastEllipsis = endPage < totalPages - 1;
-
+// Use the common Pagination component
+export const OptimizedPagination = memo(function QuestionsPagination({ currentPage, totalPages, onPageChange }) {
     return (
-        <div aria-label="Səhifələmə" className="mt-12 flex justify-center items-center">
-            <div className="flex items-center gap-2 bg-white rounded-2xl border border-gray-200 shadow-sm p-2">
-                <button
-                    onClick={() => onPageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`p-2 rounded-xl text-sm font-medium flex items-center justify-center transition-all duration-200 ${currentPage === 1
-                        ? "text-gray-400 cursor-not-allowed"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                        }`}
-                    aria-label="Əvvəlki səhifə"
-                    aria-disabled={currentPage === 1}
-                >
-                    <ChevronLeft className="w-5 h-5" />
-                </button>
-
-                {/* First page link */}
-                {startPage > 1 && (
-                    <>
-                        <button
-                            onClick={() => onPageChange(1)}
-                            className="px-4 py-2 rounded-xl text-sm font-medium min-w-[40px] transition-all duration-200 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                            aria-label="Birinci səhifə"
-                        >
-                            1
-                        </button>
-                        {showFirstEllipsis && (
-                            <span className="px-2 py-2 text-sm font-medium text-gray-400">...</span>
-                        )}
-                    </>
-                )}
-
-                {/* Page number buttons */}
-                {pages.map(page => (
-                    <button
-                        key={page}
-                        onClick={() => onPageChange(page)}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium min-w-[40px] transition-all duration-200 ${currentPage === page
-                            ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md"
-                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                            }`}
-                        aria-current={currentPage === page ? 'page' : undefined}
-                        aria-label={`Səhifə ${page}`}
-                    >
-                        {page}
-                    </button>
-                ))}
-
-                {/* Last page link */}
-                {endPage < totalPages && (
-                    <>
-                        {showLastEllipsis && (
-                            <span className="px-2 py-2 text-sm font-medium text-gray-400">...</span>
-                        )}
-                        <button
-                            onClick={() => onPageChange(totalPages)}
-                            className="px-4 py-2 rounded-xl text-sm font-medium min-w-[40px] transition-all duration-200 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                            aria-label="Sonuncu səhifə"
-                        >
-                            {totalPages}
-                        </button>
-                    </>
-                )}
-
-                <button
-                    onClick={() => onPageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className={`p-2 rounded-xl text-sm font-medium flex items-center justify-center transition-all duration-200 ${currentPage === totalPages
-                        ? "text-gray-400 cursor-not-allowed"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                        }`}
-                    aria-label="Növbəti səhifə"
-                    aria-disabled={currentPage === totalPages}
-                >
-                    <ChevronRight className="w-5 h-5" />
-                </button>
-            </div>
-        </div>
+        <Pagination
+            clientPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+        />
     );
 });

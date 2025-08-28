@@ -1,4 +1,4 @@
-import QuestionsPage from "@/components/questions/QuestionsPage"
+import NewQuestionsPage from "@/components/questions/NewQuestionsPage"
 
 export const metadata = {
     title: "Sual və Cavablar | Dini Məsələlər",
@@ -7,7 +7,7 @@ export const metadata = {
 }
 
 const Page = () => {
-    return <QuestionsPage />
+    return <NewQuestionsPage />
 }
 
 export default Page

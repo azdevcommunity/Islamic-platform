@@ -137,6 +137,7 @@ export default function QuestionsPage() {
   }
 
   const clearFilters = () => {
+    console.log("clearFilters function called!")
     setSearchQuery("")
     setSelectedCategories([])
     setSelectedTags([])
@@ -150,6 +151,10 @@ export default function QuestionsPage() {
   const confirmDelete = async () => {
     if (questionToDelete) {
       try {
+        // API'ye DELETE request gönder
+        await HttpClient.delete(`/questions/${questionToDelete}`)
+        
+        // Başarılı olursa state'i güncelle
         setQuestions(questions.filter((q) => q.id !== questionToDelete))
         setFilteredQuestions(filteredQuestions.filter((q) => q.id !== questionToDelete))
         const newTotalPages = Math.ceil((filteredQuestions.length - 1) / itemsPerPage)
@@ -159,6 +164,8 @@ export default function QuestionsPage() {
         }
       } catch (error) {
         console.error("Soru silinirken hata oluştu:", error)
+        // Hata durumunda kullanıcıya bilgi verilebilir
+        alert("Soru silinirken bir hata oluştu. Lütfen tekrar deneyin.")
       }
       setDeleteDialogOpen(false)
       setQuestionToDelete(null)
@@ -308,7 +315,7 @@ export default function QuestionsPage() {
       </div>
 
       {/* Search and Filter Controls */}
-      <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+      <Card className="relative bg-white border border-gray-200 shadow-xl">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
         <CardHeader className="relative z-10 border-b bg-gradient-to-r from-emerald-50/50 to-emerald-100/50">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -338,7 +345,7 @@ export default function QuestionsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="overflow-visible">
           <div className="space-y-4">
             {/* Search and filter controls */}
             <div className="flex flex-col sm:flex-row gap-4">
@@ -353,7 +360,7 @@ export default function QuestionsPage() {
                 />
               </div>
 
-              <div className="relative" ref={filterMenuRef}>
+              <div className="relative z-50" ref={filterMenuRef}>
                 <Button
                   variant="outline"
                   onClick={() => setFilterMenuOpen(!filterMenuOpen)}
@@ -370,7 +377,7 @@ export default function QuestionsPage() {
                 </Button>
 
                 {filterMenuOpen && (
-                  <div className="absolute right-0 z-50 mt-2 w-96 origin-top-right rounded-xl bg-white dark:bg-slate-900 shadow-2xl ring-1 ring-black/5 dark:ring-white/10 border-2 border-slate-200 dark:border-slate-700">
+                  <div className="absolute right-0 z-[99999] mt-2 w-96 max-w-[calc(100vw-2rem)] sm:max-w-96 origin-top-right rounded-xl bg-white dark:bg-slate-900 shadow-2xl ring-1 ring-black/5 dark:ring-white/10 border-2 border-slate-200 dark:border-slate-700">
                     <div className="p-6 space-y-6">
                       <div className="flex items-center justify-between">
                         <h4 className="font-semibold text-lg">Filtrlər</h4>
@@ -451,66 +458,77 @@ export default function QuestionsPage() {
 
             {/* Active filters display */}
             {hasActiveFilters && (
-              <div className="flex flex-wrap gap-2 items-center p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-                <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                  <Filter className="h-4 w-4" />
-                  Aktiv filtrlər:
-                </span>
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 pointer-events-auto">
+                <div className="flex flex-wrap gap-2 items-center justify-between">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                      <Filter className="h-4 w-4" />
+                      Aktiv filtrlər:
+                    </span>
 
-                {searchQuery && (
-                  <Badge variant="secondary" className="gap-1 px-3 py-1">
-                    <Search className="h-3 w-3" />
-                    Axtarış: {searchQuery}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setSearchQuery("")}
-                      className="h-4 w-4 p-0 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full ml-1"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                )}
+                    {searchQuery && (
+                      <Badge variant="secondary" className="gap-1 px-3 py-1">
+                        <Search className="h-3 w-3" />
+                        Axtarış: {searchQuery}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSearchQuery("")}
+                          className="h-4 w-4 p-0 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full ml-1"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    )}
 
-                {selectedCategories.map((category) => (
-                  <Badge key={category.id} variant="outline" className="gap-1 px-3 py-1 border-amber-200 text-amber-700 bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:bg-amber-950/50">
-                    <FolderOpen className="h-3 w-3" />
-                    {category.name}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleCategoryToggle(category)}
-                      className="h-4 w-4 p-0 hover:bg-amber-200 dark:hover:bg-amber-800 rounded-full ml-1"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                ))}
+                    {selectedCategories.map((category) => (
+                      <Badge key={category.id} variant="outline" className="gap-1 px-3 py-1 border-amber-200 text-amber-700 bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:bg-amber-950/50">
+                        <FolderOpen className="h-3 w-3" />
+                        {category.name}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleCategoryToggle(category)}
+                          className="h-4 w-4 p-0 hover:bg-amber-200 dark:hover:bg-amber-800 rounded-full ml-1"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    ))}
 
-                {selectedTags.map((tag) => (
-                  <Badge key={tag.id} variant="outline" className="gap-1 px-3 py-1 border-purple-200 text-purple-700 bg-purple-50 dark:border-purple-800 dark:text-purple-300 dark:bg-purple-950/50">
-                    <Tag className="h-3 w-3" />
-                    {tag.name}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleTagToggle(tag)}
-                      className="h-4 w-4 p-0 hover:bg-purple-200 dark:hover:bg-purple-800 rounded-full ml-1"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                ))}
+                    {selectedTags.map((tag) => (
+                      <Badge key={tag.id} variant="outline" className="gap-1 px-3 py-1 border-purple-200 text-purple-700 bg-purple-50 dark:border-purple-800 dark:text-purple-300 dark:bg-purple-950/50">
+                        <Tag className="h-3 w-3" />
+                        {tag.name}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleTagToggle(tag)}
+                          className="h-4 w-4 p-0 hover:bg-purple-200 dark:hover:bg-purple-800 rounded-full ml-1"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    ))}
+                  </div>
 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="ml-auto text-sm hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 gap-2"
-                >
-                  <X className="h-4 w-4" />
-                  Hamısını Təmizlə
-                </Button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      console.log("Clear button clicked!")
+                      clearFilters()
+                    }}
+                    onMouseDown={(e) => {
+                      console.log("Mouse down on clear button")
+                    }}
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-md transition-colors cursor-pointer"
+                    type="button"
+                  >
+                    <X className="h-4 w-4" />
+                    Hamısını Təmizlə
+                  </button>
+                </div>
               </div>
             )}
           </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
@@ -32,6 +32,16 @@ const slides = [
 
 export default function VideoSlider() {
   const videoRefs = useRef([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Handle component mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100); // Small delay to prevent flash
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Optional: Handle video play/pause on slide change for performance
   const handleSlideChange = (swiper) => {
@@ -45,6 +55,49 @@ export default function VideoSlider() {
     });
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="h-screen w-full bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 relative">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
+            backgroundSize: '60px 60px'
+          }}></div>
+        </div>
+        
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center lg:justify-start text-white p-6 md:p-10 lg:p-16">
+          <div className="text-center lg:text-left space-y-6 max-w-2xl lg:max-w-3xl animate-pulse">
+            {/* Badge skeleton */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+              <div className="w-2 h-2 bg-white rounded-full"></div>
+              <div className="h-4 bg-white/50 rounded w-32"></div>
+            </div>
+
+            {/* Title skeleton */}
+            <div className="space-y-3">
+              <div className="h-12 md:h-16 lg:h-20 bg-white/20 rounded-lg w-full"></div>
+              <div className="h-12 md:h-16 lg:h-20 bg-white/20 rounded-lg w-3/4"></div>
+            </div>
+
+            {/* Subtitle skeleton */}
+            <div className="space-y-2">
+              <div className="h-6 md:h-8 bg-white/15 rounded w-full"></div>
+              <div className="h-6 md:h-8 bg-white/15 rounded w-5/6"></div>
+            </div>
+
+            {/* Buttons skeleton */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="h-12 bg-white/20 rounded-xl w-40"></div>
+              <div className="h-12 bg-white/10 rounded-xl w-40"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
        <Swiper
@@ -78,7 +131,7 @@ export default function VideoSlider() {
                </video>
 
                {/* Content Overlay */}
-               <div className="absolute inset-0 flex items-center justify-center lg:justify-end text-white bg-black bg-opacity-60 p-6 md:p-10 lg:p-16">
+               <div className="absolute inset-0 flex items-center justify-center lg:justify-start text-white bg-gradient-to-r from-black/70 via-black/50 to-transparent p-6 md:p-10 lg:p-16">
 
                  {/* YouTube Link Button */}
                  <a
@@ -86,35 +139,45 @@ export default function VideoSlider() {
                      target="_blank"
                      rel="noopener noreferrer"
                      aria-label={`Watch "${slide.title}" on YouTube`}
-                     className="absolute top-5 right-5 z-20 flex items-center gap-2 bg-red-600 bg-opacity-80 text-white px-4 py-2 rounded-md hover:bg-opacity-100 transition duration-300"
+                     className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-red-600/90 backdrop-blur-sm text-white px-4 py-3 rounded-xl hover:bg-red-600 transition-all duration-300 shadow-lg hover:shadow-xl"
                  >
                    <FaYoutube className="h-5 w-5" />
-                   <span className="hidden sm:inline">Videoya keçid et</span>
+                   <span className="hidden sm:inline font-medium">Videoya keçid et</span>
                  </a>
 
                  {/* Content */}
-                 <div className="text-center lg:text-right space-y-4 max-w-lg lg:max-w-xl">
+                 <div className="text-center lg:text-left space-y-6 max-w-2xl lg:max-w-3xl">
+                   <motion.div
+                       className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white/90 font-medium text-sm mb-4"
+                       initial={{ opacity: 0, y: -20 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       transition={{ duration: 0.6, ease: "easeOut" }}
+                   >
+                     <span className="w-2 h-2 bg-white rounded-full"></span>
+                     Əhli-Sünnə Mədrəsəsi
+                   </motion.div>
+
                    <motion.h1
-                       className="text-3xl md:text-4xl lg:text-5xl font-bold drop-shadow-md"
+                       className="text-4xl md:text-5xl lg:text-6xl font-bold drop-shadow-lg leading-tight"
                        initial={{ opacity: 0, y: -30 }}
                        animate={{ opacity: 1, y: 0 }}
-                       transition={{ duration: 0.8, ease: "easeOut" }}
+                       transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                    >
                      {slide.title}
                    </motion.h1>
 
                    <motion.p
-                       className="text-base md:text-lg lg:text-xl drop-shadow-sm"
+                       className="text-lg md:text-xl lg:text-2xl drop-shadow-md font-light leading-relaxed"
                        initial={{ opacity: 0, y: 30 }}
                        animate={{ opacity: 1, y: 0 }}
-                       transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+                       transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                    >
                      {slide.subtitle}
                    </motion.p>
 
                    {slide.description && (
                        <motion.p
-                           className="text-sm md:text-base lg:text-lg max-w-xs md:max-w-md lg:max-w-lg opacity-90"
+                           className="text-base md:text-lg lg:text-xl max-w-2xl opacity-90 leading-relaxed"
                            initial={{ opacity: 0 }}
                            animate={{ opacity: 1 }}
                            transition={{ duration: 1, delay: 0.6 }}
@@ -122,6 +185,26 @@ export default function VideoSlider() {
                          {slide.description}
                        </motion.p>
                    )}
+
+                   <motion.div
+                       className="flex flex-col sm:flex-row gap-4 pt-4"
+                       initial={{ opacity: 0, y: 20 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       transition={{ duration: 0.8, delay: 0.8 }}
+                   >
+                     <a
+                         href="#articles"
+                         className="inline-flex items-center justify-center px-8 py-4 bg-[#43b365] text-white font-semibold rounded-xl hover:bg-[#2d7a47] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                     >
+                         Məqalələri Oxu
+                     </a>
+                     <a
+                         href="#books"
+                         className="inline-flex items-center justify-center px-8 py-4 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/30 transition-all duration-300 border border-white/30"
+                     >
+                         Kitabları Kəşf Et
+                     </a>
+                   </motion.div>
                  </div>
                </div>
              </SwiperSlide>

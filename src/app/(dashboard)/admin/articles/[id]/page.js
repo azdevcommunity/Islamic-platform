@@ -11,7 +11,24 @@ import { DatePicker } from "@/components/ui/date-picker"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import HttpClient from "@/util/HttpClient"
-import { ChevronDown, Upload, X, Save, Eye, FileText, Calendar as CalendarIcon, User, FolderOpen, Image as ImageIcon, AlertCircle, CheckCircle2 } from "lucide-react"
+import { 
+  Upload, 
+  X, 
+  Save, 
+  Eye, 
+  FileText, 
+  Calendar as CalendarIcon, 
+  User, 
+  FolderOpen, 
+  Image as ImageIcon, 
+  AlertCircle, 
+  CheckCircle2,
+  ArrowLeft,
+  Clock,
+  Edit3,
+  Settings,
+  Sparkles
+} from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { CategoryTreeSelector } from "@/components/admin/questions/CategoryTreeSelector"
@@ -394,35 +411,68 @@ function UpdateArticle() {
   const isFormValid = title && content && selectedAuthor && selectedCategories.length > 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 md:p-8 transition-colors duration-300">
-      <div className="w-full mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
-              Makale Düzenle
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Mevcut makaleyi düzenleyin ve güncelleyin
-            </p>
+        <div className="relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-emerald-600/10 to-emerald-500/10" />
+          <div className="relative z-10 p-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push("/admin/articles")}
+                  className="h-12 w-12 rounded-xl hover:bg-emerald-100 text-emerald-600 hover:text-emerald-700 transition-all duration-200 hover:scale-105"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 shadow-xl">
+                    <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
+                      <Edit3 className="h-8 w-8 text-emerald-600" />
+                    </div>
+                  </div>
+                  <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl opacity-20 blur-xl" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900">
+                    Məqalə Redaktəsi
+                  </h1>
+                  <p className="text-gray-600 mt-2 text-lg">
+                    Mövcud məqaləni yeniləyin və dəyişiklik edin
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Clock className="h-4 w-4" />
+                  Son yenilənmə: {new Date().toLocaleTimeString('az-AZ')}
+                </div>
+                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 border-emerald-200 px-4 py-2">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Redaktə Rejimi
+                </Badge>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Success Alert */}
         {success && (
-          <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20">
-            <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-            <AlertDescription className="text-green-800 dark:text-green-200">
-              Makale başarıyla güncellendi! Makale listesine yönlendiriliyorsunuz...
+          <Alert className="border-emerald-200 bg-emerald-50 shadow-lg shadow-emerald-500/10">
+            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+            <AlertDescription className="text-emerald-800 font-medium">
+              Məqalə uğurla yeniləndi! Məqalə siyahısına yönləndirilirsiniz...
             </AlertDescription>
           </Alert>
         )}
 
         {/* Error Alert */}
         {error && (
-          <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20">
-            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-            <AlertDescription className="text-red-800 dark:text-red-200">
+          <Alert className="border-red-200 bg-red-50 shadow-lg shadow-red-500/10">
+            <AlertCircle className="h-5 w-5 text-red-600" />
+            <AlertDescription className="text-red-800 font-medium">
               {error}
             </AlertDescription>
           </Alert>
@@ -430,81 +480,118 @@ function UpdateArticle() {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <Tabs defaultValue="content" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="content" className="gap-2">
-                <FileText className="h-4 w-4" />
-                İçerik
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-2">
-                <User className="h-4 w-4" />
-                Ayarlar
-              </TabsTrigger>
-              <TabsTrigger value="preview" className="gap-2">
-                <Eye className="h-4 w-4" />
-                Önizleme
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="content" className="space-y-6">
-              {/* Title */}
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+            <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-lg">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5" />
+              <div className="relative z-10 p-6">
+                <TabsList className="grid w-full grid-cols-3 bg-gray-100 rounded-xl p-1 h-14">
+                  <TabsTrigger 
+                    value="content" 
+                    className="gap-3 h-12 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-emerald-700 font-semibold transition-all duration-200"
+                  >
                     <FileText className="h-5 w-5" />
-                    Makale Başlığı
-                  </CardTitle>
+                    Məzmun
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="settings" 
+                    className="gap-3 h-12 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-emerald-700 font-semibold transition-all duration-200"
+                  >
+                    <Settings className="h-5 w-5" />
+                    Ayarlar
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="preview" 
+                    className="gap-3 h-12 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-emerald-700 font-semibold transition-all duration-200"
+                  >
+                    <Eye className="h-5 w-5" />
+                    Önizləmə
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </div>
+
+            <TabsContent value="content" className="space-y-8 mt-8">
+              {/* Title */}
+              <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                      <FileText className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-900">Məqalə Başlığı</CardTitle>
+                      <p className="text-gray-600 text-sm mt-1">Məqalənizin əsas başlığını daxil edin</p>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <Input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Makale başlığını girin..."
-                    className="h-12 text-lg border-2 focus:border-blue-300 dark:focus:border-blue-700 transition-colors"
+                    placeholder="Məqalə başlığını daxil edin..."
+                    className="h-14 text-lg rounded-xl border-gray-200 bg-white focus:border-emerald-500 transition-all duration-200 font-medium"
                     disabled={loading || success}
                   />
                 </CardContent>
               </Card>
 
               {/* Content */}
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5" />
-                    Makale İçeriği
-                  </CardTitle>
+              <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                      <Edit3 className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-900">Məqalə Məzmunu</CardTitle>
+                      <p className="text-gray-600 text-sm mt-1">Zəngin mətn editoru ilə məqalənizi yazın</p>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
-                  {console.log("🎯 Passing editorState to Editor:", editorState)}
-                  <Editor
-                    key={`editor-${id}-${JSON.stringify(editorState).length}`}
-                    editorSerializedState={editorState}
-                    onSerializedChange={(value) => setEditorState(value)}
-                    onChange={handleEditorChange}
-                  />
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Zengin metin editörü ile makale içeriğinizi yazın. Biçimlendirme, bağlantılar ve görseller desteklenmektedir.
-                  </p>
+                <CardContent className="relative z-10">
+                  <div className="rounded-xl border border-gray-200 overflow-hidden bg-white">
+                    {console.log("🎯 Passing editorState to Editor:", editorState)}
+                    <Editor
+                      key={`editor-${id}-${JSON.stringify(editorState).length}`}
+                      editorSerializedState={editorState}
+                      onSerializedChange={(value) => setEditorState(value)}
+                      onChange={handleEditorChange}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                    <Sparkles className="h-4 w-4 text-emerald-600" />
+                    <p className="text-sm text-emerald-700 font-medium">
+                      Formatlaşdırma, bağlantılar və şəkillər dəstəklənir. Mətnin görünüşünü yaxşılaşdırmaq üçün alətlərdən istifadə edin.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 
               {/* Image Upload */}
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <ImageIcon className="h-5 w-5" />
-                    Kapak Görseli
-                  </CardTitle>
+              <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                      <ImageIcon className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-900">Qapaq Şəkli</CardTitle>
+                      <p className="text-gray-600 text-sm mt-1">Məqalə üçün əsas şəkil seçin</p>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="relative z-10 space-y-6">
                   {!image ? (
-                    <div className="border-2 border-dashed border-muted rounded-lg p-8 text-center">
-                      <div className="space-y-4">
-                        <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 flex items-center justify-center">
-                          <Upload className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                    <div className="border-2 border-dashed border-emerald-200 rounded-2xl p-12 text-center bg-emerald-50/50 hover:bg-emerald-50 transition-colors duration-200">
+                      <div className="space-y-6">
+                        <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-xl">
+                          <Upload className="h-10 w-10 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold">Görsel Yükle</h3>
-                          <p className="text-muted-foreground">Makale için kapak görseli seçin</p>
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">Şəkil Yüklə</h3>
+                          <p className="text-gray-600">Məqalə üçün qapaq şəkli seçin və yükləyin</p>
                         </div>
                         <input
                           type="file"
@@ -517,30 +604,33 @@ function UpdateArticle() {
                         <Button
                           type="button"
                           variant="outline"
+                          size="lg"
                           onClick={() => document.getElementById('image-upload').click()}
                           disabled={loading || success}
+                          className="h-12 px-8 rounded-xl border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-200"
                         >
-                          <Upload className="h-4 w-4 mr-2" />
-                          Görsel Seç
+                          <Upload className="h-5 w-5 mr-3" />
+                          Şəkil Seç
                         </Button>
                       </div>
                     </div>
                   ) : (
-                    <div className="relative">
-                      <div className="relative w-full h-80 rounded-lg overflow-hidden">
+                    <div className="relative group">
+                      <div className="relative w-full h-96 rounded-2xl overflow-hidden shadow-xl">
                         <Image
                           src={image}
-                          alt="Kapak görseli"
+                          alt="Qapaq şəkli"
                           fill
-                          className="object-cover"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                       </div>
                       <Button
                         type="button"
                         variant="destructive"
                         size="sm"
                         onClick={removeImage}
-                        className="absolute top-2 right-2"
+                        className="absolute top-4 right-4 h-10 w-10 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 opacity-0 group-hover:opacity-100"
                         disabled={loading || success}
                       >
                         <X className="h-4 w-4" />
@@ -551,21 +641,27 @@ function UpdateArticle() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="settings" className="space-y-6">
+            <TabsContent value="settings" className="space-y-8 mt-8">
               {/* Author Selection */}
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5" />
-                    Yazar Seçimi
-                  </CardTitle>
+              <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                      <User className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-900">Müəllif Seçimi</CardTitle>
+                      <p className="text-gray-600 text-sm mt-1">Məqalənin müəllifini təyin edin</p>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <Select value={selectedAuthor} onValueChange={setSelectedAuthor} disabled={loading || success}>
-                    <SelectTrigger className="h-12 border-2">
-                      <SelectValue placeholder="Yazar seçin..." />
+                    <SelectTrigger className="h-14 rounded-xl border-gray-200 bg-white focus:border-emerald-500 transition-all duration-200">
+                      <SelectValue placeholder="Müəllif seçin..." />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="rounded-xl border-gray-200">
                       {authors.map((author) => (
                         <SelectItem key={author.id} value={author.id.toString()}>
                           {author.name}
@@ -577,68 +673,110 @@ function UpdateArticle() {
               </Card>
 
               {/* Category Selection */}
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FolderOpen className="h-5 w-5" />
-                    Kategori Seçimi
-                  </CardTitle>
+              <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                      <FolderOpen className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-900">Kateqoriya Seçimi</CardTitle>
+                      <p className="text-gray-600 text-sm mt-1">Məqalənin aid olduğu kateqoriyaları seçin</p>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
-                  <CategoryTreeSelector
-                    categories={categories}
-                    selectedCategories={selectedCategories}
-                    onSelectionChange={handleCategorySelectionChange}
-                  />
+                <CardContent className="relative z-10">
+                  <div className="rounded-xl border border-gray-200 bg-white p-4">
+                    <CategoryTreeSelector
+                      categories={categories}
+                      selectedCategories={selectedCategories}
+                      onSelectionChange={handleCategorySelectionChange}
+                    />
+                  </div>
                 </CardContent>
               </Card>
 
               {/* Publish Date */}
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CalendarIcon className="h-5 w-5" />
-                    Yayın Tarihi
-                  </CardTitle>
+              <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                      <CalendarIcon className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-900">Nəşr Tarixi</CardTitle>
+                      <p className="text-gray-600 text-sm mt-1">Məqalənin nəşr olunacağı tarixi təyin edin</p>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <DatePicker
                     date={publishedAt}
                     setDate={setPublishedAt}
-                    placeholder="Yayın tarihini seçin"
-                    className="h-12 border-2"
+                    placeholder="Nəşr tarixini seçin"
+                    className="h-14 rounded-xl border-gray-200 bg-white focus:border-emerald-500 transition-all duration-200"
                     disabled={loading || success}
                   />
                 </CardContent>
               </Card>
             </TabsContent>
 
-            <TabsContent value="preview" className="space-y-6">
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle>Makale Önizlemesi</CardTitle>
+            <TabsContent value="preview" className="space-y-8 mt-8">
+              <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                      <Eye className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold text-gray-900">Məqalə Önizləməsi</CardTitle>
+                      <p className="text-gray-600 text-sm mt-1">Məqalənizin son görünüşünü yoxlayın</p>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="relative z-10 space-y-6">
                   {image && (
-                    <div className="relative w-full h-80 rounded-lg overflow-hidden">
+                    <div className="relative w-full h-96 rounded-2xl overflow-hidden shadow-xl">
                       <Image
                         src={image}
-                        alt="Kapak görseli"
+                        alt="Qapaq şəkli"
                         fill
                         className="object-cover"
                       />
                     </div>
                   )}
-                  <div>
-                    <h2 className="text-2xl font-bold mb-2">{title || "Makale Başlığı"}</h2>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                      {selectedAuthor && (
-                        <span>Yazar: {authors.find(a => a.id.toString() === selectedAuthor)?.name}</span>
-                      )}
-                      <span>Tarih: {publishedAt.toLocaleDateString('tr-TR')}</span>
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                        {title || "Məqalə Başlığı"}
+                      </h2>
+                      <div className="flex items-center gap-6 text-sm text-gray-600 mb-6">
+                        {selectedAuthor && (
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            <span className="font-medium">
+                              Müəllif: {authors.find(a => a.id.toString() === selectedAuthor)?.name}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2">
+                          <CalendarIcon className="h-4 w-4" />
+                          <span className="font-medium">
+                            Tarix: {publishedAt.toLocaleDateString('az-AZ')}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="prose max-w-none">
-                      <div dangerouslySetInnerHTML={{ __html: content || "Makale içeriği buraya gelecek..." }} />
+                    <div className="prose prose-lg max-w-none prose-emerald">
+                      <div 
+                        className="text-gray-700 leading-relaxed"
+                        dangerouslySetInnerHTML={{ 
+                          __html: content || "<p class='text-gray-500 italic'>Məqalə məzmunu buraya gələcək...</p>" 
+                        }} 
+                      />
                     </div>
                   </div>
                 </CardContent>
@@ -647,37 +785,57 @@ function UpdateArticle() {
           </Tabs>
 
           {/* Submit Button */}
-          <div className="flex justify-end space-x-4 pt-6 border-t">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/admin/articles")}
-              disabled={loading || success}
-            >
-              İptal
-            </Button>
-            <Button
-              type="submit"
-              disabled={loading || !isFormValid || success}
-              className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Güncelleniyor...
-                </>
-              ) : success ? (
-                <>
-                  <CheckCircle2 className="h-4 w-4" />
-                  Güncellendi!
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4" />
-                  Makaleyi Güncelle
-                </>
-              )}
-            </Button>
+          <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5" />
+            <div className="relative z-10 p-6">
+              <div className="flex justify-between items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+                    <Save className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Dəyişiklikləri Yadda Saxla</h3>
+                    <p className="text-sm text-gray-600">Məqalənizi yeniləmək üçün hazırsınız</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="lg"
+                    onClick={() => router.push("/admin/articles")}
+                    disabled={loading || success}
+                    className="h-12 px-6 rounded-xl border-gray-200 hover:bg-gray-50 transition-all duration-200"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Ləğv Et
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={loading || !isFormValid || success}
+                    className="gap-3 h-12 px-8 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl font-semibold"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Yenilənir...
+                      </>
+                    ) : success ? (
+                      <>
+                        <CheckCircle2 className="h-5 w-5" />
+                        Yeniləndi!
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-5 w-5" />
+                        Məqaləni Yenilə
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </form>
       </div>

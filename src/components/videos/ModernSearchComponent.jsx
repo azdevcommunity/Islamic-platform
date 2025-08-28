@@ -51,32 +51,40 @@ const ModernSearchComponent = ({ initialSearchValue }) => {
     };
 
     return (
-        // Using relative positioning for icons within the input
-        <form onSubmit={handleSubmit} className="relative w-full md:w-72 lg:w-80"> {/* Control width */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
+        <form onSubmit={handleSubmit} className="relative w-full md:w-80 lg:w-96">
+            <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                    <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                </div>
+                <input
+                    name="search"
+                    id="videos-search"
+                    value={searchValue}
+                    onChange={handleInputChange}
+                    placeholder="Video və ya playlist axtarın..."
+                    className="block w-full rounded-xl border border-gray-200 bg-white py-3 pl-12 pr-12 text-gray-900 placeholder:text-gray-500 focus:border-[#43b365] focus:outline-none focus:ring-2 focus:ring-[#43b365]/20 shadow-sm hover:shadow-md transition-all duration-200"
+                />
+                {/* Clear button */}
+                {searchValue && (
+                    <button
+                        type="button"
+                        onClick={() => clearSearch(true)}
+                        className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors"
+                        aria-label="Axtarışı təmizlə"
+                    >
+                        <X className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                )}
             </div>
-            <input
-                // Use type="search" for potential browser benefits (like clear button on some)
-                name="search"
-                id="videos-search"
-                value={searchValue}
-                onChange={handleInputChange}
-                placeholder="Axtarış..." // Simple placeholder
-                // Modern styling: padding for icons, border, focus states
-                className="block w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-10 text-gray-900 placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm sm:leading-6 shadow-sm"
-            />
-            {/* Clear button - only shows when there is text */}
-            {searchValue && (
-                <button
-                    type="button"
-                    onClick={() => clearSearch(true)} // Pass true to update URL immediately
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
-                    aria-label="Axtarışı təmizlə"
-                >
-                    <X className="h-5 w-5" aria-hidden="true" />
-                </button>
-            )}
+            
+            {/* Search button for mobile */}
+            <button
+                type="submit"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#43b365] text-white p-2 rounded-lg hover:bg-[#2d7a47] transition-colors duration-200 md:hidden"
+                aria-label="Axtarış et"
+            >
+                <Search className="h-4 w-4" />
+            </button>
         </form>
     );
 };

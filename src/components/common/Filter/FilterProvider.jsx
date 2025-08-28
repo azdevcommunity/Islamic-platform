@@ -11,16 +11,17 @@ import useFilterStore from "@/store/useFilterStore";
  * A complete filtering solution with Zustand-backed state management
  */
 export const FilterProvider = ({
-                                   initialCategories = [],
-                                   initialTags = [],
-                                   initialSearchQuery = "",
-                                   onFiltersChange = () => {},
-                                   searchPlaceholder = "Axtar...",
-                                   className = "",
-                                   searchInputRef = null,
-                                   showMobileFilter = true,
-                                   children,
-                               }) => {
+    initialCategories = [],
+    initialTags = [],
+    initialSearchQuery = "",
+    onFiltersChange = () => { },
+    searchPlaceholder = "Axtar...",
+    className = "",
+    searchInputRef = null,
+    showMobileFilter = true,
+    children,
+    showSearch = true
+}) => {
     // Flag to track if we're in a reset operation
     const isResettingRef = useRef(false);
     const isInitializedRef = useRef(false);
@@ -63,7 +64,7 @@ export const FilterProvider = ({
             const timer = setTimeout(() => {
                 // Mark as initialized
                 isInitializedRef.current = true;
-                
+
                 // Notify parent with the current state (including persisted data)
                 onFiltersChange({
                     categories: selectedCategories,
@@ -223,40 +224,46 @@ export const FilterProvider = ({
                 {/* Main Content Area */}
                 <main className="lg:col-span-3">
                     {/* Top Bar: Search & Mobile Filter Trigger */}
-                    <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
-                        <div className="relative flex-grow w-full">
-                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Search className="h-5 w-5 text-gray-400" />
+
+
+                    {
+
+                        showSearch &&
+                        <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
+                            <div className="relative flex-grow w-full">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <Search className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    ref={searchInputRef}
+                                    type="search"
+                                    placeholder={searchPlaceholder}
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                    className="block w-full pl-11 pr-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-base"
+                                />
+                                {searchQuery && (
+                                    <button
+                                        onClick={clearSearchInput}
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                                        aria-label="Axtarışı təmizlə"
+                                    >
+                                        <X className="h-5 w-5" />
+                                    </button>
+                                )}
                             </div>
-                            <input
-                                ref={searchInputRef}
-                                type="search"
-                                placeholder={searchPlaceholder}
-                                value={searchQuery}
-                                onChange={handleSearchChange}
-                                className="block w-full pl-11 pr-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-base"
-                            />
-                            {searchQuery && (
-                                <button
-                                    onClick={clearSearchInput}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                                    aria-label="Axtarışı təmizlə"
-                                >
-                                    <X className="h-5 w-5" />
-                                </button>
+
+                            {/* Mobile Filter Trigger */}
+                            {showMobileFilter && (
+                                <MobileFilterTrigger
+                                    onClick={() => setIsMobileFilterVisible(true)}
+                                    badgeCount={selectedCategories.length + selectedTags.length + (searchQuery ? 1 : 0)}
+                                    label="Filtrlər"
+                                />
                             )}
                         </div>
 
-                        {/* Mobile Filter Trigger */}
-                        {showMobileFilter && (
-                            <MobileFilterTrigger
-                                onClick={() => setIsMobileFilterVisible(true)}
-                                badgeCount={selectedCategories.length + selectedTags.length + (searchQuery ? 1 : 0)}
-                                label="Filtrlər"
-                            />
-                        )}
-                    </div>
-
+                    }
                     {/* Active Filters */}
                     {activeFiltersArray.length > 0 && (
                         <ActiveFilters

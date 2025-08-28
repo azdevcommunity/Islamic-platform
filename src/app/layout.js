@@ -178,6 +178,10 @@ export default function RootLayout({ children }) {
             __html: `
               (function() {
                 try {
+                  // Prevent flash of unstyled content
+                  document.documentElement.style.backgroundColor = '#ffffff';
+                  document.body.style.backgroundColor = '#ffffff';
+                  
                   // Ensure DOM is ready
                   if (!document.documentElement || !document.body) {
                     return;

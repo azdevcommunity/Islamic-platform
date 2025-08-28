@@ -91,24 +91,53 @@ export default function Books() {
                 {booksData.map((book) => (
                     <SwiperSlide key={book.id} className="!flex justify-center">
                         {/* Book Card */}
-                        <div
-                            className="group flex w-full max-w-[220px] sm:max-w-[250px] flex-col items-center text-center">
-                            <div
-                                className="relative aspect-[3/4] w-full overflow-hidden rounded-lg shadow-lg transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-xl">
+                        <div className="group flex w-full max-w-[280px] flex-col items-center text-center">
+                            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl shadow-lg transition-all duration-500 group-hover:-translate-y-3 group-hover:shadow-2xl">
                                 <Image
                                     src={book.image}
                                     alt={book.title}
                                     fill
-                                    sizes="(max-width: 640px) 80vw, (max-width: 768px) 40vw, (max-width: 1024px) 30vw, 250px" // Optimized sizes
-                                    className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                                    priority={book.id <= 3} // Prioritize loading first few books images
+                                    sizes="(max-width: 640px) 80vw, (max-width: 768px) 40vw, (max-width: 1024px) 30vw, 280px"
+                                    className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                                    priority={book.id <= 3}
                                 />
-                                {/* Optional: Add a subtle overlay on hover */}
-                                <div
-                                    className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-300"></div>
+                                {/* Gradient overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                
+                                {/* Price badge */}
+                                <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500 text-white text-sm font-bold rounded-full shadow-lg">
+                                    {book.price}
+                                </div>
+
+                                {/* Category badge */}
+                                <div className="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-medium rounded-full">
+                                    {book.category}
+                                </div>
+
+                                {/* Hover content */}
+                                <div className="absolute inset-0 flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <div className="text-white text-center w-full">
+                                        <p className="text-sm leading-relaxed mb-3 line-clamp-3">
+                                            {book.description}
+                                        </p>
+                                        <button className="w-full bg-white/20 backdrop-blur-sm text-white py-2 px-4 rounded-lg font-medium hover:bg-white/30 transition-colors duration-200">
+                                            Ətraflı Məlumat
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 className="mt-4 text-base sm:text-lg font-semibold text-gray-800">{book.title}</h3>
-                            <p className="text-sm text-gray-500">{book.authorName}</p>
+                            
+                            <div className="mt-6 space-y-2">
+                                <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#43b365] transition-colors duration-300 line-clamp-2">
+                                    {book.title}
+                                </h3>
+                                <p className="text-sm text-gray-600 font-medium">{book.authorName}</p>
+                                <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                                    <span>{book.chapters?.length || 0} Fəsil</span>
+                                    <span>•</span>
+                                    <span>{book.category}</span>
+                                </div>
+                            </div>
                         </div>
                     </SwiperSlide>
                 ))}
