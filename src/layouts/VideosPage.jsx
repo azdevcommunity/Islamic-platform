@@ -6,7 +6,6 @@ import VideoPageHeader from "@/components/videos/VideoPageHeader";
 
 const Videos = ({ playlistId, search, videoId, content, page }) => {
     // Debug: Log received parameters
-    console.log("VideosPageLayout params:", { playlistId, search, videoId, content, page });
 
     if (page == null) {
         if (content == null && videoId != null) {

@@ -91,7 +91,6 @@ function UpdateArticle() {
       
       // Get all text content
       const allText = tempDiv.textContent || tempDiv.innerText || ''
-      console.log("Extracted text content:", allText)
       
       if (!allText.trim()) {
         return {
@@ -121,7 +120,6 @@ function UpdateArticle() {
         .map(p => p.trim())
         .filter(p => p.length > 0)
       
-      console.log("Split paragraphs:", paragraphs)
       
       const children = paragraphs.map(paragraph => ({
         children: [
@@ -197,14 +195,11 @@ function UpdateArticle() {
   }
   
   const handleEditorChange = (newEditorState, editor) => {
-    console.log("=== EDITOR STATE CHANGE ===")
-    console.log("New editor state:", newEditorState)
-    
+     
     // Generate HTML from editor state using $generateHtmlFromNodes
     if (editor) {
       newEditorState.read(() => {
         const htmlString = $generateHtmlFromNodes(editor, null)
-        console.log("Generated HTML:", htmlString)
         setContent(htmlString)
       })
     }
@@ -551,7 +546,6 @@ function UpdateArticle() {
                 </CardHeader>
                 <CardContent className="relative z-10">
                   <div className="rounded-xl border border-gray-200 overflow-hidden bg-white">
-                    {console.log("🎯 Passing editorState to Editor:", editorState)}
                     <Editor
                       key={`editor-${id}-${JSON.stringify(editorState).length}`}
                       editorSerializedState={editorState}

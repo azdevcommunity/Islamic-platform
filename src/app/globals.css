@@ -1599,3 +1599,94 @@ ine clamp utilities for compact design */
 .shadow-compact-lg {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
+/* L
+ine clamp utilities for text truncation */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Enhanced search page specific styles */
+.search-page-gradient {
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+}
+
+.search-card-hover {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* Glass morphism for search elements */
+.search-glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced animations for search results */
+@keyframes searchFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-search-fadeInUp {
+  animation: searchFadeInUp 0.6s ease-out forwards;
+}
+
+/* Staggered animation delays for search results */
+.search-results-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+.search-results-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+.search-results-stagger > *:nth-child(3) { animation-delay: 0.3s; }
+.search-results-stagger > *:nth-child(4) { animation-delay: 0.4s; }
+.search-results-stagger > *:nth-child(5) { animation-delay: 0.5s; }
+.search-results-stagger > *:nth-child(6) { animation-delay: 0.6s; }
+.search-results-stagger > *:nth-child(7) { animation-delay: 0.7s; }
+.search-results-stagger > *:nth-child(8) { animation-delay: 0.8s; }
+
+/* Modern search input focus effects */
+.search-input-focus {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input-focus:focus-within {
+  transform: scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Responsive improvements for search page */
+@media (max-width: 640px) {
+  .search-card-hover:hover {
+    transform: translateY(-2px) scale(1.01);
+  }
+  
+  .search-input-focus:focus-within {
+    transform: scale(1.01);
+  }
+}

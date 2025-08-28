@@ -12,7 +12,6 @@ import {booksData} from "@/components/home/Books"; // Example icons
 // --- Sample Data Fetching (Replace with actual logic) ---
 // This function simulates fetching a single books by its slug
  function getBookData(slug) {
-    console.log("Fetching books for slug:", slug);
     // In a real app, fetch from your API:
     // const res = await fetch(`/api/books/${slug}`);
     // if (!res.ok) return null;

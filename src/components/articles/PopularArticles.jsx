@@ -2,7 +2,6 @@ import { BASE_URL } from "@/util/Const"
 import Link from "next/link"
 
 const PopularArticles = async () => {
-    console.log(BASE_URL);
   const res = await fetch(`${BASE_URL}/articles/popular`, {
     next: { revalidate: 60 },
   })

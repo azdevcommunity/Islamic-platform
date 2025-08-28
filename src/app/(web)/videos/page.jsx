@@ -52,7 +52,6 @@ export default async function VideosPage({searchParams}) {
     const {playlistId, search, videoId, content, page} = awaitedParams;
     
     // Debug: Log the received parameters
-    console.log("VideosPage params:", {playlistId, search, videoId, content, page});
     // JSON-LD for Video Collection/List (using ItemList)
     const jsonLd = {
         '@context': 'https://schema.org',
