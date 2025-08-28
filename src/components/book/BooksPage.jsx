@@ -1,9 +1,9 @@
 "use client"
-import React, {useState, useEffect, useCallback, useRef, memo} from "react";
+import React, { useState, useEffect, useCallback, useRef, memo } from "react";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import useDebounce from "@/hooks/useDebounce";
-import {formatDate} from "@/util/DateUtil";
-import {motion} from "framer-motion";
+import { formatDate } from "@/util/DateUtil";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
     Calendar,
@@ -21,7 +21,7 @@ import {
     Eye,
     MessageSquare
 } from "lucide-react";
-import {booksData} from "@/components/home/Books";
+import { booksData } from "@/components/home/Books";
 
 export default function BooksPage() {
     // --- State Variables ---
@@ -253,12 +253,12 @@ const OptimizedBookCard = memo(function BookCard({ book }) {
                     alt={book.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                
+
                 {/* Price Badge */}
                 <div className="absolute top-4 right-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
                     {book.price}
                 </div>
-                
+
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
                     {book.category}
@@ -278,17 +278,17 @@ const OptimizedBookCard = memo(function BookCard({ book }) {
                     </div>
                 </div>
             </div>
-            
+
             {/* Book Content */}
             <div className="p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-emerald-600 transition-colors">
                     {book.title}
                 </h2>
-                
+
                 <p className="text-emerald-600 font-medium mb-3">
                     {book.author}
                 </p>
-                
+
                 {/* Description */}
                 <div className="text-gray-600 text-sm leading-relaxed mb-4 relative">
                     <motion.div
@@ -311,7 +311,7 @@ const OptimizedBookCard = memo(function BookCard({ book }) {
                             aria-expanded={isExpanded}
                         >
                             {isExpanded ? 'Daha az göstər' : 'Daha çox göstər'}
-                            {isExpanded ? <ChevronUp className="ml-1 h-4 w-4"/> : <ChevronDown className="ml-1 h-4 w-4"/>}
+                            {isExpanded ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />}
                         </button>
                     )}
                 </div>
@@ -354,14 +354,14 @@ const OptimizedBookCard = memo(function BookCard({ book }) {
             {/* Action Footer */}
             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 px-6 py-4 border-t border-gray-100">
                 <div className="flex items-center justify-between">
-                    <Link 
-                        href={`/books/${book.id}`} 
+                    <Link
+                        href={`/books/${book.id}`}
                         className="text-emerald-600 hover:text-emerald-700 font-medium text-sm flex items-center transition-colors"
                     >
                         Kitabı Oxu <ChevronRight className="ml-1 h-4 w-4" />
                     </Link>
                     {book.contactPhone && (
-                        <a 
+                        <a
                             href={`tel:${book.contactPhone}`}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                         >
@@ -425,7 +425,7 @@ function NoBooksFound({ onReset, hasFilters }) {
                     onClick={onReset}
                     className="inline-flex items-center gap-2 px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors"
                 >
-                    <RotateCcw size={20}/> Filtrləri Sıfırla
+                    <RotateCcw size={20} /> Filtrləri Sıfırla
                 </button>
             )}
         </div>
@@ -471,11 +471,10 @@ const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, 
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-center transition-colors ${
-                    currentPage === 1
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
-                }`}
+                className={`px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-center transition-colors ${currentPage === 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
+                    }`}
                 aria-label="Əvvəlki səhifə"
             >
                 <ChevronLeft className="h-5 w-5" />
@@ -498,11 +497,10 @@ const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, 
                 <button
                     key={page}
                     onClick={() => onPageChange(page)}
-                    className={`px-4 py-3 rounded-xl text-sm font-medium min-w-[44px] transition-colors border shadow-sm ${
-                        currentPage === page
-                            ? "bg-emerald-600 text-white border-emerald-600"
-                            : "bg-white text-gray-600 hover:bg-gray-50 border-gray-200"
-                    }`}
+                    className={`px-4 py-3 rounded-xl text-sm font-medium min-w-[44px] transition-colors border shadow-sm ${currentPage === page
+                        ? "bg-emerald-600 text-white border-emerald-600"
+                        : "bg-white text-gray-600 hover:bg-gray-50 border-gray-200"
+                        }`}
                     aria-current={currentPage === page ? 'page' : undefined}
                 >
                     {page}
@@ -525,11 +523,10 @@ const OptimizedPagination = memo(function Pagination({ currentPage, totalPages, 
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-center transition-colors ${
-                    currentPage === totalPages
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
-                }`}
+                className={`px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-center transition-colors ${currentPage === totalPages
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
+                    }`}
                 aria-label="Növbəti səhifə"
             >
                 <ChevronRight className="h-5 w-5" />

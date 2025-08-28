@@ -32,16 +32,8 @@ const slides = [
 
 export default function VideoSlider() {
   const videoRefs = useRef([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Handle component mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 100); // Small delay to prevent flash
 
-    return () => clearTimeout(timer);
-  }, []);
 
   // Optional: Handle video play/pause on slide change for performance
   const handleSlideChange = (swiper) => {
@@ -56,48 +48,6 @@ export default function VideoSlider() {
   };
 
   // Loading state
-  if (isLoading) {
-    return (
-      <div className="h-screen w-full bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 relative">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
-            backgroundSize: '60px 60px'
-          }}></div>
-        </div>
-        
-        {/* Content Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center lg:justify-start text-white p-6 md:p-10 lg:p-16">
-          <div className="text-center lg:text-left space-y-6 max-w-2xl lg:max-w-3xl animate-pulse">
-            {/* Badge skeleton */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-4">
-              <div className="w-2 h-2 bg-white rounded-full"></div>
-              <div className="h-4 bg-white/50 rounded w-32"></div>
-            </div>
-
-            {/* Title skeleton */}
-            <div className="space-y-3">
-              <div className="h-12 md:h-16 lg:h-20 bg-white/20 rounded-lg w-full"></div>
-              <div className="h-12 md:h-16 lg:h-20 bg-white/20 rounded-lg w-3/4"></div>
-            </div>
-
-            {/* Subtitle skeleton */}
-            <div className="space-y-2">
-              <div className="h-6 md:h-8 bg-white/15 rounded w-full"></div>
-              <div className="h-6 md:h-8 bg-white/15 rounded w-5/6"></div>
-            </div>
-
-            {/* Buttons skeleton */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <div className="h-12 bg-white/20 rounded-xl w-40"></div>
-              <div className="h-12 bg-white/10 rounded-xl w-40"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
        <Swiper
