@@ -120,17 +120,17 @@ const ModernQuestionCard = ({ question, index, layout }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="group bg-white rounded-2xl border border-gray-100 hover:border-green-200 hover:shadow-xl transition-all duration-300 overflow-hidden h-[420px] flex flex-col"
+            className="group bg-white rounded-lg sm:rounded-2xl border border-gray-100 hover:border-green-200 hover:shadow-xl transition-all duration-300 overflow-hidden min-h-[420px] flex flex-col"
         >
             {/* Header */}
-            <div className="p-6 pb-4">
-                <div className="flex items-start gap-4 mb-4">
+            <div className="p-4 sm:p-6 pb-3 sm:pb-4">
+                <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                     <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                         <MessageCircle className="w-5 h-5 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
                         <Link href={`/questions/${question.id}`} className="group/link">
-                            <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover/link:text-green-600 transition-colors duration-200 line-clamp-2 h-[3.5rem] overflow-hidden">
+                            <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover/link:text-green-600 transition-colors duration-200 line-clamp-3 min-h-[3.5rem] break-words">
                                 {question.question}
                             </h3>
                         </Link>
@@ -139,7 +139,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
             </div>
 
             {/* Answer Preview */}
-            <div className="px-6 pb-4 flex-1">
+            <div className="px-4 sm:px-6 pb-3 sm:pb-4 flex-1">
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 h-full flex flex-col">
                     <div className="flex items-center gap-2 mb-3">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -152,7 +152,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
             </div>
 
             {/* Categories */}
-            <div className="px-6 pb-4">
+            <div className="px-4 sm:px-6 pb-3 sm:pb-4">
                 <div className="flex flex-wrap gap-2">
                     {question.categories?.slice(0, 2).map(category => (
                         <span
@@ -172,7 +172,7 @@ const ModernQuestionCard = ({ question, index, layout }) => {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t border-gray-100 mt-auto">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100 mt-auto">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
@@ -211,7 +211,7 @@ const ModernHeader = ({
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 mb-8">
+        <div className="bg-white rounded-lg sm:rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-8 mb-4 sm:mb-8 mx-1 sm:mx-0">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                 {/* Left Section */}
                 <div className="space-y-2">
@@ -234,22 +234,22 @@ const ModernHeader = ({
                 <div className="flex flex-col sm:flex-row gap-4">
                     {/* Search */}
                     <div className={`relative transition-all duration-300 ${isSearchFocused ? 'scale-105' : ''}`}>
-                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"/>
+
                         <input
                             type="text"
-                            placeholder="Suallar arasında axtar..."
+                            placeholder={"Suallar arasında axtar..."}
                             value={searchQuery}
                             onChange={(e) => onSearchChange(e.target.value)}
-                            onFocus={() => setIsSearchFocused(true)}
-                            onBlur={() => setIsSearchFocused(false)}
-                            className="pl-12 pr-4 py-3 w-full sm:w-80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+                            className="pl-12 pr-4 py-3 w-full sm:w-80 rounded-xl border border-gray-300 bg-white text-base text-gray-700 placeholder-gray-400 focus:outline-none focus:border-emerald-500"
                         />
+
                         {searchQuery && (
                             <button
                                 onClick={() => onSearchChange('')}
                                 className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors duration-200"
                             >
-                                <X className="w-4 h-4" />
+                                <X className="w-4 h-4"/>
                             </button>
                         )}
                     </div>
@@ -261,9 +261,9 @@ const ModernHeader = ({
                             className={`px-4 py-3 flex items-center gap-2 text-sm font-medium transition-all duration-200 ${layout === 'list'
                                 ? 'bg-green-600 text-white shadow-sm'
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-white'
-                                }`}
+                            }`}
                         >
-                            <List className="w-4 h-4" />
+                            <List className="w-4 h-4"/>
                             <span className="hidden sm:inline">List</span>
                         </button>
                         <button
@@ -271,9 +271,9 @@ const ModernHeader = ({
                             className={`px-4 py-3 flex items-center gap-2 text-sm font-medium transition-all duration-200 ${layout === 'grid'
                                 ? 'bg-green-600 text-white shadow-sm'
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-white'
-                                }`}
+                            }`}
                         >
-                            <Grid3X3 className="w-4 h-4" />
+                            <Grid3X3 className="w-4 h-4"/>
                             <span className="hidden sm:inline">Grid</span>
                         </button>
                     </div>
@@ -286,7 +286,7 @@ const ModernHeader = ({
 // Skeleton Loader
 const SkeletonLoader = ({ layout, count = 6 }) => {
     const skeletonItems = Array.from({ length: count }).map((_, index) => (
-        <div key={index} className={`bg-white rounded-2xl border border-gray-100 animate-pulse ${layout === 'grid' ? 'h-[420px] flex flex-col' : ''
+        <div key={index} className={`bg-white rounded-lg sm:rounded-2xl border border-gray-100 animate-pulse ${layout === 'grid' ? 'min-h-[420px] flex flex-col' : ''
             }`}>
             {layout === 'grid' ? (
                 <>
@@ -348,7 +348,7 @@ const SkeletonLoader = ({ layout, count = 6 }) => {
 
     if (layout === 'grid') {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
                 {skeletonItems}
             </div>
         );
@@ -611,13 +611,13 @@ export default function NewQuestionsPage() {
 
             {/* Main Content */}
             <section className="py-16">
-                <div className="container mx-auto px-4 max-w-7xl">
+                <div className="w-full sm:container sm:mx-auto px-1 sm:px-4 sm:max-w-7xl">
                     <FilterProvider
                         initialCategories={[]}
                         initialTags={[]}
                         initialSearchQuery=""
                         onFiltersChange={handleFiltersChange}
-                        searchPlaceholder="Suallar arasında axtar..."
+                        searchPlaceholder="Suallar arasında axtar...444"
                         showSearch={false}
                     >
                         {/* Modern Header */}
@@ -634,7 +634,6 @@ export default function NewQuestionsPage() {
                                 onSearchChange={handleSearchChange}
                             />
                         </motion.div>
-
                         {/* Content Area */}
                         <AnimatePresence mode="wait">
                             {error && (
@@ -663,7 +662,7 @@ export default function NewQuestionsPage() {
                                     transition={{ duration: 0.5 }}
                                 >
                                     {layout === "grid" ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
                                             {questions.map((question, index) => (
                                                 <ModernQuestionCard
                                                     key={question.id}

@@ -100,7 +100,7 @@ const WelcomeSection = () => {
                     </div>
                     
                     {/* Floating card */}
-                    <motion.div
+                    {/* <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
@@ -116,7 +116,7 @@ const WelcomeSection = () => {
                                 <div className="text-sm text-gray-600">Tələbə</div>
                             </div>
                         </div>
-                    </motion.div>
+                    </motion.div> */}
                 </motion.div>
             </div>
         </div>

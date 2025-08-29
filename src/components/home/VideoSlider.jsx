@@ -10,16 +10,16 @@ import { FaYoutube } from "react-icons/fa"; // Using react-icons
 
 // Static data defined outside component
 const slides = [
+  // {
+  //   id: 1,
+  //   videoSrc: "https://res.cloudinary.com/dhhlnrons/video/upload/v1742720671/esm/jdpytj2o4dv8skgcg0eu.mp4",
+  //   title: "Şeyx Muxaxlı Seyfəddin Baba",
+  //   subtitle: "Səbr Edənlərin Mükafatı!",
+  //   description: null,
+  //   youtubeLink: "https://youtu.be/WH4r8eL64DY?si=NDQeZDByUpzMsEA1",
+  // },
   {
     id: 1,
-    videoSrc: "https://res.cloudinary.com/dhhlnrons/video/upload/v1742720671/esm/jdpytj2o4dv8skgcg0eu.mp4",
-    title: "Şeyx Muxaxlı Seyfəddin Baba",
-    subtitle: "Səbr Edənlərin Mükafatı!",
-    description: null,
-    youtubeLink: "https://youtu.be/WH4r8eL64DY?si=NDQeZDByUpzMsEA1",
-  },
-  {
-    id: 2,
     videoSrc: "https://res.cloudinary.com/dhhlnrons/video/upload/v1743080791/esm/homepage/lubjcf8kkdivjgk2hdox.mp4",
     title: "Ramazan Avari",
     subtitle: "Əhli-Sünnə Mədrəsəsinin Fəaliyyəti ilə Bağlı Önəmli Açıqlama",

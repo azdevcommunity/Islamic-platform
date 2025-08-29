@@ -1,10 +1,10 @@
 import { FaInstagram, FaYoutube, FaFacebook, FaTelegramPlane } from 'react-icons/fa'; // Using react-icons
 
 const stats = [
-    { platform: 'Instagram', icon: FaInstagram, count: '13.8K+', color: 'text-pink-500' },
-    { platform: 'YouTube', icon: FaYoutube, count: '35.6K+', color: 'text-red-600' },
-    { platform: 'Facebook', icon: FaFacebook, count: '6.3K+', color: 'text-blue-600' },
-    { platform: 'Telegram', icon: FaTelegramPlane, count: '1.0K+', color: 'text-sky-500' },
+    { platform: 'Instagram', icon: FaInstagram, count: '13.8K+', color: 'text-gray-800' },
+    { platform: 'YouTube', icon: FaYoutube, count: '35.6K+', color: 'text-gray-800' },
+    { platform: 'Facebook', icon: FaFacebook, count: '6.3K+', color: 'text-gray-800' },
+    { platform: 'Telegram', icon: FaTelegramPlane, count: '1.0K+', color: 'text-gray-800' },
 ];
 
 const SocialMediaStats = () => {

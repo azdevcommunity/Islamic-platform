@@ -138,7 +138,7 @@ export default function BooksPage() {
                                 </span>
                             </h1>
                             <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                                Əhli Sünnə təlimlərinin əsasında hazırlanmış elmi və mənəvi qaynaqları kəşf edin və ruhunuzu zənginləşdirin
+                                Əhli Sünnə Mədrəsəsi tərəfindın hazırlanmış elmi və mənəvi qaynaqları kəşf edin və ruhunuzu zənginləşdirin
                             </p>
                         </motion.div>
 

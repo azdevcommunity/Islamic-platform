@@ -225,7 +225,7 @@ export default function ModernQuestionsPage() {
                         initialTags={[]}
                         initialSearchQuery=""
                         onFiltersChange={handleFiltersChange}
-                        searchPlaceholder="Suallar arasında axtar..."
+                        searchPlaceholder="Suallar arasında axtar...333"
                         showSearch={false}
                     >
                         {/* Modern Header */}

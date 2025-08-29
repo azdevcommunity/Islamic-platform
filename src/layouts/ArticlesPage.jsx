@@ -1,9 +1,9 @@
 "use client"
-import React, {useState, useEffect, useCallback, useRef, memo} from "react";
+import React, { useState, useEffect, useCallback, useRef, memo } from "react";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import HttpClient from "@/util/HttpClient";
 import useDebounce from "@/hooks/useDebounce";
-import {motion, AnimatePresence} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ArticleCard from "@/components/articles/ArticleCard";
 import Pagination from "@/components/common/Pagination";
 import {
@@ -12,12 +12,12 @@ import {
 } from "lucide-react";
 import useFilterStore from "@/store/useFilterStore";
 
-export default function ArticlesPage() {
+export default function ArticlesPage({ page: initialPage, category: initialCategory }) {
     // --- State Variables ---
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(parseInt(initialPage) || 0);
     const [totalPages, setTotalPages] = useState(1);
     const [statistics, setStatistics] = useState({
         totalArticles: 0,
@@ -29,12 +29,23 @@ export default function ArticlesPage() {
     const PAGE_SIZE = 12;
 
     // Get filter state from Zustand store
-    const { selectedCategories, selectedTags, searchQuery } = useFilterStore();
+    const { selectedCategories, selectedTags, searchQuery, setSelectedCategories } = useFilterStore();
 
     // Use debounce for search query to avoid excessive API calls
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
     // --- Data Fetching ---
+    const fetchCategoryById = useCallback(async (categoryId) => {
+        try {
+            const response = await HttpClient.get(`/categories/${categoryId}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (err) {
+            console.error("Error fetching category:", err);
+            return null;
+        }
+    }, []);
+
     const fetchStatistics = useCallback(async () => {
         try {
             const response = await HttpClient.get('/articles/statistics');
@@ -85,6 +96,20 @@ export default function ArticlesPage() {
     useEffect(() => {
         fetchStatistics();
     }, [fetchStatistics]);
+
+    // Handle initial category parameter from URL
+    useEffect(() => {
+        if (initialCategory) {
+            const categoryId = parseInt(initialCategory);
+            if (categoryId && !isNaN(categoryId)) {
+                fetchCategoryById(categoryId).then(category => {
+                    if (category) {
+                        setSelectedCategories([category]);
+                    }
+                });
+            }
+        }
+    }, [initialCategory, fetchCategoryById, setSelectedCategories]);
 
     // Reset page when filters change
     useEffect(() => {
@@ -217,9 +242,9 @@ export default function ArticlesPage() {
                                                 <motion.div
                                                     key={article.id}
                                                     layout
-                                                    initial={{opacity: 0, scale: 0.95}}
-                                                    animate={{opacity: 1, scale: 1}}
-                                                    exit={{opacity: 0, scale: 0.95}}
+                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.95 }}
                                                     transition={{
                                                         duration: 0.3,
                                                         delay: index * 0.05,
@@ -281,20 +306,20 @@ function ArticlesSkeletonLoader({ count = 6 }) {
                             <div className="h-4 w-4 bg-gray-200 rounded"></div>
                             <div className="h-4 bg-gray-200 rounded w-24"></div>
                         </div>
-                        
+
                         {/* Title placeholder */}
                         <div className="space-y-2">
                             <div className="h-6 bg-gray-200 rounded w-full"></div>
                             <div className="h-6 bg-gray-200 rounded w-4/5"></div>
                         </div>
-                        
+
                         {/* Description placeholder */}
                         <div className="space-y-2">
                             <div className="h-4 bg-gray-200 rounded w-full"></div>
                             <div className="h-4 bg-gray-200 rounded w-5/6"></div>
                             <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                         </div>
-                        
+
                         {/* Author section placeholder */}
                         <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -320,12 +345,12 @@ function NoArticlesFound({ hasFilters }) {
 
     return (
         <motion.div
-            initial={{opacity: 0, y: 20}}
-            animate={{opacity: 1, y: 0}}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center justify-center py-20 text-center"
         >
             <div className="w-32 h-32 bg-gradient-to-br from-[#43b365]/10 to-[#43b365]/20 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
-                <SearchX size={64} className="text-[#43b365]"/>
+                <SearchX size={64} className="text-[#43b365]" />
             </div>
             <h3 className="text-3xl font-bold text-gray-900 mb-4">Məqalə Tapılmadı</h3>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
@@ -338,7 +363,7 @@ function NoArticlesFound({ hasFilters }) {
                     onClick={clearFilters}
                     className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#43b365] to-[#2d7a47] text-white font-semibold rounded-xl hover:from-[#2d7a47] hover:to-[#1e5a32] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                    <RotateCcw size={20}/> 
+                    <RotateCcw size={20} />
                     Filtrləri Sıfırla
                 </button>
             )}

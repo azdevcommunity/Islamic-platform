@@ -1,9 +1,12 @@
 "use client"
-import React, { useCallback, useEffect, useRef } from "react";
-import ReusableFilterSidebar, { ActiveFilters, MobileFilterTrigger } from "@/components/common/Filter/ReusableFilterSidebar";
-import { Search, Tag, X } from "lucide-react";
-import { useFilterData } from "@/hooks/useFilterData";
-import { CategoryFilter } from "@/components/common/Filter/CategoryTreeItem";
+import React, {useCallback, useEffect, useRef} from "react";
+import ReusableFilterSidebar, {
+    ActiveFilters,
+    MobileFilterTrigger
+} from "@/components/common/Filter/ReusableFilterSidebar";
+import {Search, Tag, X} from "lucide-react";
+import {useFilterData} from "@/hooks/useFilterData";
+import {CategoryFilter} from "@/components/common/Filter/CategoryTreeItem";
 import TagFilter from "@/components/common/Filter/TagFilter";
 import useFilterStore from "@/store/useFilterStore";
 
@@ -11,17 +14,18 @@ import useFilterStore from "@/store/useFilterStore";
  * A complete filtering solution with Zustand-backed state management
  */
 export const FilterProvider = ({
-    initialCategories = [],
-    initialTags = [],
-    initialSearchQuery = "",
-    onFiltersChange = () => { },
-    searchPlaceholder = "Axtar...",
-    className = "",
-    searchInputRef = null,
-    showMobileFilter = true,
-    children,
-    showSearch = true
-}) => {
+                                   initialCategories = [],
+                                   initialTags = [],
+                                   initialSearchQuery = "",
+                                   onFiltersChange = () => {
+                                   },
+                                   searchPlaceholder = "Axtar...",
+                                   className = "",
+                                   searchInputRef = null,
+                                   showMobileFilter = true,
+                                   children,
+                                   showSearch = true
+                               }) => {
     // Flag to track if we're in a reset operation
     const isResettingRef = useRef(false);
     const isInitializedRef = useRef(false);
@@ -42,7 +46,7 @@ export const FilterProvider = ({
     });
 
     // Get search query and setter from Zustand store
-    const { searchQuery, setSearchQuery, clearFilters: clearAllFiltersFn } = useFilterStore();
+    const {searchQuery, setSearchQuery, clearFilters: clearAllFiltersFn} = useFilterStore();
 
     // Initialize search query if provided
     useEffect(() => {
@@ -135,8 +139,11 @@ export const FilterProvider = ({
         {
             title: "Kateqoriyalar",
             icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-emerald-600">
-                    <path fillRule="evenodd" d="M2.25 3A.75.75 0 0 0 1.5 3.75v1.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-1.5A.75.75 0 0 0 3.75 3h-1.5ZM1.5 9.75A.75.75 0 0 1 2.25 9h1.5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75v-1.5ZM2.25 15A.75.75 0 0 0 1.5 15.75v1.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-1.5a.75.75 0 0 0-.75-.75h-1.5ZM6.04 4.28l-.147.146a.75.75 0 1 0 1.06 1.06l4.5-4.5a.75.75 0 0 0-1.06-1.06l-4.5 4.5ZM6 10.5a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 4.5a.75.75 0 1 0 0 1.5h9a.75.75 0 1 0 0-1.5h-9Z" clipRule="evenodd" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                     className="w-5 h-5 text-emerald-600">
+                    <path fillRule="evenodd"
+                          d="M2.25 3A.75.75 0 0 0 1.5 3.75v1.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-1.5A.75.75 0 0 0 3.75 3h-1.5ZM1.5 9.75A.75.75 0 0 1 2.25 9h1.5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75v-1.5ZM2.25 15A.75.75 0 0 0 1.5 15.75v1.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-1.5a.75.75 0 0 0-.75-.75h-1.5ZM6.04 4.28l-.147.146a.75.75 0 1 0 1.06 1.06l4.5-4.5a.75.75 0 0 0-1.06-1.06l-4.5 4.5ZM6 10.5a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 4.5a.75.75 0 1 0 0 1.5h9a.75.75 0 1 0 0-1.5h-9Z"
+                          clipRule="evenodd"/>
                 </svg>
             ),
             badgeCount: selectedCategories.length,
@@ -152,7 +159,7 @@ export const FilterProvider = ({
         },
         {
             title: "Taqlər",
-            icon: <Tag className="w-5 h-5 text-emerald-600" />,
+            icon: <Tag className="w-5 h-5 text-emerald-600"/>,
             badgeCount: selectedTags.length,
             badgeColor: "blue",
             content: (
@@ -173,7 +180,7 @@ export const FilterProvider = ({
     if (searchQuery) {
         activeFiltersArray.push({
             label: searchQuery,
-            icon: <Search size={12} />,
+            icon: <Search size={12}/>,
             value: searchQuery,
             bgClass: "bg-gray-200",
             textClass: "text-gray-800",
@@ -231,24 +238,25 @@ export const FilterProvider = ({
                         showSearch &&
                         <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
                             <div className="relative flex-grow w-full">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Search className="h-5 w-5 text-gray-400" />
-                                </div>
-                                <input
-                                    ref={searchInputRef}
-                                    type="search"
-                                    placeholder={searchPlaceholder}
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
-                                    className="block w-full pl-11 pr-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-base"
-                                />
+
+                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"/>
+
+                                    <input
+                                        ref={searchInputRef}
+                                        type="text"
+                                        placeholder={searchPlaceholder}
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 bg-white text-base text-gray-700 placeholder-gray-400 focus:outline-none focus:border-emerald-500"
+                                    />
+
                                 {searchQuery && (
                                     <button
                                         onClick={clearSearchInput}
-                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
                                         aria-label="Axtarışı təmizlə"
                                     >
-                                        <X className="h-5 w-5" />
+                                        <X className="h-5 w-5"/>
                                     </button>
                                 )}
                             </div>

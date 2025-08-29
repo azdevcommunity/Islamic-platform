@@ -75,7 +75,6 @@ export default function ContactPage() {
                                     </h2>
                                     <p className="text-gray-600 text-lg leading-relaxed">
                                         Aşağıdakı formu dolduraraq bizimlə əlaqə saxlaya bilərsiniz.
-                                        Bütün mesajlar 24 saat ərzində cavablandırılır.
                                     </p>
                                 </div>
                                 <ContactForm />

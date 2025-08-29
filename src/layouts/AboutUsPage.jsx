@@ -30,14 +30,11 @@ const AboutUsPage = () => {
           </div>
 
           <h1 className="text-white text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 tracking-tight leading-tight">
-            Bizim
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200 block sm:inline"> Məqsədimiz</span>
+            Məqsədimiz
           </h1>
 
           <p className="text-emerald-100 text-xl sm:text-2xl leading-relaxed max-w-4xl mx-auto mb-8">
-            İslam dininin hikmətini və mənəvi dəyərlərini geniş auditoriyaya çatdırmaq,
-            Əhli Sünnə təlimlərinin əsasında saf və düzgün dini bilikləri təqdim edərək,
-            fərdlərin imanını möhkəmləndirmək və cəmiyyətə faydalı olmaqdır.
+          Əlisünnə Mədrəsəsi olaraq, İslam dininin hikmətini və mənəvi dəyərlərini geniş auditoriyaya çatdırmaq üçün fəaliyyət göstəririk. Məqsədimiz, Əhli Sünnə təlimlərinin əsasında, saf və düzgün dini bilikləri təqdim edərək, fərdlərin imanını möhkəmləndirmək və cəmiyyətə faydalı olmaqdır. Hər kəsi İslamın mərhəmət və sevgi dolu mesajı ilə tanış etmək ən önəmli vəzifəmizdir.
           </p>
 
           <div className="flex flex-wrap justify-center gap-6 text-emerald-200">
@@ -58,11 +55,11 @@ const AboutUsPage = () => {
       </section>
 
       {/* Main Content Area */}
-      <div className="relative -mt-20 z-10">
+      <div className="relative mt-20 z-10">
         <div className="container mx-auto max-w-7xl px-6 lg:px-8">
 
           {/* Stats Section */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 mb-20">
+          {/* <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 mb-20">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div className="group">
                 <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -93,7 +90,7 @@ const AboutUsPage = () => {
                 <div className="text-sm text-gray-600">Müəllim</div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Section 1: Tədris və Maarifləndirmə */}
           <section className="mb-32">
@@ -124,15 +121,10 @@ const AboutUsPage = () => {
 
                 <div className="space-y-6">
                   <p className="text-gray-700 text-lg leading-relaxed">
-                    Bizim əsas fəaliyyət istiqamətimiz İslam elmlərinin dərinliklərinə enərək, onları aydın və asan başa
-                    düşülən şəkildə təqdim etməkdir. Qurani-Kərim təfsiri, hədislər, fiqh və əxlaq dərsləri vasitəsilə dini
-                    bilikləri həm yeni başlayanlar, həm də inkişaf etmiş bilik səviyyəsinə malik olan şəxslər üçün əlçatan
-                    edirik.
+                  Bizim əsas fəaliyyət istiqamətimiz İslam elmlərinin dərinliklərinə enərək, onları aydın və asan başa düşülən şəkildə təqdim etməkdir. Qurani-Kərim təfsiri, hədislər, fiqh və əxlaq dərsləri vasitəsilə dini bilikləri həm yeni başlayanlar, həm də inkişaf etmiş bilik səviyyəsinə malik olan şəxslər üçün əlçatan edirik. Təlimlərimizdə yalnız nəzəri biliklər deyil, həm də bu biliklərin gündəlik həyatda tətbiqinə xüsusi diqqət yetiririk. Bu yanaşma, insanların yalnız dini biliklərini artırmaqla kifayətlənməyərək, eyni zamanda mənəvi olaraq güclənmələrinə dəstək olur.
                   </p>
                   <p className="text-gray-700 text-lg leading-relaxed">
-                    Təlimlərimizdə yalnız nəzəri biliklər deyil, həm də bu biliklərin gündəlik həyatda tətbiqinə
-                    xüsusi diqqət yetiririk. Bu yanaşma, insanların yalnız dini biliklərini artırmaqla kifayətlənməyərək, eyni
-                    zamanda mənəvi olaraq güclənmələrinə dəstək olur.
+                  Digər tərəfdən, müasir dövrün ehtiyaclarına uyğunlaşmağı əsas prinsip kimi qəbul edirik. Mədrəsəmizdə təqdim olunan maarifləndirmə materialları, dini və mənəvi bilikləri praktik şəkildə həyata keçirə bilməyə yönəldilmişdir. Hədəfimiz, biliklərlə yanaşı, mənəviyyatı gücləndirən bir yol yoldaşı olmaqdır.
                   </p>
 
                   {/* Feature highlights */}
@@ -173,14 +165,10 @@ const AboutUsPage = () => {
 
                 <div className="space-y-6">
                   <p className="text-gray-700 text-lg leading-relaxed">
-                    Əlisünnə Mədrəsəsi sevgi, sülh və birlik dəyərlərinə sadiq qalaraq, İslamın bütün insanlara təqdim etdiyi
-                    universal mesajı vurğulayır. Biz, hər bir fərdin bu dünyada mənəvi axtarışını gücləndirmək və onu doğru
-                    istiqamətləndirmək üçün yaradılmışıq.
+                  Əlisünnə Mədrəsəsi sevgi, sülh və birlik dəyərlərinə sadiq qalaraq, İslamın bütün insanlara təqdim etdiyi universal mesajı vurğulayır. Biz, hər bir fərdin bu dünyada mənəvi axtarışını gücləndirmək və onu doğru istiqamətləndirmək üçün yaradılmışıq. Əsas dəyərlərimizdən biri, hər bir fərdin dindən aldığı bilikləri sevgi və anlayışla paylaşmasına şərait yaratmaqdır. İnanırıq ki, İslam dəyərlərinin düzgün təbliği, cəmiyyətlər arasında həmrəyliyin və harmoniyanın inkişafına xidmət edir.
                   </p>
                   <p className="text-gray-700 text-lg leading-relaxed">
-                    Əsas dəyərlərimizdən biri, hər bir fərdin dindən aldığı bilikləri sevgi və anlayışla paylaşmasına şərait
-                    yaratmaqdır. İnanırıq ki, İslam dəyərlərinin düzgün təbliği, cəmiyyətlər arasında həmrəyliyin və
-                    harmoniyanın inkişafına xidmət edir.
+                  Eyni zamanda, gələcəyə baxışımızı müasir dünyanın ehtiyaclarına uyğun formalaşdırmışıq. Vizyonumuz, İslamın hikmət dolu irsini həm yerli, həm də qlobal miqyasda təbliğ edərək, bilik, əxlaq və iman üzərində qurulan bir cəmiyyətin yaranmasına töhfə verməkdir. Təlimlərimizlə insanlara yalnız din öyrətmirik, eyni zamanda onların mənəvi ehtiyaclarına cavab verərək həyatlarında mənalı bir iz qoymağı hədəfləyirik.
                   </p>
 
                   {/* Core values */}

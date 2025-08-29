@@ -237,7 +237,7 @@ export default function CompactQuestionsPage() {
                         initialTags={[]}
                         initialSearchQuery=""
                         onFiltersChange={handleFiltersChange}
-                        searchPlaceholder="Suallar arasında axtar..."
+                        searchPlaceholder="Suallar arasında axtar...222"
                         showSearch={false}
                     >
                         {/* Compact Header */}

@@ -204,7 +204,7 @@ const QuestionsHeader = ({ questionsCount, onSortChange, currentSort, searchQuer
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
                             type="text"
-                            placeholder="Suallar arasında axtar..."
+                            placeholder="Suallar arasında axtar...1212"
                             value={searchQuery}
                             onChange={(e) => onSearchChange(e.target.value)}
                             className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-64"
@@ -467,7 +467,7 @@ export default function QuestionsPage() {
                         initialTags={[]}
                         initialSearchQuery=""
                         onFiltersChange={handleFiltersChange}
-                        searchPlaceholder="Suallar arasında axtar..."
+                        searchPlaceholder="Suallar arasında axtar...555"
                         showSearch={false}
                     >
                         {/* Header */}

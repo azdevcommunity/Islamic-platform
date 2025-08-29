@@ -27,22 +27,7 @@ const HomePage = () => {
 
             {/* Articles Section */}
             <section id="articles" className="py-20 md:py-28 bg-gradient-to-br from-gray-50 via-white to-gray-50">
-                <div className="container mx-auto px-4 max-w-7xl">
-                    <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#43b365]/10 rounded-full text-[#43b365] font-medium text-sm mb-4">
-                            <span className="w-2 h-2 bg-[#43b365] rounded-full"></span>
-                            Ən Son Məqalələr
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                            İlahi Bilik və Hikmət
-                        </h2>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                            İslami elm və hikmətdən doğan məqalələrimizlə ruhunuzu zənginləşdirin
-                        </p>
-                        <div className="mt-8 w-24 h-1 bg-gradient-to-r from-[#43b365] to-[#2d7a47] mx-auto rounded-full"></div>
-                    </div>
                     <Articles />
-                </div>
             </section>
 
             {/* Books Section */}
@@ -51,7 +36,7 @@ const HomePage = () => {
                     <div className="text-center mb-16">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 rounded-full text-amber-700 font-medium text-sm mb-4">
                             <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
-                            Kitab Kolleksiyamız
+                            Kitablarımız
                         </div>
                         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                             Ruhani Sərvətlər
@@ -82,7 +67,7 @@ const HomePage = () => {
             {/* Testimonials Section */}
             <section
                 id="feedbacks"
-                className="py-20 md:py-28 relative"
+                className="py-16 md:py-20 relative"
                 style={{
                     backgroundImage: "linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url(/feedbackbg.webp)",
                     backgroundSize: "cover",
@@ -91,18 +76,18 @@ const HomePage = () => {
                     backgroundAttachment: "fixed",
                 }}
             >
-                <div className="container mx-auto px-4 max-w-6xl">
+                <div className="container mx-auto px-4 max-w-5xl">
                     <div className="text-center mb-16">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium text-sm mb-4">
                             <span className="w-2 h-2 bg-white rounded-full"></span>
                             Tələbə Rəyləri
                         </div>
                         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                            Ürəkdən Gələn Sözlər
+                            Sizdən Gələnlər
                         </h2>
-                        <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+                        {/* <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
                             Tələbələrimizin təcrübələri və mənəvi inkişaf hekayələri
-                        </p>
+                        </p> */}
                         <div className="mt-8 w-24 h-1 bg-gradient-to-r from-white to-white/70 mx-auto rounded-full"></div>
                     </div>
                     <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/20">
