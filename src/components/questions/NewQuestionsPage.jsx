@@ -409,6 +409,7 @@ export default function NewQuestionsPage() {
     const [isFiltersInitialized, setIsFiltersInitialized] = useState(false);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    const [totalElements, setTotalElements] = useState(1);
     const [statistics, setStatistics] = useState({
         totalQuestions: 0,
         totalCategories: 0,
@@ -472,6 +473,7 @@ export default function NewQuestionsPage() {
                 readCount: q.viewCount ?? Math.floor(Math.random() * 100) + 10,
             })));
             setTotalPages(pageInfo.totalPages ?? 1);
+            setTotalElements(pageInfo.totalElements ?? 1);
         } catch (err) {
             console.error("Error fetching questions:", err);
             setError("Suallar yüklənərkən xəta baş verdi.");
@@ -627,7 +629,7 @@ export default function NewQuestionsPage() {
                             transition={{ duration: 0.6 }}
                         >
                             <ModernHeader
-                                questionsCount={statistics.totalQuestions}
+                                questionsCount={totalElements}
                                 layout={layout}
                                 onLayoutChange={handleLayoutChange}
                                 searchQuery={searchQuery}
