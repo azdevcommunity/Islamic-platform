@@ -115,7 +115,7 @@ const ArticleDetailPage = ({article}) => {
                                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
-                                {article.viewCount || 0} baxış
+                                {article.readCount || 0} baxış
                             </div>
                             <div className="flex items-center">
                                 <svg

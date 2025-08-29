@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import HttpClient from "@/util/HttpClient";
 import ModernQuestionsHeader from "./ModernQuestionsHeader";
-import { 
-    ModernQuestionsGrid, 
-    ModernQuestionsList, 
-    ModernQuestionsSkeletonLoader 
+import {
+    ModernQuestionsGrid,
+    ModernQuestionsList,
+    ModernQuestionsSkeletonLoader
 } from "./ModernQuestionsList";
 import { NoQuestionsFound, OptimizedPagination } from "./QuestionComponents";
 
@@ -32,7 +32,7 @@ export default function ModernQuestionsPage() {
     const fetchQuestions = useCallback(async () => {
         setLoading(true);
         setError(null);
-        
+
         try {
             const params = new URLSearchParams({
                 page: page.toString(),
@@ -131,7 +131,7 @@ export default function ModernQuestionsPage() {
         if (zeroIndexedPage >= 0 && zeroIndexedPage < totalPages) {
             setPage(zeroIndexedPage);
             // Smooth scroll to top of questions list
-            document.getElementById('questions-content')?.scrollIntoView({ 
+            document.getElementById('questions-content')?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
@@ -151,14 +151,14 @@ export default function ModernQuestionsPage() {
                 </div>
 
                 <div className="container mx-auto px-4 max-w-7xl relative">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                         className="text-center space-y-8"
                     >
                         {/* Badge */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
@@ -182,7 +182,7 @@ export default function ModernQuestionsPage() {
                         </div>
 
                         {/* Quick Stats */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.4 }}
@@ -261,8 +261,8 @@ export default function ModernQuestionsPage() {
                             )}
 
                             {loading ? (
-                                <ModernQuestionsSkeletonLoader 
-                                    count={layout === "grid" ? 8 : 6} 
+                                <ModernQuestionsSkeletonLoader
+                                    count={layout === "grid" ? 8 : 6}
                                     layout={layout}
                                 />
                             ) : questions.length > 0 ? (
@@ -281,7 +281,7 @@ export default function ModernQuestionsPage() {
 
                                     {/* Pagination */}
                                     {totalPages > 1 && (
-                                        <motion.div 
+                                        <motion.div
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.5, delay: 0.3 }}

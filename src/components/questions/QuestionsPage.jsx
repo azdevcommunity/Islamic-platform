@@ -3,12 +3,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import HttpClient from "@/util/HttpClient";
-import { 
-    Calendar, 
-    Eye, 
-    MessageCircle, 
-    Tag, 
-    BookOpen, 
+import {
+    Calendar,
+    Eye,
+    MessageCircle,
+    Tag,
+    BookOpen,
     ArrowUpRight,
     Search,
     Filter,
@@ -22,7 +22,7 @@ import { NoQuestionsFound, OptimizedPagination } from "./QuestionComponents";
 // Question List Item (for list view)
 const QuestionListItem = ({ question, index }) => {
     const formattedDate = formatDate(question.createdDate);
-    
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -38,18 +38,18 @@ const QuestionListItem = ({ question, index }) => {
                             {question.question}
                         </h3>
                     </Link>
-                    
+
                     {/* Answer Preview */}
                     <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
-                        {question.answer?.length > 120 
-                            ? question.answer.substring(0, 120) + "..." 
+                        {question.answer?.length > 120
+                            ? question.answer.substring(0, 120) + "..."
                             : question.answer || "Cavab mövcud deyil."}
                     </p>
-                    
+
                     {/* Categories and Tags */}
                     <div className="flex flex-wrap gap-2 mb-3">
                         {question.categories?.slice(0, 2).map(category => (
-                            <span 
+                            <span
                                 key={category.id}
                                 className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-md"
                             >
@@ -58,7 +58,7 @@ const QuestionListItem = ({ question, index }) => {
                             </span>
                         ))}
                         {question.tags?.slice(0, 3).map(tag => (
-                            <span 
+                            <span
                                 key={tag.id}
                                 className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded-md"
                             >
@@ -67,7 +67,7 @@ const QuestionListItem = ({ question, index }) => {
                             </span>
                         ))}
                     </div>
-                    
+
                     {/* Meta Information */}
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
@@ -82,9 +82,9 @@ const QuestionListItem = ({ question, index }) => {
                         )}
                     </div>
                 </div>
-                
+
                 {/* Read More Button */}
-                <Link 
+                <Link
                     href={`/questions/${question.id}`}
                     className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
                 >
@@ -99,8 +99,8 @@ const QuestionListItem = ({ question, index }) => {
 // Question Grid Item (for grid view)
 const QuestionGridItem = ({ question, index }) => {
     const formattedDate = formatDate(question.createdDate);
-    const answerPreview = question.answer?.length > 80 
-        ? question.answer.substring(0, 80) + "..." 
+    const answerPreview = question.answer?.length > 80
+        ? question.answer.substring(0, 80) + "..."
         : question.answer || "Cavab mövcud deyil.";
 
     return (
@@ -144,7 +144,7 @@ const QuestionGridItem = ({ question, index }) => {
                 {question.categories && question.categories.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                         {question.categories.slice(0, 2).map(category => (
-                            <span 
+                            <span
                                 key={category.id}
                                 className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-md"
                             >
@@ -176,7 +176,7 @@ const QuestionGridItem = ({ question, index }) => {
                     )}
                 </div>
 
-                <Link 
+                <Link
                     href={`/questions/${question.id}`}
                     className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors duration-200"
                 >
@@ -197,7 +197,7 @@ const QuestionsHeader = ({ questionsCount, onSortChange, currentSort, searchQuer
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Sual və Cavablar</h2>
                     <p className="text-gray-600">{questionsCount} sual tapıldı</p>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row gap-3">
                     {/* Search */}
                     <div className="relative">
@@ -210,7 +210,7 @@ const QuestionsHeader = ({ questionsCount, onSortChange, currentSort, searchQuer
                             className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-64"
                         />
                     </div>
-                    
+
                     {/* Layout Toggle */}
                     <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                         <button
@@ -236,7 +236,7 @@ const QuestionsHeader = ({ questionsCount, onSortChange, currentSort, searchQuer
                             Grid
                         </button>
                     </div>
-                    
+
                     {/* Sort */}
                     <select
                         value={currentSort}
@@ -256,7 +256,7 @@ const QuestionsHeader = ({ questionsCount, onSortChange, currentSort, searchQuer
 // Skeleton Loaders
 const QuestionsSkeletonLoader = ({ count = 6, layout = "list" }) => {
     const skeletonItems = Array.from({ length: count }).map((_, index) => (
-        <div key={index} className={layout === 'grid' 
+        <div key={index} className={layout === 'grid'
             ? "bg-white border border-gray-200 rounded-lg p-4 animate-pulse h-[320px] flex flex-col"
             : "bg-white border border-gray-200 rounded-lg p-6 animate-pulse"
         }>
@@ -378,7 +378,7 @@ export default function QuestionsPage() {
                 categories: Array.isArray(q.categories) ? q.categories.map(c => ({ id: c.id, name: c.name })) : [],
                 tags: Array.isArray(q.tags) ? q.tags.map(t => ({ id: t.id, name: t.name })) : [],
                 createdDate: q.createdDate || new Date().toISOString(),
-                readCount: q.viewCount ?? Math.floor(Math.random() * 100) + 10,
+                readCount: q.viewCount ?? 0,
             })));
             setTotalPages(pageInfo.totalPages ?? 1);
         } catch (err) {
@@ -508,9 +508,9 @@ export default function QuestionsPage() {
                                     {layout === 'grid' ? (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                             {questions.map((question, index) => (
-                                                <QuestionGridItem 
-                                                    key={question.id} 
-                                                    question={question} 
+                                                <QuestionGridItem
+                                                    key={question.id}
+                                                    question={question}
                                                     index={index}
                                                 />
                                             ))}
@@ -518,9 +518,9 @@ export default function QuestionsPage() {
                                     ) : (
                                         <div className="space-y-4">
                                             {questions.map((question, index) => (
-                                                <QuestionListItem 
-                                                    key={question.id} 
-                                                    question={question} 
+                                                <QuestionListItem
+                                                    key={question.id}
+                                                    question={question}
                                                     index={index}
                                                 />
                                             ))}

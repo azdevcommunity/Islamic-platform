@@ -1,6 +1,6 @@
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 
-const path = [
+const paths = [
     '/',
     '/videos',
     '/videos/**',
@@ -13,7 +13,15 @@ const path = [
     '/questions',
     '/questions/**',
     '/contact',
-    'about'
+    '/about'
+]
+
+const tags = [
+    'popular-articles',
+    'articles',
+    'videos',
+    'books',
+    'questions'
 ]
 
 export async function GET(request) {
@@ -27,11 +35,16 @@ export async function GET(request) {
 
     try {
         // Path revalidation
-        path.forEach(p => {
-            revalidatePath(p)
+        paths.forEach(path => {
+            revalidatePath(path)
         })
 
-        return new Response(`Revalidated path `, { status: 200 })
+        // Tag revalidation
+        tags.forEach(tag => {
+            revalidateTag(tag)
+        })
+
+        return new Response(`Revalidated ${paths.length} paths and ${tags.length} tags successfully`, { status: 200 })
     } catch (error) {
         return new Response(`Revalidation error: ${error.message}`, { status: 500 })
     }
