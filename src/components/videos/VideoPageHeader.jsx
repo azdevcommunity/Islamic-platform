@@ -1,8 +1,44 @@
 "use client";
 import { motion } from "framer-motion";
-import { FaPlay, FaVideo, FaList, FaClock } from "react-icons/fa";
+import { FaPlay, FaVideo, FaList, FaClock, FaEye } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import HttpClient from "@/util/HttpClient";
 
 const VideoPageHeader = () => {
+    const [stats, setStats] = useState({
+        videoCount: 500,
+        viewCount: 100000,
+        playlistCount: 50,
+        subscriberCount: 1000
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const response = await HttpClient.get('/videos/statistics');
+                const data = await response.json();
+                setStats(data);
+            } catch (error) {
+                console.error('Error fetching video statistics:', error);
+                // Keep default values if API fails
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, []);
+
+    // Format numbers for display
+    const formatNumber = (num) => {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(0) + 'K';
+        }
+        return num.toString();
+    };
     return (
         <section className="relative py-20 md:py-28 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
             {/* Background Pattern */}
@@ -52,21 +88,44 @@ const VideoPageHeader = () => {
                         className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12"
                     >
                         {[
-                            { icon: FaVideo, label: "Videolar", count: "500+" },
-                            { icon: FaList, label: "Playlistlər", count: "50+" },
-                            { icon: FaClock, label: "Saatlar", count: "1000+" },
-                            { icon: FaPlay, label: "İzləmələr", count: "100K+" }
+                            { 
+                                icon: FaVideo, 
+                                label: "Videolar", 
+                                count: loading ? "..." : formatNumber(stats.videoCount),
+                                rawCount: stats.videoCount
+                            },
+                            { 
+                                icon: FaList, 
+                                label: "Playlistlər", 
+                                count: loading ? "..." : formatNumber(stats.playlistCount),
+                                rawCount: stats.playlistCount
+                            },
+                            { 
+                                icon: FaEye, 
+                                label: "İzləmələr", 
+                                count: loading ? "..." : formatNumber(stats.viewCount),
+                                rawCount: stats.viewCount
+                            },
+                            { 
+                                icon: FaPlay, 
+                                label: "Abunəçilər", 
+                                count: loading ? "..." : formatNumber(stats.subscriberCount),
+                                rawCount: stats.subscriberCount
+                            }
                         ].map((stat, index) => (
                             <div
                                 key={index}
                                 className="group p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                                title={loading ? "Yüklənir..." : `${stat.rawCount?.toLocaleString()} ${stat.label}`}
                             >
                                 <div className="flex flex-col items-center space-y-3">
                                     <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center group-hover:bg-red-500/30 transition-colors">
-                                        <stat.icon className="w-6 h-6 text-red-400" />
+                                        <stat.icon className={`w-6 h-6 text-red-400 ${loading ? 'animate-pulse' : ''}`} />
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-2xl font-bold text-white">{stat.count}</div>
+                                        <div className={`text-2xl font-bold text-white ${loading ? 'animate-pulse' : ''}`}>
+                                            {stat.count}
+                                        </div>
                                         <div className="text-sm text-white/70">{stat.label}</div>
                                     </div>
                                 </div>
