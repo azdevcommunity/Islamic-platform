@@ -22,7 +22,7 @@ const Videos =  ({ playlistId, search, videoId, content, page }) => {
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
             {/* Video Player Section */}
-            {(videoId || (playlistId && content !== "playlists")) && (
+            {(videoId || playlistId ) && (
                 <VideoPlayer playlistId={playlistId} videoId={videoId} content={content} search={search} />
             )}
 
