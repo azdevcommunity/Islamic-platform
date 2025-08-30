@@ -5,30 +5,35 @@ import Image from "next/image"
 
 const VideoPlayerPlaylistItems = ({ playlistId, videos, page, searchParams, content, videoId }) => {
   const generateRoute = (playlistId, videoId) => {
-    const searchParams = new URLSearchParams()
+    const urlParams = new URLSearchParams()
     if (playlistId != null) {
-      searchParams.set("playlistId", playlistId)
+      urlParams.set("playlistId", playlistId)
     }
 
     if (videoId != null) {
-      searchParams.set("videoId", videoId)
+      urlParams.set("videoId", videoId)
     }
 
     if (content != null) {
-      searchParams.set("content", content)
+      urlParams.set("content", content)
     }
 
     if (page != null) {
-      searchParams.set("page", page)
+      urlParams.set("page", page)
     }
 
-    return `/videos?${searchParams}`
+    const route = `/videos?${urlParams.toString()}`
+    console.log("Generated route:", route, "for video:", videoId)
+    return route
   }
 
   return (
     <div className="divide-y divide-gray-700">
       {videos?.map((video) => {
-        console.log( video.videoId === videoId ? "bg-emerald-900/30 border-l-4 border-emerald-500" : "")
+        // Debug: Check if video selection is working
+        if (video.videoId === videoId) {
+          console.log("Selected video:", video.title, "ID:", video.videoId)
+        }
         return (
             <Link
                 href={generateRoute(playlistId, video.videoId)}

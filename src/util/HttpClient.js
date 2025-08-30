@@ -7,6 +7,16 @@ class HttpClient {
     "Accepted-Language": "az",
   }
 
+  // Helper to safely parse JSON response
+  static async _safeJsonParse(response) {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const text = await response.text();
+      return text ? JSON.parse(text) : null;
+    }
+    return response;
+  }
+
   // Helper to determine the final URL
   static _getUrl(path, customBaseUrl = null) {
     const base = customBaseUrl !== null ? customBaseUrl : this.baseUrl;
@@ -21,10 +31,6 @@ class HttpClient {
   static get(path, headers = null, customBaseUrl = null) {
     const customHeaders = headers ?? {}
     const url = this._getUrl(path, customBaseUrl);
-
-
-
-
 
     return fetch(url, {
       method: "GET",
@@ -50,10 +56,15 @@ class HttpClient {
       },
     })
 
-    // if (!response.ok) {
-    //     const errorResponse = await response.json();
-    //     throw new Error(errorResponse.message || 'Request failed with status ' + response.status);
-    // }
+    if (!response.ok) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Request failed with status ' + response.status);
+      } else {
+        throw new Error('Request failed with status ' + response.status);
+      }
+    }
     return response
   }
 
@@ -73,10 +84,16 @@ class HttpClient {
     })
 
     if (!response.ok) {
-      const errorResponse = await response.json()
-      throw new Error(errorResponse.message || "Request failed with status " + response.status)
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorResponse = await response.json()
+        throw new Error(errorResponse.message || "Request failed with status " + response.status)
+      } else {
+        throw new Error("Request failed with status " + response.status)
+      }
     }
-    return response.json()
+
+    return this._safeJsonParse(response);
   }
 
   static async delete(path, headers = null, customBaseUrl = null) {
@@ -94,7 +111,13 @@ class HttpClient {
     })
 
     if (!response.ok) {
-      throw new Error("Request failed with status " + response.status)
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || "Request failed with status " + response.status);
+      } else {
+        throw new Error("Request failed with status " + response.status);
+      }
     }
     return response
   }

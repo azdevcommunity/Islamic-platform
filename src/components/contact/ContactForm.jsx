@@ -107,110 +107,120 @@ export default function ContactForm() {
 
             {/* Form Sahələri */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Adınız
-                        Soyadınız <span className="text-red-500">*</span></label>
-                    <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder="Adınızı və soyadınızı daxil edin"
-                        required
-                        value={formData.name} // State-ə bağlanır
-                        onChange={handleChange} // Dəyişiklikləri state-ə yazır
-                        className="block w-full px-4 py-2.5 border border-gray-300 rounded-md shadow-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition duration-150 ease-in-out"
-                    />
+                <div className="group">
+                    <label htmlFor="name" className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-emerald-600 transition-colors">
+                        Adınız Soyadınız <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Adınızı və soyadınızı daxil edin"
+                            required
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl shadow-sm bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all duration-200 ease-in-out hover:border-gray-300"
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">E-poçt Ünvanı <span
-                        className="text-red-500">*</span></label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        placeholder="email@nümunə.com"
-                        required
-                        value={formData.email} // State-ə bağlanır
-                        onChange={handleChange} // Dəyişiklikləri state-ə yazır
-                        className="block w-full px-4 py-2.5 border border-gray-300 rounded-md shadow-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition duration-150 ease-in-out"
-                    />
+                <div className="group">
+                    <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-emerald-600 transition-colors">
+                        E-poçt Ünvanı <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="email@nümunə.com"
+                            required
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl shadow-sm bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all duration-200 ease-in-out hover:border-gray-300"
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">Mövzu <span
-                        className="text-red-500">*</span></label>
-                    <input
-                        type="text"
-                        name="subject"
-                        id="subject"
-                        placeholder="Mesajınızın mövzusu"
-                        required
-                        value={formData.subject} // State-ə bağlanır
-                        onChange={handleChange} // Dəyişiklikləri state-ə yazır
-                        className="block w-full px-4 py-2.5 border border-gray-300 rounded-md shadow-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition duration-150 ease-in-out"
-                    />
+                <div className="group">
+                    <label htmlFor="subject" className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-emerald-600 transition-colors">
+                        Mövzu <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            name="subject"
+                            id="subject"
+                            placeholder="Mesajınızın mövzusu"
+                            required
+                            value={formData.subject}
+                            onChange={handleChange}
+                            className="block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl shadow-sm bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all duration-200 ease-in-out hover:border-gray-300"
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefon
-                        (Könüllü)</label>
-                    <input
-                        type="tel"
-                        name="phone"
-                        id="phone"
-                        placeholder="+994 XX XXX XX XX"
-                        value={formData.phone} // State-ə bağlanır
-                        onChange={handleChange} // Dəyişiklikləri state-ə yazır
-                        className="block w-full px-4 py-2.5 border border-gray-300 rounded-md shadow-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition duration-150 ease-in-out"
-                    />
+                <div className="group">
+                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-emerald-600 transition-colors">
+                        Telefon (Könüllü)
+                    </label>
+                    <div className="relative">
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="phone"
+                            placeholder="+994 XX XXX XX XX"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl shadow-sm bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all duration-200 ease-in-out hover:border-gray-300"
+                        />
+                    </div>
                 </div>
             </div>
 
-            <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Mesajınız <span
-                    className="text-red-500">*</span></label>
-                <textarea
-                    name="message"
-                    id="message"
-                    rows="5"
-                    placeholder="Sualınızı və ya təklifinizi bura yazın..."
-                    required
-                    value={formData.message} // State-ə bağlanır
-                    onChange={handleChange} // Dəyişiklikləri state-ə yazır
-                    className="block w-full px-4 py-2.5 border border-gray-300 rounded-md shadow-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition duration-150 ease-in-out resize-y"
-                ></textarea>
+            <div className="group">
+                <label htmlFor="message" className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-emerald-600 transition-colors">
+                    Mesajınız <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                    <textarea
+                        name="message"
+                        id="message"
+                        rows="6"
+                        placeholder="Sualınızı və ya təklifinizi bura yazın..."
+                        required
+                        value={formData.message}
+                        onChange={handleChange}
+                        className="block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl shadow-sm bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-gray-900 placeholder-gray-400 transition-all duration-200 ease-in-out hover:border-gray-300 resize-y min-h-[120px]"
+                    ></textarea>
+                </div>
             </div>
 
-            <div className="pt-2 text-center md:text-left">
+            <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
                 {/* Submit Düyməsi */}
                 <button
                     type="submit"
-                    disabled={isLoading} // isLoading state-inə görə deaktiv edilir
-                    // className={`
-                    //   inline-flex items-center justify-center gap-2 px-8 py-3
-                    //   text-base font-semibold text-white
-                    //   bg-gradient-to-r from-emerald-500 to-emerald-700
-                    //   rounded-lg shadow-md
-                    //   transition-all duration-200 ease-in-out
-                    //   hover:shadow-lg hover:from-emerald-600 hover:to-emerald-700
-                    //   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500
-                    //   disabled:opacity-60 disabled:cursor-not-allowed
-                    //   transform hover:-translate-y-0.5
-                    // `}
-
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-lg shadow hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition-all duration-150 ease-in-out transform hover:-translate-y-0.5 active:translate-y-0"
-
+                    disabled={isLoading}
+                    className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-100 min-w-[200px]"
                 >
-                    {isLoading ? ( // isLoading state-inə görə məzmun dəyişir
-                        <>
-                            <Loader2 className="h-5 w-5 animate-spin"/>
-                            Göndərilir...
-                        </>
-                    ) : (
-                        <>
-                            <Send className="h-5 w-5"/>
-                            Mesajı Göndər
-                        </>
-                    )}
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-700 to-teal-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="relative flex items-center gap-3">
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="h-5 w-5 animate-spin"/>
+                                <span>Göndərilir...</span>
+                            </>
+                        ) : (
+                            <>
+                                <Send className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200"/>
+                                <span>Mesajı Göndər</span>
+                            </>
+                        )}
+                    </div>
                 </button>
+                
+                {/* Additional Info */}
+                <div className="text-sm text-gray-500 text-center sm:text-right">
+                    <p>Mesajınız 24 saat ərzində cavablandırılacaq</p>
+                </div>
             </div>
         </form>
     );

@@ -48,8 +48,10 @@ export async function generateMetadata({searchParams}) {
 
 // 2. Page Component with JSON-LD
 export default async function VideosPage({searchParams}) {
-    const {playlistId, search, videoId, content, page} = await searchParams; // Destructure directly
     const awaitedParams = await searchParams;
+    const {playlistId, search, videoId, content, page} = awaitedParams;
+    
+    // Debug: Log the received parameters
     // JSON-LD for Video Collection/List (using ItemList)
     const jsonLd = {
         '@context': 'https://schema.org',

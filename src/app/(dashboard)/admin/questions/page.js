@@ -2,15 +2,39 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import HttpClient from "@/util/HttpClient"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import QuestionsPageSkeleton from '@/components/admin/questions/QuestionsPageSkeleton'
+import { 
+  HelpCircle, 
+  Plus, 
+  Search, 
+  Filter, 
+  Edit, 
+  Trash2, 
+  Eye,
+  ChevronDown,
+  X,
+  AlertTriangle,
+  Tag,
+  FolderOpen,
+  Clock,
+  ArrowUpRight,
+  MoreHorizontal,
+  Settings,
+  RefreshCw
+} from 'lucide-react'
 
-export default function Page() {
+export default function QuestionsPage() {
   const [questions, setQuestions] = useState([])
   const [filteredQuestions, setFilteredQuestions] = useState([])
   const [paginatedQuestions, setPaginatedQuestions] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategories, setSelectedCategories] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
-  const [itemsPerPage, setItemsPerPage] = useState(5)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -22,8 +46,7 @@ export default function Page() {
   const itemsPerPageMenuRef = useRef(null)
   const [filterMenuOpen, setFilterMenuOpen] = useState(false)
   const [itemsPerPageMenuOpen, setItemsPerPageMenuOpen] = useState(false)
-  const [showCategories, setShowCategories] = useState(false)
-  const [showTags, setShowTags] = useState(false)
+  const [viewMode, setViewMode] = useState('card') // 'card' or 'table'
 
   const fetchQuestions = async () => {
     setLoading(true)
@@ -47,6 +70,7 @@ export default function Page() {
       setLoading(false)
     }
   }
+
   const fetchCategories = async () => {
     try {
       const response = await HttpClient.get("/categories")
@@ -56,6 +80,7 @@ export default function Page() {
       console.error("Kategori verisi alınamadı:", error)
     }
   }
+
   const fetchTags = async () => {
     try {
       const response = await HttpClient.get("/tags")
@@ -65,6 +90,7 @@ export default function Page() {
       console.error("Etiket verisi alınamadı:", error)
     }
   }
+
   useEffect(() => {
     fetchTags().catch((e) => console.log(e))
   }, [])
@@ -111,6 +137,7 @@ export default function Page() {
   }
 
   const clearFilters = () => {
+    console.log("clearFilters function called!")
     setSearchQuery("")
     setSelectedCategories([])
     setSelectedTags([])
@@ -124,6 +151,10 @@ export default function Page() {
   const confirmDelete = async () => {
     if (questionToDelete) {
       try {
+        // API'ye DELETE request gönder
+        await HttpClient.delete(`/questions/${questionToDelete}`)
+        
+        // Başarılı olursa state'i güncelle
         setQuestions(questions.filter((q) => q.id !== questionToDelete))
         setFilteredQuestions(filteredQuestions.filter((q) => q.id !== questionToDelete))
         const newTotalPages = Math.ceil((filteredQuestions.length - 1) / itemsPerPage)
@@ -133,6 +164,8 @@ export default function Page() {
         }
       } catch (error) {
         console.error("Soru silinirken hata oluştu:", error)
+        // Hata durumunda kullanıcıya bilgi verilebilir
+        alert("Soru silinirken bir hata oluştu. Lütfen tekrar deneyin.")
       }
       setDeleteDialogOpen(false)
       setQuestionToDelete(null)
@@ -157,152 +190,265 @@ export default function Page() {
 
   const hasActiveFilters = searchQuery || selectedCategories.length > 0 || selectedTags.length > 0
 
+  const stats = {
+    total: questions.length,
+    filtered: filteredQuestions.length,
+    categories: allCategories.length,
+    tags: allTags.length
+  }
+
+  if (loading) {
+    return <QuestionsPageSkeleton />
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Sorular</h1>
-        <Link href="/admin/questions/create">
-          <button className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mr-2 h-4 w-4"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 8v8" />
-              <path d="M8 12h8" />
-            </svg>
-            Yeni sual elave et
-          </button>
-        </Link>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 space-y-8">
+      {/* Header */}
+      <div className="relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-emerald-600/10 to-emerald-500/10" />
+        <div className="relative z-10 p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 shadow-xl">
+                  <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
+                    <HelpCircle className="h-8 w-8 text-emerald-600" />
+                  </div>
+                </div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl opacity-20 blur-xl" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Suallar İdarəsi
+                </h1>
+                <p className="text-gray-600 mt-2 text-lg">
+                  İslami sualları idarə edin və cavabları təşkil edin
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  fetchQuestions()
+                  fetchCategories()
+                  fetchTags()
+                }}
+                className="gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-colors"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Yenilə
+              </Button>
+              <Button asChild className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                <Link href="/admin/questions/create">
+                  <Plus className="h-4 w-4" />
+                  Yeni Sual
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
-      <>
-        <>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Ümumi Suallar</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.total}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <HelpCircle className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Filtrlənmiş</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.filtered}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <Filter className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Kateqoriyalar</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.categories}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <FolderOpen className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <CardContent className="relative z-10 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Teqlər</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.tags}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                <Tag className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Search and Filter Controls */}
+      <Card className="relative bg-white border border-gray-200 shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+        <CardHeader className="relative z-10 border-b bg-gradient-to-r from-emerald-50/50 to-emerald-100/50">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <CardTitle className="flex items-center gap-2 text-gray-900">
+              <Search className="h-5 w-5" />
+              Axtarış və Filtr
+            </CardTitle>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === 'card' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('card')}
+                className={`gap-2 ${viewMode === 'card' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' : 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300'}`}
+              >
+                <Eye className="h-4 w-4" />
+                Kart
+              </Button>
+              <Button
+                variant={viewMode === 'table' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('table')}
+                className={`gap-2 ${viewMode === 'table' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' : 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300'}`}
+              >
+                <Settings className="h-4 w-4" />
+                Cədvəl
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="overflow-visible">
           <div className="space-y-4">
             {/* Search and filter controls */}
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-4 w-4 text-gray-400"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                  </svg>
-                </div>
-                <input
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
                   type="search"
-                  placeholder="Soru ara..."
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Sualları axtarın..."
+                  className="pl-10 h-12 text-base border-2 focus:border-blue-300 dark:focus:border-blue-700 transition-colors"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
 
-              <div className="relative" ref={filterMenuRef}>
-                <button
+              <div className="relative z-50" ref={filterMenuRef}>
+                <Button
+                  variant="outline"
                   onClick={() => setFilterMenuOpen(!filterMenuOpen)}
-                  className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="h-12 px-6 gap-2 border-2 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-4 w-4 mr-2"
-                  >
-                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-                  </svg>
-                  Filtrele
+                  <Filter className="h-4 w-4" />
+                  Filtrələ
                   {hasActiveFilters && (
-                    <span className="ml-1 rounded-full bg-gray-200 px-2 py-0.5 text-xs font-semibold text-gray-800">
+                    <Badge variant="secondary" className="ml-1">
                       {selectedCategories.length + selectedTags.length + (searchQuery ? 1 : 0)}
-                    </span>
+                    </Badge>
                   )}
-                </button>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
 
                 {filterMenuOpen && (
-                  <div className="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="p-4 space-y-4">
-                      <div className="space-y-2">
-                        <h4 className="font-medium">Kategoriler</h4>
-                        <div className="grid grid-cols-2 gap-2">
-                          {allCategories.map((category) => (
-                            <div key={category.id} className="flex items-center space-x-2">
-                              <input
-                                type="checkbox"
-                                id={`category-${category.id}`}
-                                checked={selectedCategories.includes(category)}
-                                onChange={() => handleCategoryToggle(category)}
-                                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                              />
-                              <label htmlFor={`category-${category.id}`} className="text-sm text-gray-700">
-                                {category.name}
+                  <div className="absolute right-0 z-[99999] mt-2 w-96 max-w-[calc(100vw-2rem)] sm:max-w-96 origin-top-right rounded-xl bg-white dark:bg-slate-900 shadow-2xl ring-1 ring-black/5 dark:ring-white/10 border-2 border-slate-200 dark:border-slate-700">
+                    <div className="p-6 space-y-6">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-lg">Filtrlər</h4>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setFilterMenuOpen(false)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="font-medium mb-3 flex items-center gap-2">
+                            <FolderOpen className="h-4 w-4" />
+                            Kateqoriyalar
+                          </h5>
+                          <div className="grid grid-cols-2 gap-3 max-h-40 overflow-y-auto">
+                            {allCategories.map((category) => (
+                              <label key={category.id} className="flex items-center space-x-2 cursor-pointer group">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedCategories.some(c => c.id === category.id)}
+                                  onChange={() => handleCategoryToggle(category)}
+                                  className="h-4 w-4 rounded border-2 border-slate-300 text-indigo-600 focus:ring-indigo-500 focus:ring-2"
+                                />
+                                <span className="text-sm group-hover:text-indigo-600 transition-colors">{category.name}</span>
                               </label>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h5 className="font-medium mb-3 flex items-center gap-2">
+                            <Tag className="h-4 w-4" />
+                            Teqlər
+                          </h5>
+                          <div className="grid grid-cols-2 gap-3 max-h-40 overflow-y-auto">
+                            {allTags.map((tag) => (
+                              <label key={tag.id} className="flex items-center space-x-2 cursor-pointer group">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedTags.some(t => t.id === tag.id)}
+                                  onChange={() => handleTagToggle(tag)}
+                                  className="h-4 w-4 rounded border-2 border-slate-300 text-indigo-600 focus:ring-indigo-500 focus:ring-2"
+                                />
+                                <span className="text-sm group-hover:text-indigo-600 transition-colors">{tag.name}</span>
+                              </label>
+                            ))}
+                          </div>
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <h4 className="font-medium">Etiketler</h4>
-                        <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
-                          {allTags.map((tag) => (
-                            <div key={tag.id} className="flex items-center space-x-2">
-                              <input
-                                type="checkbox"
-                                id={`tag-${tag.id}`}
-                                checked={selectedTags.includes(tag)}
-                                onChange={() => handleTagToggle(tag)}
-                                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                              />
-                              <label htmlFor={`tag-${tag.id}`} className="text-sm text-gray-700">
-                                {tag.name}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between pt-2">
-                        <button
+                      <div className="flex justify-between pt-4 border-t">
+                        <Button
+                          variant="outline"
                           onClick={clearFilters}
                           disabled={!hasActiveFilters}
-                          className={`rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium ${
-                            hasActiveFilters
-                              ? "bg-white text-gray-700 hover:bg-gray-50"
-                              : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          }`}
+                          className="gap-2"
                         >
-                          Filtreleri Temizle
-                        </button>
-                        <button
+                          <X className="h-4 w-4" />
+                          Təmizlə
+                        </Button>
+                        <Button
                           onClick={() => setFilterMenuOpen(false)}
-                          className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+                          className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
                         >
-                          Uygula
-                        </button>
+                          Tətbiq Et
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -312,394 +458,416 @@ export default function Page() {
 
             {/* Active filters display */}
             {hasActiveFilters && (
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="text-sm text-gray-500">Aktif filtreler:</span>
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 pointer-events-auto">
+                <div className="flex flex-wrap gap-2 items-center justify-between">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                      <Filter className="h-4 w-4" />
+                      Aktiv filtrlər:
+                    </span>
 
-                {searchQuery && (
-                  <div className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-800">
-                    Arama: {searchQuery}
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="ml-1 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200 hover:text-gray-500"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-3 w-3"
-                      >
-                        <path d="M18 6 6 18" />
-                        <path d="m6 6 12 12" />
-                      </svg>
-                    </button>
+                    {searchQuery && (
+                      <Badge variant="secondary" className="gap-1 px-3 py-1">
+                        <Search className="h-3 w-3" />
+                        Axtarış: {searchQuery}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSearchQuery("")}
+                          className="h-4 w-4 p-0 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full ml-1"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    )}
+
+                    {selectedCategories.map((category) => (
+                      <Badge key={category.id} variant="outline" className="gap-1 px-3 py-1 border-amber-200 text-amber-700 bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:bg-amber-950/50">
+                        <FolderOpen className="h-3 w-3" />
+                        {category.name}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleCategoryToggle(category)}
+                          className="h-4 w-4 p-0 hover:bg-amber-200 dark:hover:bg-amber-800 rounded-full ml-1"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    ))}
+
+                    {selectedTags.map((tag) => (
+                      <Badge key={tag.id} variant="outline" className="gap-1 px-3 py-1 border-purple-200 text-purple-700 bg-purple-50 dark:border-purple-800 dark:text-purple-300 dark:bg-purple-950/50">
+                        <Tag className="h-3 w-3" />
+                        {tag.name}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleTagToggle(tag)}
+                          className="h-4 w-4 p-0 hover:bg-purple-200 dark:hover:bg-purple-800 rounded-full ml-1"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    ))}
                   </div>
-                )}
 
-                {selectedCategories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-800"
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      console.log("Clear button clicked!")
+                      clearFilters()
+                    }}
+                    onMouseDown={(e) => {
+                      console.log("Mouse down on clear button")
+                    }}
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-md transition-colors cursor-pointer"
+                    type="button"
                   >
-                    Kategori: {category.name}
-                    <button
-                      onClick={() => handleCategoryToggle(category)}
-                      className="ml-1 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200 hover:text-gray-500"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-3 w-3"
-                      >
-                        <path d="M18 6 6 18" />
-                        <path d="m6 6 12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
-
-                {selectedTags.map((tag) => (
-                  <div
-                    key={tag.id}
-                    className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-800"
-                  >
-                    Etiket: {tag.name}
-                    <button
-                      onClick={() => handleTagToggle(tag)}
-                      className="ml-1 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200 hover:text-gray-500"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-3 w-3"
-                      >
-                        <path d="M18 6 6 18" />
-                        <path d="m6 6 12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
-
-                <button
-                  onClick={clearFilters}
-                  className="ml-auto text-sm text-blue-600 hover:text-blue-800 hover:underline"
-                >
-                  Tümünü Temizle
-                </button>
+                    <X className="h-4 w-4" />
+                    Hamısını Təmizlə
+                  </button>
+                </div>
               </div>
             )}
+          </div>
+        </CardContent>
+      </Card>
 
-            {/* Questions table */}
-            <div className="overflow-hidden rounded-lg border border-gray-200 shadow">
-              <div className="flex items-center gap-4">
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" checked={showCategories} onChange={() => setShowCategories(!showCategories)} />
-                  <span className="text-sm">Kategorileri Göster</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" checked={showTags} onChange={() => setShowTags(!showTags)} />
-                  <span className="text-sm">Etiketleri Göster</span>
-                </label>
+      {/* Questions Display */}
+      {paginatedQuestions.length === 0 ? (
+        <Card className="border-2 shadow-lg">
+          <CardContent className="py-16">
+            <div className="text-center space-y-4">
+              <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center">
+                <HelpCircle className="h-10 w-10 text-muted-foreground" />
               </div>
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Soru
-                    </th>
-                    {showCategories && (
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                        Kategoriler
-                      </th>
-                    )}
-
-                    {showTags && (
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                        Etiketler
-                      </th>
-                    )}
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 w-[100px]"
-                    >
-                      İşlemler
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {paginatedQuestions.length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="px-6 py-6 text-center text-sm text-gray-500">
-                        {hasActiveFilters ? "Filtrelere uygun soru bulunamadı." : "Henüz soru bulunmamaktadır."}
-                      </td>
-                    </tr>
-                  ) : (
-                    paginatedQuestions.map((question) => (
-                      <tr key={question.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm font-medium text-justify text-gray-900">{question.question}</td>
-                        {showCategories && (
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">
+                  {hasActiveFilters ? "Filtrlərə uyğun sual tapılmadı" : "Hələ sual yoxdur"}
+                </h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  {hasActiveFilters 
+                    ? "Filtrlər dəyişdirin və ya yeni axtarış edin" 
+                    : "İlk sualınızı yaratmaq üçün aşağıdakı düyməni basın"
+                  }
+                </p>
+              </div>
+              <div className="flex gap-3 justify-center">
+                {hasActiveFilters && (
+                  <Button variant="outline" onClick={clearFilters} className="gap-2">
+                    <X className="h-4 w-4" />
+                    Filtrlər Təmizlə
+                  </Button>
+                )}
+                <Button asChild className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Link href="/admin/questions/create">
+                    <Plus className="h-4 w-4" />
+                    İlk Sualı Yarat
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {viewMode === 'card' ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {paginatedQuestions.map((question) => (
+                <Card key={question.id} className="group relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-slate-800/50 hover:-translate-y-1 border-2 hover:border-blue-200 dark:hover:border-blue-800">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-base line-clamp-2 group-hover:text-blue-600 transition-colors">
+                          {question.question}
+                        </CardTitle>
+                        <CardDescription className="mt-2 line-clamp-3">
+                          {question.answer}
+                        </CardDescription>
+                      </div>
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button asChild variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <Link href={`/admin/questions/${question.id}`}>
+                            <Edit className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteClick(question.id)}
+                          className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="space-y-3">
+                      {question.categories.length > 0 && (
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                            <FolderOpen className="h-3 w-3" />
+                            Kateqoriyalar
+                          </div>
+                          <div className="flex flex-wrap gap-1">
+                            {question.categories.map((category) => (
+                              <Badge key={category.id} variant="outline" className="text-xs border-amber-200 text-amber-700 bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:bg-amber-950/50">
+                                {category.name}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {question.tags.length > 0 && (
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                            <Tag className="h-3 w-3" />
+                            Teqlər
+                          </div>
+                          <div className="flex flex-wrap gap-1">
+                            {question.tags.map((tag) => (
+                              <Badge key={tag.id} variant="secondary" className="text-xs border-purple-200 text-purple-700 bg-purple-50 dark:border-purple-800 dark:text-purple-300 dark:bg-purple-950/50">
+                                {tag.name}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="border-2 shadow-xl">
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-muted/50 border-b-2">
+                      <tr>
+                        <th className="px-6 py-4 text-left font-semibold">
+                          Sual
+                        </th>
+                        <th className="px-6 py-4 text-left font-semibold">
+                          Kateqoriyalar
+                        </th>
+                        <th className="px-6 py-4 text-left font-semibold">
+                          Teqlər
+                        </th>
+                        <th className="px-6 py-4 text-center font-semibold w-32">
+                          Əməliyyatlar
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y">
+                      {paginatedQuestions.map((question) => (
+                        <tr key={question.id} className="group hover:bg-muted/30 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="space-y-1">
+                              <div className="font-medium text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                {question.question}
+                              </div>
+                              <div className="text-xs text-muted-foreground line-clamp-1">
+                                {question.answer}
+                              </div>
+                            </div>
+                          </td>
                           <td className="px-6 py-4">
                             <div className="flex flex-wrap gap-1">
                               {question.categories.map((category) => (
-                                <span
-                                  key={category.id}
-                                  className="inline-flex items-center rounded-md border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-800"
-                                >
+                                <Badge key={category.id} variant="outline" className="text-xs border-amber-200 text-amber-700 bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:bg-amber-950/50">
                                   {category.name}
-                                </span>
+                                </Badge>
                               ))}
                             </div>
                           </td>
-                        )}
-
-                        {showTags && (
                           <td className="px-6 py-4">
                             <div className="flex flex-wrap gap-1">
                               {question.tags.map((tag) => (
-                                <span
-                                  key={tag.id}
-                                  className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800"
-                                >
+                                <Badge key={tag.id} variant="secondary" className="text-xs border-purple-200 text-purple-700 bg-purple-50 dark:border-purple-800 dark:text-purple-300 dark:bg-purple-950/50">
                                   {tag.name}
-                                </span>
+                                </Badge>
                               ))}
                             </div>
                           </td>
-                        )}
-                        <td className="px-6 py-4 text-right text-sm font-medium">
-                          <div className="flex items-center gap-2">
-                            <Link href={`/admin/questions/${question.id}`}>
-                              <button className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="h-4 w-4"
-                                >
-                                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                                  <path d="m15 5 4 4" />
-                                </svg>
-                                <span className="sr-only">Düzenle</span>
-                              </button>
-                            </Link>
-                            <button
-                              onClick={() => handleDeleteClick(question.id)}
-                              className="rounded-md p-1 text-red-400 hover:bg-red-50 hover:text-red-500"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="h-4 w-4"
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button asChild variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/20">
+                                <Link href={`/admin/questions/${question.id}`}>
+                                  <Edit className="h-4 w-4" />
+                                </Link>
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteClick(question.id)}
+                                className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50"
                               >
-                                <path d="M3 6h18" />
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                                <path d="M10 11v6" />
-                                <path d="M14 11v6" />
-                              </svg>
-                              <span className="sr-only">Sil</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination controls */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <p className="text-sm text-gray-500">Sayfa başına gösterim:</p>
-                <div className="relative inline-block text-left" ref={itemsPerPageMenuRef}>
-                  <button
-                    type="button"
-                    className="inline-flex w-16 justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    onClick={() => setItemsPerPageMenuOpen(!itemsPerPageMenuOpen)}
-                  >
-                    {itemsPerPage}
-                    <svg
-                      className="-mr-1 ml-2 h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-
-                  {itemsPerPageMenuOpen && (
-                    <div className="absolute right-0 z-10 mt-2 w-16 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
-                        {[5, 10, 20, 50].map((value) => (
-                          <button
-                            key={value}
-                            onClick={() => {
-                              setItemsPerPage(value)
-                              setItemsPerPageMenuOpen(false)
-                            }}
-                            className={`block w-full px-4 py-2 text-left text-sm ${
-                              itemsPerPage === value ? "bg-gray-100 text-gray-900" : "text-gray-700 hover:bg-gray-50"
-                            }`}
-                          >
-                            {value}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                <p className="text-sm text-gray-500">Toplam {filteredQuestions.length} soru</p>
-              </div>
+              </CardContent>
+            </Card>
+          )}
+        </>
+      )}
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className={`relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium ${
-                    currentPage === 1 ? "cursor-not-allowed text-gray-400" : "text-gray-700 hover:bg-gray-50"
-                  }`}
+      {/* Pagination */}
+      {paginatedQuestions.length > 0 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Toplam {filteredQuestions.length} sualdan {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, filteredQuestions.length)} arası gösteriliyor
+          </p>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-muted-foreground">Səhifə başına:</span>
+              <div className="relative" ref={itemsPerPageMenuRef}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setItemsPerPageMenuOpen(!itemsPerPageMenuOpen)}
+                  className="w-20 justify-between gap-2"
                 >
-                  Önceki
-                </button>
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
+                  {itemsPerPage}
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+
+                {itemsPerPageMenuOpen && (
+                  <div className="absolute top-full left-0 z-50 mt-1 w-20 origin-top-left rounded-lg bg-white dark:bg-slate-900 shadow-xl ring-1 ring-black/5 dark:ring-white/10 border-2 border-slate-200 dark:border-slate-700">
+                    <div className="py-1">
+                      {[5, 10, 20, 50].map((value) => (
+                        <button
+                          key={value}
+                          onClick={() => {
+                            setItemsPerPage(value)
+                            setItemsPerPageMenuOpen(false)
+                          }}
+                          className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
+                            itemsPerPage === value 
+                              ? "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-medium" 
+                              : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                          }`}
+                        >
+                          {value}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="gap-2"
+              >
+                Əvvəlki
+              </Button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                  let page;
+                  if (totalPages <= 5) {
+                    page = i + 1;
+                  } else if (currentPage <= 3) {
+                    page = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    page = totalPages - 4 + i;
+                  } else {
+                    page = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <Button
                       key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
                       onClick={() => setCurrentPage(page)}
-                      className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${
-                        currentPage === page
-                          ? "bg-blue-600 text-white"
-                          : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                      className={`w-10 h-10 p-0 ${
+                        currentPage === page 
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white" 
+                          : ""
                       }`}
                     >
                       {page}
-                    </button>
-                  ))}
-                </div>
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages || totalPages === 0}
-                  className={`relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium ${
-                    currentPage === totalPages || totalPages === 0
-                      ? "cursor-not-allowed text-gray-400"
-                      : "text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  Sonraki
-                </button>
+                    </Button>
+                  );
+                })}
               </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className="gap-2"
+              >
+                Sonrakı
+              </Button>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Delete confirmation dialog */}
-          {deleteDialogOpen && (
-            <div className="fixed inset-0 z-50 overflow-y-auto">
-              <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <div
-                  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                  onClick={() => setDeleteDialogOpen(false)}
-                ></div>
-                <span className="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">
-                  &#8203;
-                </span>
-                <div className="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
-                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div className="sm:flex sm:items-start">
-                      <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-6 w-6 text-red-600"
-                        >
-                          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                          <line x1="12" y1="9" x2="12" y2="13" />
-                          <line x1="12" y1="17" x2="12.01" y2="17" />
-                        </svg>
-                      </div>
-                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">
-                          Soruyu silmek istediğinizden emin misiniz?
-                        </h3>
-                        <div className="mt-2">
-                          <p className="text-sm text-gray-500">
-                            Bu işlem geri alınamaz. Bu soru kalıcı olarak silinecektir.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+      {/* Delete confirmation dialog */}
+      {deleteDialogOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center px-4 py-8">
+            <div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+              onClick={() => setDeleteDialogOpen(false)}
+            />
+            <Card className="relative w-full max-w-md mx-auto shadow-2xl border-2">
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950/50 flex items-center justify-center">
+                    <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
                   </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <button
-                      type="button"
-                      onClick={confirmDelete}
-                      className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    >
-                      Sil
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setDeleteDialogOpen(false)}
-                      className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                    >
-                      İptal
-                    </button>
+                  <div>
+                    <CardTitle className="text-lg">Sualı Sil</CardTitle>
+                    <CardDescription>Bu əməliyyat geri alına bilməz</CardDescription>
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </>
-      </>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Bu sualı silmək istədiyinizə əminsiniz? Bu əməliyyat geri alına bilməz və sual həmişəlik silinəcək.
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <Button
+                    variant="outline"
+                    onClick={() => setDeleteDialogOpen(false)}
+                  >
+                    Ləğv Et
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={confirmDelete}
+                    className="gap-2"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Sil
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
-

@@ -112,13 +112,7 @@ export const useFilterData = ({
         fetchData();
     }, [fetchCategories, fetchTags]);
 
-    // Notify parent when filters change
-    useEffect(() => {
-        onChange({
-            categories: selectedCategories,
-            tags: selectedTags
-        });
-    }, [selectedCategories, selectedTags, onChange]);
+    // Note: onChange is now handled by the FilterProvider to prevent double calls
 
     // Custom category toggle handler
     const handleCategoryToggle = useCallback((category, forceSelect = false) => {

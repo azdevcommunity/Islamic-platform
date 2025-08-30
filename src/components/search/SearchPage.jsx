@@ -126,131 +126,160 @@ export default function SearchPage() {
   const showNoResultsMessage = !loading && !error && !hasResults && (initialSearchValue || initialCategoryId);
 
   return (
-      // Use a light gray background for a cleaner look
-      <main className="min-h-screen w-full bg-gray-50 py-10 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
+      <main className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 py-8 md:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* --- Search Bar --- */}
-          <div className="mb-10 md:mb-12">
-            <form onSubmit={handleSearchSubmit} className="relative flex items-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 focus-within:ring-2 focus-within:ring-offset-1 focus-within:ring-yellow-500">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleSearchInputChange}
-                  placeholder="Məqalə, video və ya kitab axtarın..."
-                  className="flex-grow py-3 pl-11 pr-10 border-none focus:ring-0 outline-none text-gray-800 placeholder-gray-500 text-base" // Adjusted padding and styles
-              />
-              {searchQuery && (
+          {/* --- Enhanced Search Bar --- */}
+          <div className="mb-12 md:mb-16">
+            <div className="max-w-3xl mx-auto">
+              <form onSubmit={handleSearchSubmit} className="group relative">
+                <div className="relative flex items-center bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl border border-white/20 focus-within:shadow-2xl focus-within:scale-[1.02] transition-all duration-300 overflow-hidden">
+                  <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                    <Search className="h-6 w-6 text-primary-400 group-focus-within:text-primary-600 transition-colors duration-200" />
+                  </div>
+                  <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={handleSearchInputChange}
+                      placeholder="Məqalə, video və ya kitab axtarın..."
+                      className="flex-grow py-5 pl-16 pr-32 sm:pr-40 border-none focus:ring-0 outline-none text-gray-800 placeholder-gray-400 text-lg font-medium bg-transparent"
+                  />
+                  {searchQuery && (
+                      <button
+                          type="button"
+                          onClick={handleClearSearch}
+                          className="absolute inset-y-0 right-28 sm:right-36 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100 z-10"
+                          aria-label="Axtarışı təmizlə"
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                  )}
                   <button
-                      type="button"
-                      onClick={handleClearSearch}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                      aria-label="Axtarışı təmizlə"
+                      type="submit"
+                      disabled={!searchQuery.trim()}
+                      className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 sm:px-8 py-5 font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 flex items-center gap-2 shadow-lg hover:shadow-xl"
                   >
-                    <X className="h-5 w-5" />
+                    <Search className="h-5 w-5" />
+                    <span className="hidden sm:inline">Axtar</span>
                   </button>
-              )}
-              {/* Submit button kept outside for clarity, but could be integrated */}
-              <button
-                  type="submit"
-                  disabled={!searchQuery.trim()} // Disable if query is empty or whitespace
-                  className="bg-yellow-600 text-white px-5 py-3 font-medium hover:bg-yellow-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-              >
-                Axtar
-              </button>
-            </form>
+                </div>
+                {/* Decorative gradient line */}
+                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-400 to-accent-400 rounded-full opacity-60"></div>
+              </form>
+            </div>
           </div>
 
-          {/* --- Page Title --- */}
-          {(initialSearchValue || initialCategoryId) && ( // Only show title if there was a search
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-8 md:mb-10 text-gray-800">
-                Axtarış Nəticələri {initialSearchValue && <span className="text-yellow-600">"{initialSearchValue}"</span>}
-              </h1>
+          {/* --- Enhanced Page Title --- */}
+          {(initialSearchValue || initialCategoryId) && (
+              <div className="text-center mb-12 md:mb-16">
+                <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent">
+                  Axtarış Nəticələri
+                </h1>
+                {initialSearchValue && (
+                    <p className="text-xl md:text-2xl text-gray-600 font-medium">
+                      <span className="text-primary-600 font-semibold">"{initialSearchValue}"</span> üçün tapılan nəticələr
+                    </p>
+                )}
+                <div className="mt-6 flex justify-center">
+                  <div className="w-24 h-1 bg-gradient-to-r from-primary-400 to-accent-400 rounded-full"></div>
+                </div>
+              </div>
           )}
 
 
-          {/* --- Loading State --- */}
+          {/* --- Enhanced Loading State --- */}
           {loading && (
-              <div className="flex justify-center items-center py-20">
-                <Loader2 className="h-12 w-12 text-yellow-500 animate-spin" />
+              <div className="flex flex-col justify-center items-center py-24">
+                <div className="relative">
+                  <div className="w-16 h-16 border-4 border-primary-200 rounded-full animate-pulse"></div>
+                  <div className="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-t-primary-600 rounded-full animate-spin"></div>
+                </div>
+                <p className="mt-6 text-gray-600 font-medium animate-pulse">Axtarış edilir...</p>
               </div>
           )}
 
-          {/* --- Error Message --- */}
+          {/* --- Enhanced Error Message --- */}
           {error && !loading && (
-              <div className="text-center py-10 px-6 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-700 font-medium">{error}</p>
+              <div className="max-w-2xl mx-auto text-center py-12 px-8 bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl shadow-lg">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 mb-6">
+                  <X className="h-8 w-8" />
+                </div>
+                <h3 className="text-xl font-semibold text-red-800 mb-3">Xəta baş verdi</h3>
+                <p className="text-red-700 font-medium leading-relaxed">{error}</p>
               </div>
           )}
 
-          {/* --- No Results Message --- */}
+          {/* --- Enhanced No Results Message --- */}
           {showNoResultsMessage && (
-              <div className="text-center py-16 px-6 bg-white rounded-xl border border-gray-100 shadow-sm my-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-50 text-yellow-500 mb-6"><Search className="h-8 w-8" /></div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Nəticə tapılmadı</h3>
-                <p className="text-gray-600 max-w-md mx-auto mb-6 text-sm leading-relaxed">
-                  "{initialSearchValue}" üçün uyğun nəticə tapılmadı. Fərqli açar sözlər yoxlayın.
+              <div className="max-w-2xl mx-auto text-center py-20 px-8 bg-gradient-to-br from-white to-gray-50 rounded-3xl border border-gray-100 shadow-xl">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary-50 to-primary-100 text-primary-600 mb-8 shadow-lg">
+                  <Search className="h-10 w-10" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Nəticə tapılmadı</h3>
+                <p className="text-gray-600 max-w-lg mx-auto mb-8 text-lg leading-relaxed">
+                  <span className="font-semibold text-primary-600">"{initialSearchValue}"</span> üçün uyğun nəticə tapılmadı. Fərqli açar sözlər və ya daha ümumi terminlər yoxlayın.
                 </p>
+                <div className="flex flex-wrap justify-center gap-2 text-sm">
+                  <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">İslam</span>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">Quran</span>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">Hədiş</span>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">Fiqh</span>
+                </div>
               </div>
           )}
 
-          {/* --- Results Sections --- */}
+          {/* --- Enhanced Results Sections --- */}
           {!loading && !error && hasResults && (
-              <div className="space-y-12 md:space-y-16">
+              <div className="space-y-16 md:space-y-20">
                 {/* Articles Section */}
-                <ModernSection title="Məqalələr" data={results.articles} icon={Newspaper}>
-                  {results.articles.map((article) => (
+                <ModernSection title="Məqalələr" data={results.articles} icon={Newspaper} gradient="from-blue-500 to-blue-600">
+                  {results.articles.map((article, index) => (
                       <ModernCard
                           key={article.id}
                           href={`/articles/${article.id}`}
-                          image={article.image || '/placeholder-image.png'} // Add fallback image
+                          image={article.image || '/placeholder-image.png'}
                           title={article.title}
                           info1Label="Müəllif"
                           info1={article.authorName}
                           info1Icon={User}
                           info2Label="Kateqoriyalar"
-                          info2={article.categories?.join(", ") || "Təyin edilməyib"} // Handle potential undefined/empty categories
+                          info2={article.categories?.join(", ") || "Təyin edilməyib"}
+                          animationDelay={index * 0.1}
                       />
                   ))}
                 </ModernSection>
 
                 {/* Videos Section */}
-                <ModernSection title="Videolar" data={results.videos} icon={Video}>
-                  {results.videos.map((video) => {
-                    const thumbnailUrls = video.thumbnail?.split("+") || []; // Handle potential undefined thumbnail
-                    const displayThumbnail = thumbnailUrls[2] || thumbnailUrls[0] || '/placeholder-video.png'; // Better fallback logic
-                    const formattedDate = video.publishedAt ? new Date(video.publishedAt).toLocaleDateString('az-AZ', { year: 'numeric', month: 'long', day: 'numeric' }) : "Naməlum"; // Improved date formatting
+                <ModernSection title="Videolar" data={results.videos} icon={Video} gradient="from-red-500 to-red-600">
+                  {results.videos.map((video, index) => {
+                    const thumbnailUrls = video.thumbnail?.split("+") || [];
+                    const displayThumbnail = thumbnailUrls[2] || thumbnailUrls[0] || '/placeholder-video.png';
+                    const formattedDate = video.publishedAt ? new Date(video.publishedAt).toLocaleDateString('az-AZ', { year: 'numeric', month: 'long', day: 'numeric' }) : "Naməlum";
 
                     return (
-                        <VideoCard
-                            key={video.videoId}
-                            video={video}
-                            link={generateVideoRoute(video.playlistId, video.videoId)}
-                            // image={displayThumbnail}
-                            content={"video"}
-                            // info1Label="Tarix"
-                            // info1={formattedDate}
-                            // info1Icon={Calendar}
-                        />
+                        <div key={video.videoId} className="animate-fadeInUp" style={{ animationDelay: `${index * 0.1}s` }}>
+                          <VideoCard
+                              video={video}
+                              link={generateVideoRoute(video.playlistId, video.videoId)}
+                              content={"video"}
+                          />
+                        </div>
                     );
                   })}
                 </ModernSection>
 
-                {/* Books Section (Using Static Data) */}
-                <ModernSection title="Kitablar" data={results.books} icon={BookOpen}>
-                  {results.books.map((book) => (
+                {/* Books Section */}
+                <ModernSection title="Kitablar" data={results.books} icon={BookOpen} gradient="from-green-500 to-green-600">
+                  {results.books.map((book, index) => (
                       <ModernCard
                           key={book.id}
-                          href={book.href || "#"} // Use books's href if available, otherwise fallback
-                          image={book.image || '/placeholder-books.png'} // Add fallback
+                          href={book.href || "#"}
+                          image={book.image || '/placeholder-books.png'}
                           title={book.title}
                           info1Label="Müəllif"
                           info1={book.authorName}
                           info1Icon={User}
-                          // Add info2 if available in your static books data
+                          animationDelay={index * 0.1}
                       />
                   ))}
                 </ModernSection>
@@ -262,20 +291,31 @@ export default function SearchPage() {
 }
 
 
-// --- Section Component ---
-function ModernSection({ title, data, children, icon: Icon }) {
-  // Only render section if data exists
+// --- Enhanced Section Component ---
+function ModernSection({ title, data, children, icon: Icon, gradient = "from-primary-500 to-primary-600" }) {
   if (!data || data.length === 0) {
-    return null; // Don't render empty sections
+    return null;
   }
 
   return (
-      <section>
-        <div className="flex items-center mb-5 md:mb-6 border-b border-gray-200 pb-3">
-          {Icon && <Icon className="h-6 w-6 mr-3 text-yellow-600" />}
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-800">{title}</h2>
+      <section className="animate-fadeInUp">
+        <div className="mb-8 md:mb-10">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              {Icon && (
+                <div className={`p-3 rounded-xl bg-gradient-to-r ${gradient} text-white shadow-lg mr-4`}>
+                  <Icon className="h-6 w-6" />
+                </div>
+              )}
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{title}</h2>
+                <p className="text-gray-600 mt-1">{data.length} nəticə tapıldı</p>
+              </div>
+            </div>
+            <div className={`hidden md:block w-24 h-1 bg-gradient-to-r ${gradient} rounded-full`}></div>
+          </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {children}
         </div>
       </section>
@@ -283,39 +323,46 @@ function ModernSection({ title, data, children, icon: Icon }) {
 }
 
 
-// --- Card Component ---
-function ModernCard({ href, image, title, info1Label, info1, info1Icon: Info1Icon, info2Label, info2, info2Icon: Info2Icon }) {
+// --- Enhanced Card Component ---
+function ModernCard({ href, image, title, info1Label, info1, info1Icon: Info1Icon, info2Label, info2, info2Icon: Info2Icon, animationDelay = 0 }) {
   return (
-      <Link href={href} className="group block bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden hover:shadow-lg hover:border-gray-300 transition-all duration-300">
-        <div className="relative w-full aspect-video overflow-hidden"> {/* Aspect ratio for consistent image height */}
+      <Link 
+        href={href} 
+        className="group block bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 animate-fadeInUp"
+        style={{ animationDelay: `${animationDelay}s` }}
+      >
+        <div className="relative w-full aspect-video overflow-hidden">
           <img
               src={image}
               alt={title || "Card image"}
-              // fill // Use fill to cover the container
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" // Optimize image loading
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
-          {/* Optional: Add a subtle gradient overlay for text contrast if needed */}
-          {/* <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/30 to-transparent"></div> */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </div>
         </div>
-        <div className="p-4">
-          <h3 className="text-base md:text-lg font-semibold text-gray-800 group-hover:text-yellow-700 mb-2 line-clamp-2 transition-colors">
+        <div className="p-5">
+          <h3 className="text-lg font-bold text-gray-800 group-hover:text-primary-700 mb-3 line-clamp-2 transition-colors duration-300 leading-tight">
             {title}
           </h3>
-          <div className="text-xs md:text-sm text-gray-600 space-y-1.5"> {/* Slightly increased space */}
+          <div className="text-sm text-gray-600 space-y-2">
             {info1 && (
-                <p className="flex items-center">
-                  {Info1Icon && <Info1Icon className="h-3.5 w-3.5 mr-1.5 text-gray-400 flex-shrink-0" />}
-                  <span className="font-medium text-gray-700 mr-1">{info1Label}:</span>
-                  <span className="line-clamp-1">{info1}</span> {/* Prevent long text overflow */}
-                </p>
+                <div className="flex items-center">
+                  {Info1Icon && <Info1Icon className="h-4 w-4 mr-2 text-primary-500 flex-shrink-0" />}
+                  <span className="font-semibold text-gray-700 mr-2">{info1Label}:</span>
+                  <span className="line-clamp-1 text-gray-600">{info1}</span>
+                </div>
             )}
             {info2 && (
-                <p className="flex items-center">
-                  {Info2Icon && <Info2Icon className="h-3.5 w-3.5 mr-1.5 text-gray-400 flex-shrink-0" />}
-                  <span className="font-medium text-gray-700 mr-1">{info2Label}:</span>
-                  <span className="line-clamp-1">{info2}</span>
-                </p>
+                <div className="flex items-center">
+                  {Info2Icon && <Info2Icon className="h-4 w-4 mr-2 text-primary-500 flex-shrink-0" />}
+                  <span className="font-semibold text-gray-700 mr-2">{info2Label}:</span>
+                  <span className="line-clamp-1 text-gray-600">{info2}</span>
+                </div>
             )}
           </div>
         </div>

@@ -5,18 +5,18 @@ export const bankData = [
     {
         id: 1,
         bankName: "Leo Bank",
-        cardCode: "5411 2498 0716 0481"
+        cardCode: "5411 2498 0153 0416"
     },
     {
         id: 2,
         bankName: "ABB Bank",
-        cardCode: "4127 2093 0035 1696"
+        cardCode: "5522 0993 6029 9366"
     },
-    {
-        id:3,
-        bankName: "Kapital Bank",
-        cardCode: "4169 7388 7530 8813"
-    },
+    // {
+    //     id: 3,
+    //     bankName: "Kapital Bank",
+    //     cardCode: "4169 7388 7530 8813"
+    // },
 
 ]
 

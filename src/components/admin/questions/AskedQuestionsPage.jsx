@@ -1,26 +1,50 @@
 
-// app/admin/questions/page.jsx
 'use client'
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation'; // Use hooks from next/navigation
+import { useRouter, useSearchParams } from 'next/navigation';
 import HttpClient from '@/util/HttpClient';
-import { formatDate } from '@/util/DateUtil'; // Assuming you have this
+import { formatDate } from '@/util/DateUtil';
 import {
-    ListFilter,
     Search,
     ChevronLeft,
     ChevronRight,
-    Eye, // Icon for View action
-    CheckCircle, // Icon for Approved
-    XCircle, // Icon for Rejected
-    HelpCircle, // Icon for Pending
-    RotateCcw, // Icon for Reset
-    Inbox, // Icon for Empty state
-    Loader2, // Icon for Loading
-    AlertTriangle // Icon for Error
+    Eye,
+    CheckCircle,
+    HelpCircle,
+    RotateCcw,
+    Inbox,
+    AlertTriangle,
+    MessageSquare,
+    RefreshCw,
+    Filter,
+    X,
+    Clock,
+    User,
+    Mail,
+    List,
+    Table,
+    Phone
 } from 'lucide-react';
+
+// Import shadcn/ui components
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 const QUESTIONS_PER_PAGE = 15;
 
@@ -28,12 +52,10 @@ const QUESTIONS_PER_PAGE = 15;
 const getStatusProps = (status) => {
     switch (status?.toLowerCase()) {
         case 'approved':
-            return { icon: CheckCircle, color: 'text-green-600 bg-green-100', text: 'Təsdiqlənib' };
-        case 'rejected':
-            return { icon: XCircle, color: 'text-red-600 bg-red-100', text: 'Rədd edilib' };
+            return { icon: CheckCircle, color: 'text-green-600 bg-green-100', text: 'Oxunub' };
         case 'pending':
         default:
-            return { icon: HelpCircle, color: 'text-yellow-600 bg-yellow-100', text: 'Gözləmədə' };
+            return { icon: HelpCircle, color: 'text-yellow-600 bg-yellow-100', text: 'Oxunmayıb' };
     }
 };
 
@@ -45,7 +67,7 @@ function useQueryState(key, defaultValue = '') {
 
     const updateQuery = useCallback((newValue) => {
         const current = new URLSearchParams(Array.from(searchParams.entries())); // Get current params
-        if (newValue.trim() === '' || newValue === defaultValue) {
+        if (newValue.trim() === '' || newValue === defaultValue || (key === 'status' && newValue === 'all')) {
             current.delete(key);
         } else {
             current.set(key, newValue);
@@ -80,9 +102,10 @@ export default function AskedQuestionsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [totalPages, setTotalPages] = useState(1);
+    const [viewMode, setViewMode] = useState('list'); // 'list' or 'table'
 
     // Filters using custom hook
-    const [statusFilter, setStatusFilter] = useQueryState('status', '');
+    const [statusFilter, setStatusFilter] = useQueryState('status', 'all');
     const [searchQuery, setSearchQuery, setSearchQueryInput] = useQueryState('search', '');
     const page = parseInt(searchParams.get('page') || '1', 10); // Get page from URL
 
@@ -91,83 +114,44 @@ export default function AskedQuestionsPage() {
         setLoading(true);
         setError(null);
         try {
+            // API parameters matching the provided endpoint structure
             const params = new URLSearchParams({
-                page: currentPage.toString(),
-                limit: QUESTIONS_PER_PAGE.toString(),
+                page: (currentPage - 1).toString(), // API uses 0-based indexing
+                size: QUESTIONS_PER_PAGE.toString(),
+                sortBy: 'createdAt',
+                sortDir: 'DESC'
             });
-            if (currentStatus) params.set('status', currentStatus);
-            if (currentSearch) params.set('searchQuery', currentSearch);
 
-            // --- Adjust API Endpoint ---
-            // const response = await HttpClient.get(`/api/admin/questions?${params.toString()}`);
-            // if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            // const data = await response.json();
-
-            const data = {
-                data: [
-                    {
-                        "id": "q-7a2b8f", // Unique Question ID
-                        "question": "Hesabıma daxil ola bilmirəm, şifrə sıfırlama linki gəlmir. Nə etməliyəm?", // The user's question text (can be long)
-                        "status": "pending", // Current status: 'pending', 'approved', 'rejected'
-                        "createdAt": "2024-03-10T14:25:10Z", // ISO 8601 timestamp of submission
-                        "user": { // Optional: Information about the user who asked
-                            "id": "u-f4g1h",
-                            "name": "Leyla Həsənova",
-                            "email": "leyla.h@email-example.com"
-                        }
-                    },
-                    {
-                        "id": "q-3c4d9e",
-                        "question": "Ödəniş etdikdən sonra xidmət nə zaman aktivləşir?",
-                        "status": "approved",
-                        "createdAt": "2024-03-09T09:10:30Z",
-                        "user": {
-                            "id": "u-k9l3m",
-                            "name": "Samir Babayev",
-                            "email": null // User might not have provided email or is anonymous
-                        }
-                    },
-                    {
-                        "id": "q-1a9b8c",
-                        "question": "Platformanızda reklam yerləşdirmək mümkündürmü?",
-                        "status": "rejected", // Might be rejected if off-topic or spam
-                        "createdAt": "2024-03-08T18:45:00Z",
-                        "user": {
-                            "id": "u-z1x2y",
-                            "name": "Anonim İstifadəçi",
-                            "email": "spam.user@another-example.net"
-                        }
-                    },
-                    {
-                        "id": "q-5e6f7g",
-                        "question": "Profil şəklimi dəyişə bilmirəm, xəta verir.",
-                        "status": "pending",
-                        "createdAt": "2024-03-11T11:05:15Z",
-                        "user": {
-                            "id": "u-f4g1h", // Same user as the first question
-                            "name": "Leyla Həsənova",
-                            "email": "leyla.h@email-example.com"
-                        }
-                    },
-                    {
-                        "id": "q-8h9i0j",
-                        "question": "API sənədləriniz haradadır?",
-                        "status": "approved",
-                        "createdAt": "2024-03-07T10:00:00Z",
-                        "user": null // Could represent a submission where user info wasn't captured
-                    }
-                    // ... more question objects would follow for a full page result
-                ],
-                pagination: {
-                    currentPage: 1,
-                    totalPages: 5,
-                    totalItems: 73,
-                    limit: 15
-                }
+            // Add search parameter if provided
+            if (currentSearch) {
+                params.set('search', currentSearch);
             }
 
-            setQuestions(data?.data || []); // Adjust based on your API response structure
-            setTotalPages(data?.pagination?.totalPages ?? 1); // Adjust based on your API response structure
+            // Add status filter if provided (assuming API supports it)
+            if (currentStatus && currentStatus !== 'all') {
+                params.set('read', currentStatus === 'approved' ? 'true' : 'false');
+            }
+
+            const response = await HttpClient.get(`/contact?${params.toString()}`);
+            const data = await response.json();
+
+            // Map the contact API response to our question format
+            const mappedQuestions = data.content.map((contact) => ({
+                id: contact.id,
+                question: contact.message, // Use message as question
+                subject: contact.subject, // Additional field for subject
+                status: contact.read ? 'approved' : 'pending', // Map read status to our status
+                createdAt: contact.createdAt,
+                user: {
+                    id: contact.id, // Use contact id as user id
+                    name: contact.name,
+                    email: contact.email,
+                    phone: contact.phone
+                }
+            }));
+
+            setQuestions(mappedQuestions);
+            setTotalPages(data.page.totalPages);
 
         } catch (err) {
             console.error("Error fetching admin questions:", err);
@@ -183,7 +167,7 @@ export default function AskedQuestionsPage() {
     // Effect to fetch data when URL params change
     useEffect(() => {
         const currentSearch = searchParams.get('search') ?? '';
-        const currentStatus = searchParams.get('status') ?? '';
+        const currentStatus = searchParams.get('status') ?? 'all';
         const currentPage = parseInt(searchParams.get('page') || '1', 10);
         fetchAdminQuestions(currentPage, currentStatus, currentSearch);
     }, [searchParams, fetchAdminQuestions]); // Re-run when URL changes
@@ -198,10 +182,6 @@ export default function AskedQuestionsPage() {
         setSearchQuery(searchQuery); // This updates the URL via useQueryState
     };
 
-    const handleStatusChange = (e) => {
-        setStatusFilter(e.target.value); // Updates URL via useQueryState
-    };
-
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
             const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -213,184 +193,558 @@ export default function AskedQuestionsPage() {
     const resetFilters = () => {
         // Resetting state triggers URL update via useQueryState hooks
         setSearchQuery('');
-        setStatusFilter('');
+        setStatusFilter('all');
         // Explicitly navigate to base URL without filters
         router.push('/admin/asked-questions');
     };
 
-    const hasActiveFilters = !!(searchQuery || statusFilter);
+    const hasActiveFilters = !!(searchQuery || (statusFilter && statusFilter !== 'all'));
 
     // --- Render Logic ---
     const StatusBadge = ({ status }) => {
         const { icon: Icon, color, text } = getStatusProps(status);
         return (
-            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}>
+            <Badge className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border-0 ${color}`}>
                 <Icon size={14} />
                 {text}
-            </span>
+            </Badge>
         );
     };
 
     return (
-        <div className="p-6 md:p-8 bg-gray-50 min-h-screen">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">İstifadəçi Sualları</h1>
-
-            {/* Filter and Search Section */}
-            <div className="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                    {/* Search Input */}
-                    <div className="relative">
-                        <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">Axtarış</label>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Search className="h-5 w-5 text-gray-400" />
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 space-y-8">
+            {/* Header Section */}
+            <div className="relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-emerald-600/10 to-emerald-500/10" />
+                <div className="relative z-10 p-8">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center gap-6">
+                            <div className="relative">
+                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 shadow-xl">
+                                    <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
+                                        <MessageSquare className="h-8 w-8 text-emerald-600" />
+                                    </div>
+                                </div>
+                                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl opacity-20 blur-xl" />
                             </div>
-                            <input
-                                type="search"
-                                id="search"
-                                name="search"
-                                value={searchQuery} // Controlled component
-                                onChange={handleSearchChange}
-                                onKeyDown={(e) => e.key === 'Enter' && applySearch()}
-                                placeholder="Sual mətni, istifadəçi..."
-                                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                            />
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900">
+                                    İstifadəçi Sualları
+                                </h1>
+                                <p className="text-gray-600 mt-2 text-lg">
+                                    İstifadəçilərin göndərdiyi sualları idarə edin və cavablandırın
+                                </p>
+                            </div>
                         </div>
-                        {/* Optional: Add apply search button if not using Enter/debounce */}
-                        {/* <button onClick={applySearch} className="mt-1 text-sm ...">Apply</button> */}
-                    </div>
-
-                    {/* Status Filter */}
-                    <div>
-                        <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select
-                            id="status"
-                            name="status"
-                            value={statusFilter}
-                            onChange={handleStatusChange}
-                            className="block w-full pl-3 pr-10 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                        >
-                            <option value="">Bütün Statuslar</option>
-                            <option value="pending">Gözləmədə</option>
-                            <option value="approved">Təsdiqlənib</option>
-                            <option value="rejected">Rədd edilib</option>
-                        </select>
-                    </div>
-
-                    {/* Reset Button */}
-                    {hasActiveFilters && (
-                        <div className="md:col-start-3 flex justify-end">
-                            <button
-                                onClick={resetFilters}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500"
+                        <div className="flex items-center gap-3">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => fetchAdminQuestions(page, statusFilter, searchQuery)}
+                                className="gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-colors"
                             >
-                                <RotateCcw size={16} />
-                                Filtrləri Sıfırla
-                            </button>
+                                <RefreshCw className="h-4 w-4" />
+                                Yenilə
+                            </Button>
+                            <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 border-emerald-200 px-4 py-2">
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                {questions.length} Sual
+                            </Badge>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <CardContent className="relative z-10 p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-muted-foreground">Oxunmayıb</p>
+                                <p className="text-3xl font-bold text-yellow-600">
+                                    {questions.filter(q => q.status === 'pending').length}
+                                </p>
+                            </div>
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center">
+                                <Clock className="h-6 w-6 text-yellow-600" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <CardContent className="relative z-10 p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-muted-foreground">Oxunub</p>
+                                <p className="text-3xl font-bold text-green-600">
+                                    {questions.filter(q => q.status === 'approved').length}
+                                </p>
+                            </div>
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                                <CheckCircle className="h-6 w-6 text-green-600" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="group relative overflow-hidden bg-white border border-gray-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <CardContent className="relative z-10 p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-muted-foreground">Ümumi</p>
+                                <p className="text-3xl font-bold text-emerald-600">
+                                    {questions.length}
+                                </p>
+                            </div>
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                                <MessageSquare className="h-6 w-6 text-emerald-600" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Search and Filter Controls */}
+            <Card className="relative bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 border-b bg-gradient-to-r from-emerald-50/50 to-emerald-100/50">
+                    <div className="flex items-center justify-between">
+                        <CardTitle className="flex items-center gap-2 text-gray-900">
+                            <Search className="h-5 w-5" />
+                            Axtarış və Filtr
+                        </CardTitle>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant={viewMode === 'list' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setViewMode('list')}
+                                className={`gap-2 ${viewMode === 'list' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' : 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300'}`}
+                            >
+                                <List className="h-4 w-4" />
+                                Siyahı
+                            </Button>
+                            <Button
+                                variant={viewMode === 'table' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setViewMode('table')}
+                                className={`gap-2 ${viewMode === 'table' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' : 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300'}`}
+                            >
+                                <Table className="h-4 w-4" />
+                                Cədvəl
+                            </Button>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent className="relative z-10 p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        {/* Search Input */}
+                        <div className="space-y-2">
+                            <label htmlFor="search" className="text-sm font-medium text-gray-700">Axtarış</label>
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                <Input
+                                    type="search"
+                                    id="search"
+                                    name="search"
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                    onKeyDown={(e) => e.key === 'Enter' && applySearch()}
+                                    placeholder="Sual mətni, istifadəçi..."
+                                    className="pl-10 h-12 border-2 focus:border-emerald-300 transition-colors"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Status Filter */}
+                        <div className="space-y-2">
+                            <label htmlFor="status" className="text-sm font-medium text-gray-700">Status</label>
+                            <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                <SelectTrigger className="h-12 border-2 focus:border-emerald-300">
+                                    <SelectValue placeholder="Bütün Statuslar" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Bütün Statuslar</SelectItem>
+                                    <SelectItem value="pending">Oxunmayıb</SelectItem>
+                                    <SelectItem value="approved">Oxunub</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Reset Button */}
+                        {hasActiveFilters && (
+                            <div className="flex justify-end">
+                                <Button
+                                    variant="outline"
+                                    onClick={resetFilters}
+                                    className="h-12 gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-colors"
+                                >
+                                    <RotateCcw className="h-4 w-4" />
+                                    Filtrləri Sıfırla
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Active filters display */}
+                    {hasActiveFilters && (
+                        <div className="mt-6 p-4 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                            <div className="flex flex-wrap gap-2 items-center justify-between">
+                                <div className="flex flex-wrap gap-2 items-center">
+                                    <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                                        <Filter className="h-4 w-4" />
+                                        Aktiv filtrlər:
+                                    </span>
+
+                                    {searchQuery && (
+                                        <Badge variant="secondary" className="gap-1 px-3 py-1">
+                                            <Search className="h-3 w-3" />
+                                            Axtarış: {searchQuery}
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => setSearchQuery("")}
+                                                className="h-4 w-4 p-0 hover:bg-slate-200 rounded-full ml-1"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </Button>
+                                        </Badge>
+                                    )}
+
+                                    {statusFilter && statusFilter !== 'all' && (
+                                        <Badge variant="outline" className="gap-1 px-3 py-1 border-emerald-200 text-emerald-700 bg-emerald-50">
+                                            Status: {statusFilter === 'pending' ? 'Oxunmayıb' : 'Oxunub'}
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => setStatusFilter("all")}
+                                                className="h-4 w-4 p-0 hover:bg-emerald-200 rounded-full ml-1"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </Button>
+                                        </Badge>
+                                    )}
+                                </div>
+
+                                <Button
+                                    variant="ghost"
+                                    onClick={resetFilters}
+                                    className="gap-2 text-gray-700 hover:text-red-600 hover:bg-red-50"
+                                >
+                                    <X className="h-4 w-4" />
+                                    Hamısını Təmizlə
+                                </Button>
+                            </div>
                         </div>
                     )}
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
-            {/* Questions Table/List */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                        <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sual (Qısa)</th>
-                            {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İstifadəçi</th> */}
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Göndərilmə Tarixi</th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Əməliyyatlar</th>
-                        </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                        {loading ? (
-                            Array.from({ length: 5 }).map((_, i) => ( // Skeleton rows
-                                <tr key={`skel-${i}`} className="animate-pulse">
-                                    <td className="px-6 py-4 whitespace-nowrap"><div className="h-4 bg-gray-200 rounded w-3/4"></div></td>
-                                    {/* <td className="px-6 py-4 whitespace-nowrap"><div className="h-4 bg-gray-200 rounded w-1/2"></div></td> */}
-                                    <td className="px-6 py-4 whitespace-nowrap"><div className="h-5 bg-gray-200 rounded-full w-24"></div></td>
-                                    <td className="px-6 py-4 whitespace-nowrap"><div className="h-4 bg-gray-200 rounded w-28"></div></td>
-                                    <td className="px-6 py-4 text-center"><div className="h-6 w-10 bg-gray-200 rounded mx-auto"></div></td>
-                                </tr>
-                            ))
-                        ) : error ? (
-                            <tr>
-                                <td colSpan={5} className="text-center py-10 px-6 text-red-600">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <AlertTriangle className="w-10 h-10 text-red-400" />
-                                        <p className="font-medium">Xəta baş verdi!</p>
-                                        <p className="text-sm">{error}</p>
-                                        <button onClick={() => fetchAdminQuestions(page, statusFilter, searchQuery)} className="mt-2 text-sm text-emerald-700 hover:underline">Yenidən cəhd edin</button>
+            {/* Questions Display */}
+            {loading ? (
+                <Card className="border-2 shadow-lg">
+                    <CardContent className="p-6">
+                        <div className="space-y-4">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                                <div key={`skel-${i}`} className="animate-pulse">
+                                    <div className="flex items-start gap-4 p-4 border border-gray-200 rounded-xl">
+                                        <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                                            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                            <div className="flex gap-2">
+                                                <div className="h-5 bg-gray-200 rounded-full w-20"></div>
+                                                <div className="h-5 bg-gray-200 rounded-full w-24"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                        ) : questions.length === 0 ? (
-                            <tr>
-                                <td colSpan={5} className="text-center py-16 px-6 text-gray-500">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <Inbox className="w-12 h-12 text-gray-300" />
-                                        <p className="font-semibold text-lg text-gray-700">Heç bir sual tapılmadı.</p>
-                                        <p className="text-sm">{hasActiveFilters ? 'Filtrləri dəyişin və ya sıfırlayın.' : 'Hələ heç bir sual göndərilməyib.'}</p>
-                                        {hasActiveFilters && <button onClick={resetFilters} className="mt-2 text-sm text-emerald-700 hover:underline">Filtrləri Sıfırla</button>}
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            ) : error ? (
+                <Card className="border-2 shadow-lg border-red-200">
+                    <CardContent className="py-16">
+                        <div className="text-center space-y-4">
+                            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
+                                <AlertTriangle className="h-10 w-10 text-red-600" />
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold text-red-600">Xəta baş verdi!</h3>
+                                <p className="text-gray-600">{error}</p>
+                            </div>
+                            <Button
+                                onClick={() => fetchAdminQuestions(page, statusFilter, searchQuery)}
+                                className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700"
+                            >
+                                <RefreshCw className="h-4 w-4" />
+                                Yenidən cəhd edin
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            ) : questions.length === 0 ? (
+                <Card className="border-2 shadow-lg">
+                    <CardContent className="py-16">
+                        <div className="text-center space-y-4">
+                            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                                <Inbox className="h-10 w-10 text-slate-400" />
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold">
+                                    {hasActiveFilters ? "Filtrlərə uyğun sual tapılmadı" : "Heç bir sual tapılmadı"}
+                                </h3>
+                                <p className="text-gray-600 max-w-md mx-auto">
+                                    {hasActiveFilters
+                                        ? "Filtrləri dəyişin və ya yeni axtarış edin"
+                                        : "Hələ heç bir sual göndərilməyib"
+                                    }
+                                </p>
+                            </div>
+                            {hasActiveFilters && (
+                                <Button variant="outline" onClick={resetFilters} className="gap-2">
+                                    <X className="h-4 w-4" />
+                                    Filtrləri Sıfırla
+                                </Button>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+            ) : viewMode === 'list' ? (
+                <div className="space-y-4">
+                    {questions.map((q) => (
+                        <Card key={q.id} className="group relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1 border-2 hover:border-emerald-200">
+                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <CardContent className="relative z-10 p-6">
+                                <div className="flex items-start gap-4">
+                                    {/* Status Icon */}
+                                    <div className="flex-shrink-0">
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${q.status === 'approved' ? 'bg-green-100' :
+                                            q.status === 'rejected' ? 'bg-red-100' : 'bg-yellow-100'
+                                            }`}>
+                                            {(() => {
+                                                const { icon: Icon } = getStatusProps(q.status);
+                                                return <Icon className="h-6 w-6" />;
+                                            })()}
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                        ) : (
-                            questions.map((q) => (
-                                <tr key={q.id} className="hover:bg-gray-50 transition-colors duration-150">
-                                    <td className="px-6 py-4 text-sm text-gray-800 max-w-md">
-                                        <p className="truncate font-medium" title={q.question}>
-                                            {q.question || 'N/A'}
-                                        </p>
-                                    </td>
-                                    {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{q.user?.name || q.user?.email || '-'}</td> */}
-                                    <td className="px-6 py-4 whitespace-nowrap"><StatusBadge status={q.status} /></td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(q.createdAt || q.submittedAt)}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                        <Link
-                                            href={`/admin/asked-questions/${q.id}`}
-                                            className="text-emerald-600 hover:text-emerald-800 inline-flex items-center gap-1 p-1 rounded hover:bg-emerald-50 focus:outline-none focus:ring-1 focus:ring-emerald-400"
-                                            title="Detallara Bax"
-                                        >
-                                            <Eye size={18} />
-                                            {/* Bax */}
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                        </tbody>
-                    </table>
+
+                                    {/* Question Content */}
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="mb-2">
+                                                    {q.subject && (
+                                                        <h4 className="font-semibold text-emerald-600 text-sm mb-1">
+                                                            {q.subject}
+                                                        </h4>
+                                                    )}
+                                                    <h3 className="font-medium text-gray-900 text-base line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                                                        {q.question || 'N/A'}
+                                                    </h3>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-500 mb-3">
+                                                    {q.user && (
+                                                        <div className="flex items-center gap-1">
+                                                            <User className="h-4 w-4" />
+                                                            <span>{q.user.name || 'Anonim'}</span>
+                                                        </div>
+                                                    )}
+                                                    {q.user?.email && (
+                                                        <div className="flex items-center gap-1">
+                                                            <Mail className="h-4 w-4" />
+                                                            <span className="truncate max-w-48">{q.user.email}</span>
+                                                        </div>
+                                                    )}
+                                                    {q.user?.phone && (
+                                                        <div className="flex items-center gap-1">
+                                                            <Phone className="h-4 w-4" />
+                                                            <span>{q.user.phone}</span>
+                                                        </div>
+                                                    )}
+                                                    <div className="flex items-center gap-1">
+                                                        <Clock className="h-4 w-4" />
+                                                        <span>{formatDate(q.createdAt || q.submittedAt)}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center gap-2">
+                                                    <StatusBadge status={q.status} />
+                                                </div>
+                                            </div>
+
+                                            {/* Action Button */}
+                                            <div className="flex-shrink-0">
+                                                <Button
+                                                    asChild
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-10 w-10 rounded-xl hover:bg-emerald-100 text-emerald-600 hover:text-emerald-700 transition-all duration-200 hover:scale-105"
+                                                >
+                                                    <Link href={`/admin/asked-questions/${q.id}`}>
+                                                        <Eye className="h-5 w-5" />
+                                                        <span className="sr-only">Detallara Bax</span>
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
                 </div>
-            </div>
+            ) : (
+                /* Table View */
+                <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                    <div className="relative z-10 overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gradient-to-r from-emerald-50/50 to-emerald-100/50">
+                                <tr>
+                                    <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                                        Sual
+                                    </th>
+                                    <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                                        İstifadəçi
+                                    </th>
+                                    <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                                        Tarix
+                                    </th>
+                                    <th scope="col" className="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                                        Əməliyyatlar
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {questions.map((q, index) => (
+                                    <tr key={q.id} className={`hover:bg-emerald-50/50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}`}>
+                                        <td className="px-6 py-4">
+                                            <div className="max-w-md">
+                                                {q.subject && (
+                                                    <p className="font-semibold text-emerald-600 text-xs mb-1">
+                                                        {q.subject}
+                                                    </p>
+                                                )}
+                                                <p className="font-medium text-gray-900 line-clamp-2 text-sm leading-relaxed">
+                                                    {q.question || 'N/A'}
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex flex-col gap-1">
+                                                {q.user ? (
+                                                    <>
+                                                        <div className="flex items-center gap-2">
+                                                            <User className="h-4 w-4 text-gray-400" />
+                                                            <span className="text-sm font-medium text-gray-900">
+                                                                {q.user.name || 'Anonim'}
+                                                            </span>
+                                                        </div>
+                                                        {q.user.email && (
+                                                            <div className="flex items-center gap-2">
+                                                                <Mail className="h-4 w-4 text-gray-400" />
+                                                                <span className="text-xs text-gray-500 truncate max-w-40">
+                                                                    {q.user.email}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                        {q.user.phone && (
+                                                            <div className="flex items-center gap-2">
+                                                                <Phone className="h-4 w-4 text-gray-400" />
+                                                                <span className="text-xs text-gray-500">
+                                                                    {q.user.phone}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <span className="text-sm text-gray-500">-</span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <StatusBadge status={q.status} />
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-2">
+                                                <Clock className="h-4 w-4 text-gray-400" />
+                                                <span className="text-sm text-gray-600">
+                                                    {formatDate(q.createdAt || q.submittedAt)}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <Button
+                                                asChild
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 w-8 rounded-lg hover:bg-emerald-100 text-emerald-600 hover:text-emerald-700 transition-all duration-200 hover:scale-105"
+                                            >
+                                                <Link href={`/admin/asked-questions/${q.id}`}>
+                                                    <Eye className="h-4 w-4" />
+                                                    <span className="sr-only">Detallara Bax</span>
+                                                </Link>
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
+            )}
 
             {/* Pagination */}
             {!loading && !error && questions.length > 0 && totalPages > 1 && (
-                <div className="mt-6 flex justify-between items-center">
-                    <p className="text-sm text-gray-700">
-                        Səhifə {page} / {totalPages}
-                    </p>
-                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <button
-                            onClick={() => handlePageChange(page - 1)}
-                            disabled={page === 1}
-                            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <ChevronLeft className="h-5 w-5" />
-                        </button>
-                        {/* Consider adding page number links here if needed */}
-                        <button
-                            onClick={() => handlePageChange(page + 1)}
-                            disabled={page === totalPages}
-                            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <ChevronRight className="h-5 w-5" />
-                        </button>
-                    </nav>
-                </div>
+                <Card className="border-2 shadow-lg">
+                    <CardContent className="p-6">
+                        <div className="flex justify-between items-center">
+                            <p className="text-sm text-gray-700 font-medium">
+                                Səhifə {page} / {totalPages}
+                            </p>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handlePageChange(page - 1)}
+                                    disabled={page === 1}
+                                    className="h-10 w-10 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <ChevronLeft className="h-4 w-4" />
+                                    <span className="sr-only">Əvvəlki səhifə</span>
+                                </Button>
+
+                                <div className="flex items-center gap-1">
+                                    {/* Add page numbers if needed */}
+                                    <span className="px-3 py-2 text-sm font-medium text-gray-700">
+                                        {page}
+                                    </span>
+                                </div>
+
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handlePageChange(page + 1)}
+                                    disabled={page === totalPages}
+                                    className="h-10 w-10 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <ChevronRight className="h-4 w-4" />
+                                    <span className="sr-only">Növbəti səhifə</span>
+                                </Button>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             )}
         </div>
     );

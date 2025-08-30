@@ -23,13 +23,17 @@ export async function generateStaticParams() {
 
 async function getArticle(id) {
     try {
-        const res = await fetch(`${BASE_URL}/articles/${id}`, {next: {revalidate: 3600}});
+        const res = await fetch(`${BASE_URL}/articles/${id}`, {
+            next: {revalidate: 3600},
+            cache: 'force-cache'
+        });
 
         if (!res.ok) {
-            if (res.status === 404) return null;
-            throw new Error(`Failed to fetch article: ${res.status} ${res.statusText}`);
+            return null;
         }
-        return await res.json();
+        
+        const data = await res.json();
+        return data;
     } catch (error) {
         console.error("Error fetching article:", error);
         return null;
@@ -111,12 +115,11 @@ export async function generateMetadata({params}) {
 const Page = async ({params}) => {
     const {id} = await params
 
-    try {
-        const article = await getArticle(id)
+    const article = await getArticle(id)
 
-        if (!article) {
-            notFound()
-        }
+    if (!article) {
+        notFound()
+    }
 
         const cleanJsonLdDescription = article.content?.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim().substring(0, 200)
             || 'Əhli-Sünnə Mədrəsəsi - İslam dini haqqında məqalə.';
@@ -148,26 +151,16 @@ const Page = async ({params}) => {
             keywords: article.tags?.map(t => t.name).join(', ') || '',
         }
 
-        return (
-            <>
-                <Script
-                    id="article-schema"
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
-                />
-                <ArticleDetailPage article={article}/>
-            </>
-        )
-    } catch (error) {
-        console.error("Error fetching article:", error)
-        return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                    <p>Məqalə yüklənərkən xəta baş verdi. Zəhmət olmasa bir az sonra yenidən cəhd edin.</p>
-                </div>
-            </div>
-        )
-    }
+    return (
+        <>
+            <Script
+                id="article-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
+            />
+            <ArticleDetailPage article={article}/>
+        </>
+    )
 }
 
 export default Page

@@ -1,39 +1,47 @@
-// app/admin/questions/[id]/page.jsx
 'use client'
 
 import React, {useState, useEffect, useCallback} from 'react';
 import Link from 'next/link';
-import {useParams, useRouter} from 'next/navigation';
+import {useParams} from 'next/navigation';
 import HttpClient from '@/util/HttpClient';
 import {formatDate} from '@/util/DateUtil';
 import {
     ChevronLeft,
     CheckCircle,
-    XCircle,
     HelpCircle,
-    Calendar,
-    User, // Assuming you might get user info
+    User,
     Loader2,
     AlertTriangle,
-    MessageSquare // Icon for question text
+    MessageSquare,
+    Mail,
+    Clock,
+    RefreshCw,
+    Phone
 } from 'lucide-react';
+
+// Import shadcn/ui components
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 
 // Helper to get status display properties (can be shared or redefined)
 const getStatusProps = (status) => {
     switch (status?.toLowerCase()) {
         case 'approved':
-            return {icon: CheckCircle, color: 'text-green-600 bg-green-100 border-green-200', text: 'Təsdiqlənib'};
-        case 'rejected':
-            return {icon: XCircle, color: 'text-red-600 bg-red-100 border-red-200', text: 'Rədd edilib'};
+            return {icon: CheckCircle, color: 'text-green-600 bg-green-100 border-green-200', text: 'Oxunub'};
         case 'pending':
         default:
-            return {icon: HelpCircle, color: 'text-yellow-600 bg-yellow-100 border-yellow-200', text: 'Gözləmədə'};
+            return {icon: HelpCircle, color: 'text-yellow-600 bg-yellow-100 border-yellow-200', text: 'Oxunmayıb'};
     }
 };
 
 export default function AdminQuestionDetailPage() {
     const params = useParams();
-    const router = useRouter();
     const {id} = params; // Get ID from URL
 
     const [question, setQuestion] = useState(null);
@@ -48,22 +56,25 @@ export default function AdminQuestionDetailPage() {
         setLoading(true);
         setError(null);
         try {
-            // --- Adjust API Endpoint ---
-            // const response = await HttpClient.get(`/api/admin/questions/${id}`);
-            // if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            // const data = await response.json();
-            const data = {
-                "id": "q-7a2b8f", // Unique Question ID
-                "question": "Hesabıma daxil ola bilmirəm, şifrə sıfırlama linki gəlmir. Nə etməliyəm?", // The user's question text (can be long)
-                "status": "pending", // Current status: 'pending', 'approved', 'rejected'
-                "createdAt": "2024-03-10T14:25:10Z", // ISO 8601 timestamp of submission
-                "user": { // Optional: Information about the user who asked
-                    "id": "u-f4g1h",
-                    "name": "Leyla Həsənova",
-                    "email": "leyla.h@email-example.com"
+            const response = await HttpClient.get(`/contact/${id}`);
+            const data = await response.json();
+            
+            // Map the contact API response to our question format
+            const mappedQuestion = {
+                id: data.id,
+                question: data.message,
+                subject: data.subject,
+                status: data.read ? 'approved' : 'pending',
+                createdAt: data.createdAt,
+                user: {
+                    id: data.id,
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone
                 }
-            }
-            setQuestion(data); // Adjust based on your API response structure
+            };
+            
+            setQuestion(mappedQuestion);
         } catch (err) {
             console.error("Error fetching question detail:", err);
             setError("Sual detalları yüklənərkən xəta baş verdi.");
@@ -82,28 +93,13 @@ export default function AdminQuestionDetailPage() {
         setActionLoading(prev => ({...prev, [actionType]: true}));
         setActionError(null);
         try {
-            // --- Adjust API Endpoints ---
-            const endpoint = actionType === 'approve'
-                ? `/api/admin/questions/${id}/approve`
-                : `/api/admin/questions/${id}/reject`;
+            // For contact API, we only have "mark as read" functionality
+            if (actionType === 'approve') {
+                await HttpClient.patch(`/contact/${id}/read`);
 
-            const response = await HttpClient.patch(endpoint); // Or POST depending on your API
-            if (!response.ok) {
-                let errorMessage = 'Əməliyyat zamanı xəta baş verdi.';
-                try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.message || errorData.error || errorMessage;
-                } catch (parseError) {
-                }
-                throw new Error(errorMessage);
+                // Update local state on success
+                setQuestion(prev => ({ ...prev, status: 'approved' }));
             }
-
-            // Update local state on success
-            const updatedQuestion = await response.json(); // Assume API returns updated question
-            setQuestion(updatedQuestion); // Update with the latest data from backend
-
-            // Or simply update the status locally if API doesn't return full object:
-            // setQuestion(prev => ({ ...prev, status: actionType === 'approve' ? 'approved' : 'rejected' }));
 
         } catch (err) {
             console.error(`Error ${actionType}ing question:`, err);
@@ -117,147 +113,251 @@ export default function AdminQuestionDetailPage() {
     const StatusDisplay = ({status}) => {
         const {icon: Icon, color, text} = getStatusProps(status);
         return (
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium border ${color}`}>
+            <Badge className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border-0 ${color}`}>
                 <Icon size={18}/>
                 {text}
-            </div>
+            </Badge>
         );
     };
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center min-h-[400px]">
-                <Loader2 className="h-12 w-12 text-emerald-600 animate-spin"/>
+            <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8">
+                <Card className="border-2 shadow-lg">
+                    <CardContent className="py-16">
+                        <div className="flex justify-center items-center">
+                            <div className="text-center space-y-4">
+                                <Loader2 className="h-12 w-12 text-emerald-600 animate-spin mx-auto"/>
+                                <p className="text-gray-600">Sual detalları yüklənir...</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="p-6 md:p-8 text-center text-red-600">
-                <div
-                    className="flex flex-col items-center gap-2 max-w-md mx-auto bg-white p-8 rounded-lg shadow border border-red-200">
-                    <AlertTriangle className="w-10 h-10 text-red-400"/>
-                    <p className="font-medium">Xəta baş verdi!</p>
-                    <p className="text-sm">{error}</p>
-                    <Link href="/admin/asked-questions"
-                          className="mt-4 inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-800">
-                        <ChevronLeft className="h-5 w-5 mr-1"/>
-                        Siyahıya Qayıt
-                    </Link>
-                </div>
+            <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8">
+                <Card className="border-2 shadow-lg border-red-200">
+                    <CardContent className="py-16">
+                        <div className="text-center space-y-4">
+                            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
+                                <AlertTriangle className="h-10 w-10 text-red-600" />
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold text-red-600">Xəta baş verdi!</h3>
+                                <p className="text-gray-600">{error}</p>
+                            </div>
+                            <div className="flex gap-3 justify-center">
+                                <Button
+                                    onClick={fetchQuestionDetail}
+                                    className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700"
+                                >
+                                    <RefreshCw className="h-4 w-4" />
+                                    Yenidən cəhd edin
+                                </Button>
+                                <Button asChild variant="outline">
+                                    <Link href="/admin/asked-questions" className="gap-2">
+                                        <ChevronLeft className="h-4 w-4"/>
+                                        Siyahıya Qayıt
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         );
     }
 
     if (!question) {
         return (
-            <div className="p-6 md:p-8 text-center text-gray-500">
-                <div
-                    className="flex flex-col items-center gap-2 max-w-md mx-auto bg-white p-8 rounded-lg shadow border border-gray-200">
-                    <HelpCircle className="w-10 h-10 text-gray-400"/>
-                    <p className="font-medium">Sual Tapılmadı</p>
-                    <p className="text-sm">Bu ID ilə sual mövcud deyil.</p>
-                    <Link href="/admin/asked-questions"
-                          className="mt-4 inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-800">
-                        <ChevronLeft className="h-5 w-5 mr-1"/>
-                        Siyahıya Qayıt
-                    </Link>
-                </div>
+            <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8">
+                <Card className="border-2 shadow-lg">
+                    <CardContent className="py-16">
+                        <div className="text-center space-y-4">
+                            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                                <HelpCircle className="h-10 w-10 text-slate-400" />
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold">Sual Tapılmadı</h3>
+                                <p className="text-gray-600">Bu ID ilə sual mövcud deyil.</p>
+                            </div>
+                            <Button asChild variant="outline">
+                                <Link href="/admin/asked-questions" className="gap-2">
+                                    <ChevronLeft className="h-4 w-4"/>
+                                    Siyahıya Qayıt
+                                </Link>
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         );
     }
 
 
     return (
-        <div className="p-6 md:p-8 bg-gray-50 min-h-screen">
-            {/* Back Link */}
-            <div className="mb-6">
-                <Link href="/admin/asked-questions"
-                      className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-800">
-                    <ChevronLeft className="h-5 w-5 mr-1"/>
-                    Bütün Suallara Qayıt
-                </Link>
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white p-4 md:p-8 space-y-8">
+            {/* Header Section */}
+            <div className="relative overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-emerald-600/10 to-emerald-500/10" />
+                <div className="relative z-10 p-8">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center gap-6">
+                            <div className="relative">
+                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-0.5 shadow-xl">
+                                    <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
+                                        <MessageSquare className="h-8 w-8 text-emerald-600" />
+                                    </div>
+                                </div>
+                                <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl opacity-20 blur-xl" />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900">
+                                    Sual Detalları
+                                </h1>
+                                <p className="text-gray-600 mt-2 text-lg">
+                                    İstifadəçi sualının tam məlumatları
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <Button asChild variant="outline" size="sm" className="gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300">
+                                <Link href="/admin/asked-questions">
+                                    <ChevronLeft className="h-4 w-4"/>
+                                    Siyahıya Qayıt
+                                </Link>
+                            </Button>
+                            <StatusDisplay status={question.status}/>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Action Error Message */}
             {actionError && (
-                <div className="mb-6 p-4 rounded-md border bg-red-50 border-red-200 text-red-800">
-                    <div className="flex items-center">
-                        <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0"/>
-                        <p className="text-sm font-medium">{actionError}</p>
-                    </div>
-                </div>
+                <Card className="border-2 shadow-lg border-red-200">
+                    <CardContent className="p-6">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                                <AlertTriangle className="h-5 w-5 text-red-600"/>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-red-600">Əməliyyat Xətası</h3>
+                                <p className="text-sm text-red-600">{actionError}</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             )}
 
             {/* Main Content Card */}
-            <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                <div className="p-6 md:p-8">
-                    <div
-                        className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-200">
-                        <h1 className="text-xl md:text-2xl font-semibold text-gray-900">Sual Detalları</h1>
-                        <StatusDisplay status={question.status}/>
-                    </div>
-
-                    {/* Question Info */}
-                    <div className="space-y-5">
+            <Card className="relative overflow-hidden bg-white border border-gray-200 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
+                <CardHeader className="relative z-10 border-b bg-gradient-to-r from-emerald-50/50 to-emerald-100/50">
+                    <CardTitle className="flex items-center gap-2 text-gray-900">
+                        <MessageSquare className="h-5 w-5" />
+                        Sual Məlumatları
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="relative z-10 p-8">
+                    <div className="space-y-8">
                         {/* Submission Date */}
-                        <div className="flex items-start">
-                            <Calendar className="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0"/>
-                            <div>
-                                <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">Göndərilmə
-                                    Tarixi</p>
-                                <p className="text-sm text-gray-700">{formatDate(question.createdAt || question.submittedAt)}</p>
+                        <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center flex-shrink-0">
+                                <Clock className="h-6 w-6 text-blue-600"/>
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-semibold text-gray-900 mb-1">Göndərilmə Tarixi</h3>
+                                <p className="text-gray-600">{formatDate(question.createdAt || question.submittedAt)}</p>
                             </div>
                         </div>
 
                         {/* User Info (Optional) */}
                         {question.user && (
-                            <div className="flex items-start">
-                                <User className="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0"/>
-                                <div>
-                                    <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">İstifadəçi</p>
-                                    <p className="text-sm text-gray-700">{question.user.name || 'Anonim'}{question.user.email ? ` (${question.user.email})` : ''}</p>
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center flex-shrink-0">
+                                    <User className="h-6 w-6 text-purple-600"/>
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-gray-900 mb-2">İstifadəçi Məlumatları</h3>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <User className="h-4 w-4 text-gray-400"/>
+                                            <span className="text-gray-600">{question.user.name || 'Anonim'}</span>
+                                        </div>
+                                        {question.user.email && (
+                                            <div className="flex items-center gap-2">
+                                                <Mail className="h-4 w-4 text-gray-400"/>
+                                                <span className="text-gray-600">{question.user.email}</span>
+                                            </div>
+                                        )}
+                                        {question.user.phone && (
+                                            <div className="flex items-center gap-2">
+                                                <Phone className="h-4 w-4 text-gray-400"/>
+                                                <span className="text-gray-600">{question.user.phone}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Subject */}
+                        {question.subject && (
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center flex-shrink-0">
+                                    <MessageSquare className="h-6 w-6 text-blue-600"/>
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-gray-900 mb-3">Mövzu</h3>
+                                    <div className="bg-blue-50 rounded-xl p-4 border-2 border-blue-100">
+                                        <p className="text-blue-800 font-medium text-lg">{question.subject}</p>
+                                    </div>
                                 </div>
                             </div>
                         )}
 
                         {/* Question Text */}
-                        <div className="flex items-start">
-                            <MessageSquare className="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0"/>
-                            <div>
-                                <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">Sual
-                                    Mətni</p>
-                                <p className="text-base text-gray-800 leading-relaxed whitespace-pre-wrap">{question.question}</p>
+                        <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center flex-shrink-0">
+                                <MessageSquare className="h-6 w-6 text-emerald-600"/>
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-semibold text-gray-900 mb-3">Mesaj Mətni</h3>
+                                <div className="bg-gray-50 rounded-xl p-6 border-2 border-gray-100">
+                                    <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-lg">{question.question}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </CardContent>
 
-                {/* Actions Section (Only if pending) */}
+                {/* Actions Section (Only if unread) */}
                 {question.status?.toLowerCase() === 'pending' && (
-                    <div
-                        className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3">
-                        <button
-                            onClick={() => handleAction('reject')}
-                            disabled={actionLoading.reject || actionLoading.approve}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {actionLoading.reject ? <Loader2 className="h-4 w-4 animate-spin"/> : <XCircle size={16}/>}
-                            Rədd et
-                        </button>
-                        <button
-                            onClick={() => handleAction('approve')}
-                            disabled={actionLoading.approve || actionLoading.reject}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {actionLoading.approve ? <Loader2 className="h-4 w-4 animate-spin"/> :
-                                <CheckCircle size={16}/>}
-                            Təsdiqlə
-                        </button>
+                    <div className="relative z-10 bg-gradient-to-r from-emerald-50/50 to-emerald-100/50 px-8 py-6 border-t border-gray-200">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h3 className="font-semibold text-gray-900 mb-1">Mesajı oxunmuş kimi işarələ</h3>
+                                <p className="text-sm text-gray-600">Bu mesajı oxunmuş kimi qeyd edin</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <Button
+                                    onClick={() => handleAction('approve')}
+                                    disabled={actionLoading.approve}
+                                    className="gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                                >
+                                    {actionLoading.approve ? <Loader2 className="h-4 w-4 animate-spin"/> : <CheckCircle className="h-4 w-4"/>}
+                                    Oxunmuş kimi işarələ
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 )}
-            </div>
+            </Card>
         </div>
     );
 }

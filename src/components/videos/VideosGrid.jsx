@@ -54,64 +54,97 @@ const VideosGrid = async ({ playlistId, search, videoId, page, content }) => {
   }
 
   return (
-    <div className="py-8">
-      <div className="max-w-7xl mx-auto">
-        {videos?.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-6">
-              <svg
-                className="w-12 h-12 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-700 mb-2">Heç bir video tapılmadı</h2>
-            <p className="text-gray-500 max-w-md">
-              Axtarışa uyğun bir nəticə tapılmadı. Zəhmət olmasa başqa açar sözlərlə yenidən cəhd edin.
-            </p>
+    <div>
+      {videos?.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-32 h-32 bg-gradient-to-br from-red-100 to-red-200 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
+            <svg
+              className="w-16 h-16 text-red-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {videos?.map((video) => (
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Heç bir video tapılmadı</h2>
+          <p className="text-gray-600 max-w-md text-lg leading-relaxed">
+            Axtarışa uyğun bir nəticə tapılmadı. Zəhmət olmasa başqa açar sözlərlə yenidən cəhd edin.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Results Header */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {content === "shorts" ? "Qısa Videolar" : "Videolar"}
+                </h3>
+                <p className="text-gray-600 mt-1">
+                  {videos?.length} nəticə tapıldı
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Videos Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {videos?.map((video, index) => (
+              <div
+                key={video.videoId}
+                className="animate-fadeInUp"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <Link
                   href={buildPageLink(clientPage, video.videoId)}
-                  key={video.videoId}
-                  className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
                 >
                   <div className="relative aspect-video">
                     <Image
                       src={getBestThumbnailUrl(video.thumbnail) || "/placeholder.svg"}
                       alt={video.title}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
+                    {/* Gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                    
+                    {/* Duration badge */}
+                    {/* <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-lg font-medium">
                       12:34
-                    </div>
-                    <div className="absolute top-2 left-2">
-                      <span className="bg-emerald-600 text-white text-xs px-2 py-1 rounded-md">
+                    </div> */}
+                    
+                    {/* Type badge */}
+                    <div className="absolute top-3 left-3">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-red-500 text-white`}>
                         {content === "shorts" ? "Short" : "Video"}
                       </span>
                     </div>
+
+                    {/* Play button overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-emerald-700">
+                  
+                  <div className="p-6">
+                    <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-red-600 transition-colors duration-300 text-lg leading-tight">
                       {video.title}
                     </h3>
-                    <div className="flex items-center text-xs text-gray-500 space-x-4">
+                    <div className="flex items-center text-sm text-gray-500 space-x-4">
                       <div className="flex items-center">
-                        <Calendar className="w-3 h-3 mr-1" />
+                        <Calendar className="w-4 h-4 mr-2" />
                         <span>
                           {new Date(video.publishedAt).toLocaleDateString("az-AZ", {
                             year: "numeric",
@@ -121,22 +154,24 @@ const VideosGrid = async ({ playlistId, search, videoId, page, content }) => {
                         </span>
                       </div>
                       <div className="flex items-center">
-                        <Clock className="w-3 h-3 mr-1" />
+                        <Clock className="w-4 h-4 mr-2" />
                         <span>12:34</span>
                       </div>
                     </div>
                   </div>
                 </Link>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
 
-            {/* Pagination */}
-            <div className="mt-12">
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-16">
               <Pagination clientPage={clientPage} totalPages={totalPages} buildPageLink={buildPageLink} />
             </div>
-          </>
-        )}
-      </div>
+          )}
+        </>
+      )}
     </div>
   )
 }

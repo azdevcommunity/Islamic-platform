@@ -3,11 +3,13 @@
 import { useState, useEffect, useCallback } from "react"
 
 const useTheme = () => {
-  // Initialize state with a default value, useEffect will correct it
-  const [theme, setThemeState] = useState('system');
+  const [theme, setThemeState] = useState('light');
 
   // Function to apply theme to the document and potentially save preference
   const applyTheme = useCallback((chosenTheme) => {
+    // Ensure we're in the browser
+    if (typeof window === 'undefined') return;
+
     let effectiveTheme = chosenTheme;
     if (chosenTheme === 'system') {
       localStorage.removeItem("color-theme");
@@ -18,30 +20,51 @@ const useTheme = () => {
     }
 
     // Apply the class to the document element
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+    
+    // Force remove dark class from both html and body
+    htmlElement.classList.remove("dark");
+    bodyElement.classList.remove("dark");
+    
     if (effectiveTheme === 'dark') {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+      htmlElement.classList.add("dark");
+      bodyElement.classList.add("dark");
     }
-     // Update the state
-     // Important: We update the state based on the *chosen* theme (light/dark/system),
-     // not the *effective* theme (light/dark), so the UI reflects the user's choice.
+
+    // Update the state
     setThemeState(chosenTheme);
+
+    // Force a re-render by triggering a custom event
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: effectiveTheme } }));
+
+    // Update color scheme
+    document.documentElement.style.colorScheme = effectiveTheme;
+    
+    // Add a data attribute to help with CSS targeting
+    document.documentElement.setAttribute('data-theme', effectiveTheme);
 
   }, []);
 
   // Effect to set initial theme and listen for system changes
   useEffect(() => {
+    // Ensure we're in the browser
+    if (typeof window === 'undefined') return;
+
     const storedTheme = localStorage.getItem("color-theme");
-    const initialTheme = storedTheme ? storedTheme : 'system';
-    applyTheme(initialTheme); // Apply the initial theme and update state
+    const initialTheme = storedTheme || 'system';
+    
+    // Apply theme immediately on mount
+    setTimeout(() => {
+      applyTheme(initialTheme);
+    }, 0);
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     // Handler for system theme changes
     const handleSystemChange = (e) => {
       // Only apply system change if the current setting is 'system'
-      if (localStorage.getItem("color-theme") === null) {
+      if (!localStorage.getItem("color-theme") || theme === 'system') {
         applyTheme('system');
       }
     };
@@ -50,10 +73,8 @@ const useTheme = () => {
 
     // Cleanup listener on component unmount
     return () => mediaQuery.removeEventListener("change", handleSystemChange);
-  }, [applyTheme]); // Depend on applyTheme
+  }, [applyTheme, theme]);
 
-  // Return the current theme state and the function to change it
-  // Note: the returned 'setTheme' function is actually our 'applyTheme'
   return [theme, applyTheme];
 }
 

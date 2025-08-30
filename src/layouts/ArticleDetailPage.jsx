@@ -6,6 +6,7 @@ import ArticleApiCount from "@/components/articledetail/ArticleApiCount"
 import ArticleReadScroll from "@/components/articledetail/ArticleReadScroll";
 import ShareArticle from "@/components/articledetail/ShareArticle";
 import RelatedArticles from "@/components/articledetail/RelatedArticles";
+import { lexicalToHtml } from "@/util/LexicalToHtml";
 
 const ArticleDetailPage = ({article}) => {
     const isLiked = true;
@@ -114,7 +115,7 @@ const ArticleDetailPage = ({article}) => {
                                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
-                                {article.viewCount || 0} baxış
+                                {article.readCount || 0} baxış
                             </div>
                             <div className="flex items-center">
                                 <svg
@@ -161,7 +162,7 @@ const ArticleDetailPage = ({article}) => {
                         {/* Main Article Content Section */}
                         <div>
                             <div className="prose prose-emerald text-justify max-w-none">
-                                <div dangerouslySetInnerHTML={{__html: article.content}}></div>
+                                <div dangerouslySetInnerHTML={{__html: lexicalToHtml(article.content)}}></div>
                             </div>
 
                             {/* Action Buttons & Back Link */}

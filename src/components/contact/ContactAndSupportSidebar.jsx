@@ -1,72 +1,113 @@
-"use client"; // Keep if needed
+"use client";
 
-import { Phone, HeartHandshake } from "lucide-react";
+import { Phone, HeartHandshake, Clock, Mail, MapPin, Users } from "lucide-react";
 import SupportButton from "@/components/common/SupportButton";
-import {phones} from "@/util/Const"; // Import icons
+import {phones} from "@/util/Const";
 
-// Assume bankData and phones are passed as props or defined/fetched here
-
-
-
-
-// Replace with your actual component name
 const ContactAndSupportSidebar = () => {
-
     return (
-        // Sidebar Container: Slightly refined styling
-        <div className="lg:col-span-1 space-y-10 bg-white p-6 md:p-8 rounded-lg shadow-lg border border-gray-100/80">
-
-            {/* Telefon Bölməsi - Modernized */}
-            <div>
-                <h2 className="text-xl font-semibold text-gray-800 mb-5 border-b border-gray-200 pb-3 flex items-center gap-2.5">
-                    <Phone className="h-5 w-5 text-emerald-600 flex-shrink-0" />
-                    Əlaqə Vasitəsi
-                </h2>
-                <div className="space-y-2.5"> {/* Spacing between phone numbers */}
+        <div className="space-y-8">
+            {/* Quick Contact Info */}
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-2xl border border-emerald-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <Phone className="h-5 w-5 text-emerald-600" />
+                    Sürətli Əlaqə
+                </h3>
+                <div className="space-y-3">
                     {phones.map((phone, index) => (
                         <a
                             key={index}
                             href={`tel:${phone.replace(/\s/g, '')}`}
-                            className="group flex items-center gap-2 p-2 rounded-md transition-colors duration-150 ease-in-out hover:bg-emerald-50/70"
+                            className="group flex items-center gap-3 p-3 bg-white/70 backdrop-blur-sm rounded-xl hover:bg-white hover:shadow-md transition-all duration-200"
                             aria-label={`Telefon nömrəsi: ${phone}`}
                         >
-                            {/* Optional: Repeat phone icon for each line? Or use a different subtle icon */}
-                            {/* <Phone size={16} className="text-gray-400 group-hover:text-emerald-600 flex-shrink-0"/> */}
-                            <span className="text-sm font-medium text-gray-700 group-hover:text-emerald-700 tracking-wide">
-                                {phone}
-                            </span>
-                            {/* Optional: Add a subtle indicator that it's clickable */}
-                            {/* <ExternalLink size={14} className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity ml-auto"/> */}
+                            <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                                <Phone className="w-4 h-4 text-emerald-600" />
+                            </div>
+                            <div>
+                                <span className="text-sm font-semibold text-gray-900 block">
+                                    {phone}
+                                </span>
+                                <span className="text-xs text-gray-500">Zəng edin</span>
+                            </div>
                         </a>
                     ))}
                 </div>
-                {/* Optional: Add note about availability times if applicable */}
-                {/* <p className="text-xs text-gray-500 mt-3 italic">
-                    Zənglər üçün iş saatları: 09:00 - 18:00
-                 </p> */}
             </div>
 
-            {/* Dəstək Olun Bölməsi - Integrated with Modal Button */}
-            <div>
-                <h2 className="text-xl font-semibold text-gray-800 mb-5 border-b border-gray-200 pb-3 flex items-center gap-2.5">
-                    <HeartHandshake size={20} className="text-emerald-600 flex-shrink-0" /> {/* Using appropriate icon */}
-                    Dəstək Olun
-                </h2>
-                <p className="text-sm text-gray-600 mb-6 leading-relaxed"> {/* Slightly more line height */}
-                    Mədrəsəmizin fəaliyyətinə və İslam elmlərinin yayılmasına dəstək olmaq üçün bank hesablarımızdan istifadə edə bilərsiniz.
-                    Allah etdiyiniz yardımları qəbul etsin!
-                </p>
-                {/* --- Integration Point --- */}
-                {/* Render the SupportButton component, passing the bank data */}
-                <SupportButton />
-                {/* The previous mapping logic is now handled *inside* the SupportModal triggered by SupportButton */}
-                {/*
-                    <div className="space-y-3">
-                        {bankData.map((bank, index) => (
-                            <BankCardCopy key={index} bank={bank}/> // Removed
-                        ))}
+            {/* Working Hours */}
+            {/* <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-blue-600" />
+                    İş Saatları
+                </h3>
+                <div className="space-y-2 text-sm">
+                    <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Bazar ertəsi - Cümə</span>
+                        <span className="font-semibold text-gray-900">09:00 - 18:00</span>
                     </div>
-                 */}
+                    <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Şənbə</span>
+                        <span className="font-semibold text-gray-900">10:00 - 16:00</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Bazar</span>
+                        <span className="font-semibold text-red-600">Bağlı</span>
+                    </div>
+                </div>
+            </div> */}
+
+            {/* Contact Methods */}
+            {/* <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <Mail className="h-5 w-5 text-purple-600" />
+                    Əlaqə Üsulları
+                </h3>
+                <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-sm">
+                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                            <Mail className="w-4 h-4 text-purple-600" />
+                        </div>
+                        <div>
+                            <span className="text-gray-600">E-poçt cavabı</span>
+                            <p className="text-xs text-gray-500">24 saat ərzində</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <Phone className="w-4 h-4 text-green-600" />
+                        </div>
+                        <div>
+                            <span className="text-gray-600">Telefon dəstəyi</span>
+                            <p className="text-xs text-gray-500">İş saatlarında</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                            <Users className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                            <span className="text-gray-600">Şəxsi görüş</span>
+                            <p className="text-xs text-gray-500">Təyin ilə</p>
+                        </div>
+                    </div>
+                </div>
+            </div> */}
+
+            {/* Support Section */}
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <HeartHandshake className="h-5 w-5 text-amber-600" />
+                    Dəstək Olun
+                </h3>
+                <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                    Mədrəsəmizin fəaliyyətinə və İslam elmlərinin yayılmasına dəstək olmaq üçün 
+                    bank hesablarımızdan istifadə edə bilərsiniz.
+                </p>
+                <p className="text-xs text-amber-700 mb-4 font-medium">
+                    Allah etdiyiniz yardımları qəbul etsin! 🤲
+                </p>
+                <SupportButton />
             </div>
         </div>
     );

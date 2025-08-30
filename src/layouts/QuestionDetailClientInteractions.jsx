@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThumbsUp, Share2 } from 'lucide-react';
 import HttpClient from '@/util/HttpClient'; // Assuming HttpClient is needed for like action
 
@@ -8,6 +8,22 @@ export default function QuestionDetailClientInteractions({ questionId, initialLi
   const [hasLiked, setHasLiked] = useState(false); // TODO: Fetch initial liked state if available
   const [likeCount, setLikeCount] = useState(initialLikeCount || 0);
   const [isLiking, setIsLiking] = useState(false); // Prevent multiple clicks
+
+  // Increment view count when component mounts
+  useEffect(() => {
+    const incrementViewCount = async () => {
+      try {
+        await HttpClient.put(`/questions/${questionId}/increment-view`);
+      } catch (error) {
+        console.error("Error incrementing view count:", error);
+        // Silently fail - view count increment is not critical for user experience
+      }
+    };
+
+    if (questionId) {
+      incrementViewCount();
+    }
+  }, [questionId]);
 
   // --- Event Handlers ---
   const handleLike = async () => {

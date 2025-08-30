@@ -1,6 +1,6 @@
 import "./globals.css"
 import "@fortawesome/fontawesome-free/css/all.min.css"
-import "primereact/resources/themes/lara-light-cyan/theme.css"
+
 import { Analytics } from "@vercel/analytics/next"
 
 import { Roboto } from "next/font/google"
@@ -162,7 +162,7 @@ export default function RootLayout({ children }) {
   }
 
   return (
-      <html lang="az-AZ" className={roboto.className}>
+      <html lang="az-AZ" className={roboto.className} suppressHydrationWarning>
       <head>
         <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
         <title>Əhli-Sünnə Mədrəsəsi</title>
@@ -173,6 +173,40 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"/>
         <meta name="description" content="Əhli-Sünnə Mədrəsəsi haqqında məlumatlar və maarifləndirici məqalələr."/>
         <meta name="keywords" content={keywords.join(", ")}/>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  // Prevent flash of unstyled content
+                  document.documentElement.style.backgroundColor = '#ffffff';
+                  document.body.style.backgroundColor = '#ffffff';
+                  
+                  // Ensure DOM is ready
+                  if (!document.documentElement || !document.body) {
+                    return;
+                  }
+                  
+                  const storedTheme = localStorage.getItem('color-theme');
+                  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  const shouldUseDark = storedTheme === 'dark' || (!storedTheme && systemPrefersDark);
+                  
+                  if (shouldUseDark) {
+                    document.documentElement.classList.add('dark');
+                    document.body.classList.add('dark');
+                    document.documentElement.style.colorScheme = 'dark';
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                    document.body.classList.remove('dark');
+                    document.documentElement.style.colorScheme = 'light';
+                  }
+                } catch (e) {
+                  console.warn('Theme initialization failed:', e);
+                }
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={`antialiased`}>
       {children}

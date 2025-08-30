@@ -1,10 +1,9 @@
 "use client"
-import React, {useState, memo} from "react";
-import {motion} from "framer-motion";
+import React, { useState, memo } from "react";
+import { motion } from "framer-motion";
 import {
     Calendar,
     ChevronDown,
-    ChevronLeft,
     ChevronRight,
     ChevronUp,
     Clock,
@@ -14,144 +13,162 @@ import {
     TagIcon
 } from "lucide-react";
 import Link from "next/link";
-import {formatDate} from "@/util/DateUtil";
+import { formatDate } from "@/util/DateUtil";
 import useFilterStore from "@/store/useFilterStore";
+import Pagination from "@/components/common/Pagination";
 
-// Question Card (Memoized + Animation Fix)
-export const OptimizedQuestionCard = memo(function QuestionCard({question}) {
+// Modern Professional Question Card
+export const OptimizedQuestionCard = memo(function QuestionCard({ question }) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const formattedDate = formatDate(question.createdDate); // Assuming formatDate handles potential errors
+    const formattedDate = formatDate(question.createdDate);
 
-    const answerPreviewThreshold = 180; // Characters
-    const collapsedHeight = "4.5rem"; // Approx 3 lines (adjust as needed based on font/line-height)
-    const answerText = question.answer || "Cavab mövcud deyil."; // Fallback for empty answer
+    const answerPreviewThreshold = 200; // Characters
+    const collapsedHeight = "5rem"; // Approx 3-4 lines
+    const answerText = question.answer || "Cavab mövcud deyil.";
     const needsExpansion = answerText.length > answerPreviewThreshold;
 
     return (
-        // Outer motion for list animations (if needed, e.g., with AnimatePresence on the list)
         <motion.div
-            layout // Enable layout animation for smooth resizing when content changes
-            initial={{opacity: 0, y: 15}}
-            animate={{opacity: 1, y: 0}}
-            // exit animation can be added if list uses AnimatePresence
-            transition={{duration: 0.3, type: "spring", stiffness: 100, damping: 20}}
-            className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:border-gray-200 hover:shadow-md transition-shadow duration-200" // Use transition-shadow
+            layout
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, type: "spring", stiffness: 120, damping: 25 }}
+            className="group bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:border-[#43b365]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
         >
             <div className="p-5 md:p-6">
-                <h2 className="text-lg font-semibold text-justify text-gray-900 mb-3">
-                    {question.question}
-                </h2>
-                <div className="text-gray-600 text-sm leading-relaxed mb-4 relative">
-                    {/* Inner motion for height animation */}
+                {/* Question Header with Icon */}
+                <div className="flex items-start gap-4 mb-3">
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#43b365] to-[#2d7a47] rounded-xl flex items-center justify-center shadow-lg">
+                        <MessageSquare className="w-6 h-6 text-white" />
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight group-hover:text-[#43b365] transition-colors duration-200">
+                        {question.question}
+                    </h2>
+                </div>
+
+                <div className="text-gray-700 text-base leading-relaxed mb-4 relative pl-14">
                     <motion.div
-                        // *** ANIMATION FIX ***
-                        // Set initial height correctly based on whether it needs expansion and is initially collapsed.
-                        // This prevents the "opening" animation on first render for cards that start collapsed.
-                        initial={needsExpansion ? {height: collapsedHeight} : {height: "auto"}}
-                        // Animate height based on isExpanded state *only if* expansion is needed
-                        animate={{height: isExpanded || !needsExpansion ? "auto" : collapsedHeight}}
-                        transition={{duration: 0.3, ease: "easeInOut"}}
-                        className="overflow-hidden text-justify" // Crucial for clipping content during animation
+                        initial={needsExpansion ? { height: collapsedHeight } : { height: "auto" }}
+                        animate={{ height: isExpanded || !needsExpansion ? "auto" : collapsedHeight }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden text-justify leading-relaxed"
                     >
-                        {/* Render the full answer text */}
-                        {answerText}
+                        <div className="prose prose-gray max-w-none">
+                            {answerText}
+                        </div>
                     </motion.div>
 
-                    {/* Gradient overlay: Only show when collapsed AND needs expansion */}
                     {!isExpanded && needsExpansion && (
-                        <div
-                            className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-100% pointer-events-none" // Increased height slightly
-                        ></div>
+                        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none"></div>
                     )}
 
-                    {/* Toggle button: Only show if expansion is needed */}
                     {needsExpansion && (
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            // CHANGE HERE: Use an even darker shade
-                            className="text-emerald-800 hover:text-emerald-900 font-medium text-sm mt-2 flex items-center focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-1 rounded"
+                            className="inline-flex items-center gap-2 mt-4 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             aria-expanded={isExpanded}
                         >
                             {isExpanded ? 'Daha az göstər' : 'Daha çox göstər'}
-                            {isExpanded ? <ChevronUp className="ml-1 h-4 w-4"/> :
-                                <ChevronDown className="ml-1 h-4 w-4"/>}
+                            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
                     )}
                 </div>
                 {/* Tags */}
                 {question.tags && question.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-4 pl-14">
                         {question.tags.map(tag => (
                             <Link key={tag.id}
-                                  href={`/questions?tag=${tag.id}&page=1`} // Consider how tag links interact with current filters
-                                  className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-300 rounded-full group">
-                              <span
-                                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 group-hover:bg-blue-200 transition-colors cursor-pointer">
-                                  <TagIcon className="mr-1 h-3 w-3"/>{tag.name}
-                              </span>
+                                href={`/questions?tag=${tag.id}&page=1`}
+                                className="group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-full">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-200 group-hover:from-blue-100 group-hover:to-indigo-100 group-hover:border-blue-300 transition-all duration-200 cursor-pointer">
+                                    <TagIcon className="w-3 h-3" />
+                                    {tag.name}
+                                </span>
                             </Link>
                         ))}
                     </div>
                 )}
                 {/* Meta Info */}
-                <div
-                    className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 text-xs text-gray-500 pt-3 border-t border-gray-100">
-                  <span className="flex items-center" title="Yaradılma tarixi">
-                      <Calendar className="h-3.5 w-3.5 mr-1.5 text-gray-400"/>
-                      {formattedDate}
-                  </span>
-                    <div className="flex items-center gap-x-3">
+                <div className="flex flex-wrap items-center justify-between gap-y-3 gap-x-4 text-sm text-gray-600 pt-4 border-t border-gray-100 pl-14">
+                    <div className="flex items-center gap-4">
+                        <span className="flex items-center gap-2" title="Yaradılma tarixi">
+                            <Calendar className="w-4 h-4 text-blue-500" />
+                            {formattedDate}
+                        </span>
                         {question.categories && question.categories.length > 0 && (
-                            <span className="flex items-center" title="Kateqoriyalar">
-                              <MessageSquare className="h-3.5 w-3.5 mr-1 text-gray-400"/>
+                            <span className="flex items-center gap-2" title="Kateqoriyalar">
+                                <div className="w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                </div>
                                 {question.categories.length} kateqoriya
-                          </span>
-                        )}
-                        {question.readCount != null && ( // Check for null/undefined explicitly
-                            <span className="flex items-center" title="Oxunma sayı">
-                              <Clock className="h-3.5 w-3.5 mr-1 text-gray-400"/>
-                                {question.readCount} oxunma
-                          </span>
+                            </span>
                         )}
                     </div>
+
+                    {question.readCount != null && (
+                        <span className="flex items-center gap-2 text-gray-500" title="Oxunma sayı">
+                            <Clock className="w-4 h-4" />
+                            {question.readCount} oxunma
+                        </span>
+                    )}
                 </div>
             </div>
-            {/* Link to Full Question */}
-            <div className="bg-gray-50 px-5 py-3 border-t border-gray-100">
+
+            {/* Enhanced Action Footer */}
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 px-6 py-4 border-t border-gray-100">
                 <Link href={`/questions/${question.id}`}
-                      className="text-emerald-600 hover:text-emerald-700 font-medium text-sm flex items-center transition-colors focus:outline-none focus:ring-1 focus:ring-emerald-400 focus:ring-offset-1 rounded -m-1 p-1">
-                    Tam cavabı oxu <ChevronRight className="ml-1 h-4 w-4"/>
+                    className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-semibold text-sm group transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1">
+                    <span>Tam cavabı oxu</span>
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
             </div>
         </motion.div>
     );
 });
 
-// Skeleton Loader
-export function QuestionsSkeletonLoader({count = 6}) {
+// Modern Skeleton Loader
+export function QuestionsSkeletonLoader({ count = 6 }) {
     return (
-        <div className="grid grid-cols-1 gap-5">
-            {Array.from({length: count}).map((_, index) => (
+        <div className="grid grid-cols-1 gap-4">
+            {Array.from({ length: count }).map((_, index) => (
                 <div key={index}
-                     className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden animate-pulse">
+                    className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-pulse">
                     <div className="p-5 md:p-6">
-                        <div className="h-6 bg-gray-200 rounded w-4/5 mb-4"></div>
-                        <div className="space-y-2 mb-5">
+                        {/* Header with icon */}
+                        <div className="flex items-start gap-4 mb-3">
+                            <div className="w-10 h-10 bg-gray-200 rounded-xl"></div>
+                            <div className="flex-1">
+                                <div className="h-6 bg-gray-200 rounded w-4/5 mb-2"></div>
+                                <div className="h-4 bg-gray-200 rounded w-3/5"></div>
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="space-y-3 mb-4 pl-14">
                             <div className="h-4 bg-gray-200 rounded"></div>
                             <div className="h-4 bg-gray-200 rounded"></div>
                             <div className="h-4 bg-gray-200 rounded w-5/6"></div>
                         </div>
-                        <div className="flex flex-wrap gap-2 mb-5">
-                            <div className="h-5 bg-gray-200 rounded-full w-16"></div>
-                            <div className="h-5 bg-gray-200 rounded-full w-20"></div>
+
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mb-4 pl-14">
+                            <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                            <div className="h-6 bg-gray-200 rounded-full w-20"></div>
                         </div>
-                        <div className="flex justify-between items-center pt-3 border-t border-gray-100">
-                            <div className="h-4 bg-gray-200 rounded w-24"></div>
-                            <div className="h-4 bg-gray-200 rounded w-32"></div>
+
+                        {/* Meta */}
+                        <div className="flex justify-between items-center pt-4 border-t border-gray-100 pl-14">
+                            <div className="flex items-center gap-4">
+                                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                                <div className="h-4 bg-gray-200 rounded w-20"></div>
+                            </div>
+                            <div className="h-4 bg-gray-200 rounded w-16"></div>
                         </div>
                     </div>
-                    <div className="bg-gray-50 px-5 py-3 border-t border-gray-200">
-                        <div className="h-4 bg-gray-200 rounded w-28"></div>
+
+                    {/* Footer */}
+                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-t border-gray-100">
+                        <div className="h-4 bg-gray-200 rounded w-32"></div>
                     </div>
                 </div>
             ))}
@@ -159,170 +176,84 @@ export function QuestionsSkeletonLoader({count = 6}) {
     );
 }
 
-// No Questions Found Component
-// NoQuestionsFound Component - Fixed Version
-export function NoQuestionsFound({onReset, hasFilters}) {
-    const {clearFilters} = useFilterStore();
+// Enhanced No Questions Found Component
+export function NoQuestionsFound({ onReset, hasFilters }) {
+    const { clearFilters } = useFilterStore();
     const [isResetting, setIsResetting] = useState(false);
 
-    // Handle the reset with a flag to prevent double API calls
     const handleReset = () => {
-        // If already resetting, do nothing
         if (isResetting) return;
 
-        // Clear filters (this will set isResetting=true in the store)
+        setIsResetting(true);
         clearFilters();
 
-        // If parent has a reset handler, call it after filters are cleared
         if (typeof onReset === 'function') {
             setTimeout(() => {
                 onReset();
+                setIsResetting(false);
+            }, 100);
+        } else {
+            setTimeout(() => {
+                setIsResetting(false);
             }, 100);
         }
     };
 
     return (
-        <div className="text-center py-16 px-6 bg-white rounded-xl border border-gray-100 shadow-sm my-6">
-            <div
-                className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 mb-6">
-                <Search className="h-8 w-8"/>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
+                <Search className="w-16 h-16 text-blue-600" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Heç bir sual tapılmadı</h3>
-            <p className="text-gray-600 max-w-md mx-auto mb-6 text-sm leading-relaxed">
+
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                {hasFilters ? "Nəticə tapılmadı" : "Hələ sual yoxdur"}
+            </h3>
+
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
                 {hasFilters
-                    ? "Seçdiyiniz filtrlərə uyğun nəticə yoxdur. Filtrləri dəyişməyi və ya sıfırlamağı yoxlayın."
-                    : "Görünür, hələ heç bir sual əlavə edilməyib. Zəhmət olmasa daha sonra təkrar yoxlayın."}
+                    ? "Seçdiyiniz filtrlərə uyğun heç bir sual tapılmadı. Axtarış şərtlərini dəyişməyi və ya filtrləri sıfırlamağı yoxlayın."
+                    : "Görünür, hələ heç bir sual əlavə edilməyib. Zəhmət olmasa daha sonra təkrar yoxlayın və ya özünüz sual əlavə edin."}
             </p>
-            {hasFilters && (
+
+            {hasFilters ? (
                 <button
                     onClick={handleReset}
                     disabled={isResetting}
-                    className={`inline-flex items-center gap-2 px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white ${
-                        isResetting
-                            ? "bg-emerald-400 cursor-not-allowed"
-                            : "bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-                    } transition-colors`}
+                    className={`inline-flex items-center gap-3 px-8 py-4 border border-transparent text-base font-semibold rounded-xl shadow-lg text-white transition-all duration-300 transform hover:scale-105 ${isResetting
+                        ? "bg-blue-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 hover:shadow-xl"
+                        }`}
                 >
-                    <RotateCcw size={16}/> {isResetting ? 'Sıfırlanır...' : 'Filtrləri Sıfırla'}
+                    <RotateCcw className={`w-5 h-5 ${isResetting ? 'animate-spin' : ''}`} />
+                    {isResetting ? 'Sıfırlanır...' : 'Filtrləri Sıfırla'}
                 </button>
+            ) : (
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105">
+                        <MessageSquare className="w-5 h-5" />
+                        Sual əlavə et
+                    </button>
+
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                    >
+                        <RotateCcw className="w-5 h-5" />
+                        Yenilə
+                    </button>
+                </div>
             )}
         </div>
     );
 }
 
-// Pagination Component (Memoized)
-export const OptimizedPagination = memo(function Pagination({currentPage, totalPages, onPageChange}) {
-    if (totalPages <= 1) return null;
-
-    // Basic pagination logic (can be extended for ellipsis, etc.)
-    const pages = [];
-    const maxVisiblePages = 5; // Adjust as needed
-    let startPage, endPage;
-
-    if (totalPages <= maxVisiblePages) {
-        startPage = 1;
-        endPage = totalPages;
-    } else {
-        const maxPagesBeforeCurrent = Math.floor((maxVisiblePages - 1) / 2);
-        const maxPagesAfterCurrent = Math.ceil((maxVisiblePages - 1) / 2);
-
-        if (currentPage <= maxPagesBeforeCurrent) {
-            startPage = 1;
-            endPage = maxVisiblePages;
-        } else if (currentPage + maxPagesAfterCurrent >= totalPages) {
-            startPage = totalPages - maxVisiblePages + 1;
-            endPage = totalPages;
-        } else {
-            startPage = currentPage - maxPagesBeforeCurrent;
-            endPage = currentPage + maxPagesAfterCurrent;
-        }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-    }
-
-    const showFirstEllipsis = startPage > 2;
-    const showLastEllipsis = endPage < totalPages - 1;
-
+// Use the common Pagination component
+export const OptimizedPagination = memo(function QuestionsPagination({ currentPage, totalPages, onPageChange }) {
     return (
-        <div aria-label="Səhifələmə" className="mt-10 flex justify-center items-center space-x-1">
-            <button
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center justify-center transition-colors ${
-                    currentPage === 1
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
-                }`}
-                aria-label="Əvvəlki səhifə"
-                aria-disabled={currentPage === 1}
-            >
-                <ChevronLeft className="h-5 w-5"/>
-            </button>
-
-            {/* First page link */}
-            {startPage > 1 && (
-                <button
-                    onClick={() => onPageChange(1)}
-                    className="px-4 py-2 rounded-md text-sm font-medium min-w-[36px] transition-colors bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
-                    aria-label="Birinci səhifə"
-                >
-                    1
-                </button>
-            )}
-
-            {/* Ellipsis at the start */}
-            {showFirstEllipsis && (
-                <span className="px-2 py-2 text-sm font-medium text-gray-500">...</span>
-            )}
-
-            {/* Page number buttons */}
-            {pages.map(page => (
-                <button
-                    key={page}
-                    onClick={() => onPageChange(page)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium min-w-[36px] transition-colors border shadow-sm ${
-                        currentPage === page
-                            ? "bg-emerald-600 text-white border-emerald-600 z-10"
-                            : "bg-white text-gray-600 hover:bg-gray-50 border-gray-200"
-                    }`}
-                    aria-current={currentPage === page ? 'page' : undefined}
-                    aria-label={`Səhifə ${page}`}
-                >
-                    {page}
-                </button>
-            ))}
-
-            {/* Ellipsis at the end */}
-            {showLastEllipsis && (
-                <span className="px-2 py-2 text-sm font-medium text-gray-500">...</span>
-            )}
-
-            {/* Last page link */}
-            {endPage < totalPages && (
-                <button
-                    onClick={() => onPageChange(totalPages)}
-                    className="px-4 py-2 rounded-md text-sm font-medium min-w-[36px] transition-colors bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
-                    aria-label="Sonuncu səhifə"
-                >
-                    {totalPages}
-                </button>
-            )}
-
-            <button
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center justify-center transition-colors ${
-                    currentPage === totalPages
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
-                }`}
-                aria-label="Növbəti səhifə"
-                aria-disabled={currentPage === totalPages}
-            >
-                <ChevronRight className="h-5 w-5"/>
-            </button>
-        </div>
+        <Pagination
+            clientPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+        />
     );
 });

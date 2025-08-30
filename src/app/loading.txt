@@ -1,0 +1,31 @@
+export default function Loading() {
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-emerald-100 flex items-center justify-center">
+            <div className="text-center">
+                {/* Loading Animation */}
+                <div className="relative mx-auto w-24 h-24 mb-6">
+                    <div className="absolute inset-0 border-4 border-emerald-200 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-emerald-600 rounded-full border-t-transparent animate-spin"></div>
+                    <div className="absolute inset-2 border-2 border-emerald-400 rounded-full border-r-transparent animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+                </div>
+
+                {/* Loading Text */}
+                <div className="space-y-2">
+                    <h2 className="text-xl font-semibold text-emerald-800">
+                        Yüklənir...
+                    </h2>
+                    <p className="text-emerald-600 text-sm">
+                        Zəhmət olmasa gözləyin
+                    </p>
+                </div>
+
+                {/* Progress Dots */}
+                <div className="flex justify-center space-x-1 mt-4">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+            </div>
+        </div>
+    )
+}

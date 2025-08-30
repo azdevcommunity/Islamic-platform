@@ -43,8 +43,7 @@ const ShareArticle = ({article}) => {
     // Copy to clipboard
     const copyToClipboard = () => {
         navigator.clipboard.writeText(window.location.href)
-        alert("Link kopyalandı!")
-        // setShowShareOptions(false)
+        setShowShareOptions(false)
     }
 
     return (
