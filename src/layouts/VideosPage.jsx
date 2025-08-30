@@ -4,7 +4,10 @@ import VideosGrid from "@/components/videos/VideosGrid"
 import ModernSearchAndToggle from "@/components/videos/ModernSearchAndToggle";
 import VideoPageHeader from "@/components/videos/VideoPageHeader";
 
-const Videos = ({ playlistId, search, videoId, content, page }) => {
+
+export const revalidate = 60
+
+const Videos =  ({ playlistId, search, videoId, content, page }) => {
     // Debug: Log received parameters
 
     if (page == null) {
