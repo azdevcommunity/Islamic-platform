@@ -18,7 +18,9 @@ import {
   FolderOpen, 
   Tag as TagIcon,
   Loader2,
-  CheckCircle
+  CheckCircle,
+  Link as LinkIcon,
+  ExternalLink
 } from 'lucide-react'
 
 export function QuestionForm({ initialData }) {
@@ -26,6 +28,8 @@ export function QuestionForm({ initialData }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [tags, setTags] = useState()
   const [categories, setCategories] = useState()
+  const [relatedQuestions, setRelatedQuestions] = useState([])
+  const [isLoadingRelated, setIsLoadingRelated] = useState(false)
 
   const [formData, setFormData] = useState({
     question: initialData?.question || "",

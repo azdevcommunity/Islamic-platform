@@ -123,28 +123,8 @@ export default async function QuestionPage({params}) {
     };
 
     // Fetch Related Questions (Server-side)
-    const relatedQuestions = await (async () => {
-        // Simulate fetch
-        await new Promise(resolve => setTimeout(resolve, 100));
-        return [
-            {
-                id: 22,
-                question: "Namazda səhv etdikdə nə etmək lazımdır?",
-                tags: [{id: 1, name: "Namaz"}, {id: 2, name: "Fiqh"}]
-            },
-            {
-                id: 23,
-                question: "Ramazan ayında oruc tutmağın faydaları nələrdir?",
-                tags: [{id: 3, name: "Ramazan"}, {id: 4, name: "Oruc"}, {id: 2, name: "Fiqh"}]
-            },
-            {
-                id: 24,
-                question: "Quran oxumağın ən yaxşı vaxtı nə zamandır?",
-                tags: [{id: 5, name: "Quran"}, {id: 6, name: "İbadət"}]
-            },
-            {id: 25, question: "Zəkat kimlərə verilməlidir?", tags: [{id: 7, name: "Zəkat"}, {id: 2, name: "Fiqh"}]},
-        ].filter(rq => rq.id.toString() !== id.toString()).slice(0, 4);
-    })();
+    const relatedQuestionsResponse = await fetch(`${BASE_URL}/questions/${id}/related`, {next: {revalidate: 3600}});
+    const relatedQuestions = await relatedQuestionsResponse.json();
 
     return (
         <>
