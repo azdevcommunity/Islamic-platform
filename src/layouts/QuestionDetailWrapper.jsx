@@ -61,9 +61,11 @@ export default function QuestionDetailWrapper({ question, relatedQuestions }) {
                         <div
                             className="prose text-justify prose-emerald max-w-none prose-p:text-gray-700 prose-p:leading-relaxed prose-headings:font-semibold prose-headings:text-gray-800 prose-a:text-emerald-600 hover:prose-a:text-emerald-700 break-words"
                         >
-                            {question.answer.split('\n').map((paragraph, index) => (
-                                paragraph.trim() ? <p key={index}>{paragraph}</p> : null
-                            ))}
+                            {question.answer.split('\n')
+                                .filter(paragraph => paragraph.trim())
+                                .map((paragraph, index) => (
+                                    <p key={`paragraph-${index}`}>{paragraph}</p>
+                                ))}
                         </div>
                     </motion.div>
 
@@ -127,8 +129,8 @@ export default function QuestionDetailWrapper({ question, relatedQuestions }) {
                         >
                             <h2 className="text-xl font-semibold mb-5 text-gray-800">Oxşar Suallar</h2>
                             <div className="grid gap-4 md:grid-cols-2">
-                                {relatedQuestions.map(rq => (
-                                    <RelatedQuestionCard key={rq.id} question={rq}/>
+                                {relatedQuestions.map((rq, index) => (
+                                    <RelatedQuestionCard key={rq.id || `related-${index}`} question={rq}/>
                                 ))}
                             </div>
                         </motion.section>

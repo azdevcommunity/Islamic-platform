@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 export default function RelatedQuestionCard({ question }) {
+  console.log(question);
   return (
     <Link
       href={`/questions/${question.id}`}
@@ -21,4 +22,4 @@ export default function RelatedQuestionCard({ question }) {
       )}
     </Link>
   );
-} 
+}
