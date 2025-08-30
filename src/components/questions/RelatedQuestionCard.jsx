@@ -4,7 +4,7 @@ export default function RelatedQuestionCard({ question }) {
   console.log(question);
   return (
     <Link
-      href={`/questions/${question.id}`}
+      href={`/questions/${question.questionId}`}
       className="group block p-4 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-200"
     >
       <h3 className="font-medium text-sm text-gray-800 group-hover:text-emerald-700 mb-2 line-clamp-2">
