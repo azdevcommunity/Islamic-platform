@@ -22,5 +22,5 @@ export const bankData = [
 
 
 export const phones = [
-    "+994 70 624 00 62", "+994 50 987 19 92"
+    "+994 70 624 00 62"
 ]
