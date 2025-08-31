@@ -589,7 +589,7 @@ export default function NewQuestionsPage() {
                             {[
                                 { label: "Suallar", count: statistics.totalQuestions },
                                 { label: "Kateqoriyalar", count: statistics.totalCategories },
-                                { label: "Teqlər", count: statistics.totalQuestions }, // Assuming answered questions = total questions
+                                { label: "Teqlər", count: statistics.totalTags }, // Assuming answered questions = total questions
                                 { label: "Oxunma", count: statistics.totalViewCount > 1000 ? `${Math.floor(statistics.totalViewCount / 1000)}K+` : `${statistics.totalViewCount}+` }
                             ].map((stat, index) => (
                                 <div
