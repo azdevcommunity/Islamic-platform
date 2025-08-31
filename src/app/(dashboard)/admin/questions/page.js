@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import HttpClient from "@/util/HttpClient"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -29,8 +29,7 @@ import {
 
 export default function QuestionsPage() {
   const [questions, setQuestions] = useState([])
-  const [filteredQuestions, setFilteredQuestions] = useState([])
-  const [paginatedQuestions, setPaginatedQuestions] = useState([])
+  const [totalElements, setTotalElements] = useState(0)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategories, setSelectedCategories] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
@@ -48,10 +47,50 @@ export default function QuestionsPage() {
   const [itemsPerPageMenuOpen, setItemsPerPageMenuOpen] = useState(false)
   const [viewMode, setViewMode] = useState('card') // 'card' or 'table'
 
-  const fetchQuestions = async () => {
+  // Debounced search handler
+  const debouncedSearch = useCallback(
+    (() => {
+      let timeoutId
+      return (searchTerm) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          setSearchQuery(searchTerm)
+          setCurrentPage(1) // Reset to first page when searching
+        }, 500) // 500ms delay
+      }
+    })(),
+    []
+  )
+
+  const fetchQuestions = async (search = '', categories = [], tags = []) => {
     setLoading(true)
     try {
-      const response = await HttpClient.get(`/questions?containsTag=1&containsCategory=1`)
+      // Build API parameters according to the API documentation
+      const params = new URLSearchParams({
+        page: (currentPage - 1).toString(), // API uses 0-based indexing
+        maxResult: itemsPerPage.toString(),
+        containsTag: '1',
+        containsCategory: '1',
+        sortBy: 'createdDate',
+        sortDirection: 'desc'
+      })
+
+      // Add search parameter if provided
+      if (search && search.trim()) {
+        params.set('searchQuery', search.trim())
+      }
+
+      // Add category IDs if selected
+      if (categories.length > 0) {
+        params.set('categoryIds', categories.map(c => c.id).join(','))
+      }
+
+      // Add tag IDs if selected
+      if (tags.length > 0) {
+        params.set('tagIds', tags.map(t => t.id).join(','))
+      }
+
+      const response = await HttpClient.get(`/questions?${params.toString()}`)
       const data = await response.json()
 
       const receivedQuestions = data.content.map((q) => ({
@@ -63,7 +102,7 @@ export default function QuestionsPage() {
       }))
 
       setQuestions(receivedQuestions)
-      setFilteredQuestions(receivedQuestions)
+      setTotalElements(data.page.totalElements)
       setTotalPages(data.page.totalPages)
       setCurrentPage(data.page.number + 1)
     } finally {
@@ -95,45 +134,43 @@ export default function QuestionsPage() {
     fetchTags().catch((e) => console.log(e))
   }, [])
 
+  // Initial data fetch
   useEffect(() => {
     fetchQuestions().catch((e) => console.log(e))
   }, [])
+
+  // Fetch data when filters or pagination change
+  useEffect(() => {
+    fetchQuestions(searchQuery, selectedCategories, selectedTags).catch((e) => console.log(e))
+  }, [currentPage, itemsPerPage, searchQuery, selectedCategories, selectedTags])
 
   useEffect(() => {
     fetchCategories().catch((e) => console.log(e))
   }, [])
 
-  useEffect(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage
-    setPaginatedQuestions(filteredQuestions.slice(startIndex, startIndex + itemsPerPage))
-  }, [filteredQuestions, currentPage, itemsPerPage])
 
-  useEffect(() => {
-    const filtered = questions.filter((q) => {
-      const matchesSearch = q.question.toLowerCase().includes(searchQuery.toLowerCase())
-      const matchesCategories =
-        selectedCategories.length === 0 || selectedCategories.some((cat) => q.categories.some((qc) => qc.id === cat.id))
 
-      const matchesTags = selectedTags.length === 0 || selectedTags.some((tag) => q.tags.some((qt) => qt.id === tag.id))
-
-      return matchesSearch && matchesCategories && matchesTags
-    })
-
-    setFilteredQuestions(filtered)
-    setTotalPages(Math.ceil(filtered.length / itemsPerPage))
-    setCurrentPage(1)
-  }, [searchQuery, selectedCategories, selectedTags, itemsPerPage, questions])
+  // Remove client-side filtering since we're now doing server-side filtering
+  // The API will return the filtered results
 
   const handleCategoryToggle = (category) => {
-    setSelectedCategories((prev) =>
-      prev.some((c) => c.id === category.id) ? prev.filter((c) => c.id !== category.id) : [...prev, category],
-    )
+    const newCategories = selectedCategories.some((c) => c.id === category.id) 
+      ? selectedCategories.filter((c) => c.id !== category.id) 
+      : [...selectedCategories, category]
+    
+    setSelectedCategories(newCategories)
+    // Reset to first page when filters change
+    setCurrentPage(1)
   }
 
   const handleTagToggle = (tag) => {
-    setSelectedTags((prev) =>
-      prev.some((t) => t.id === tag.id) ? prev.filter((t) => t.id !== tag.id) : [...prev, tag],
-    )
+    const newTags = selectedTags.some((t) => t.id === tag.id) 
+      ? selectedTags.filter((t) => t.id !== tag.id) 
+      : [...selectedTags, tag]
+    
+    setSelectedTags(newTags)
+    // Reset to first page when filters change
+    setCurrentPage(1)
   }
 
   const clearFilters = () => {
@@ -141,6 +178,7 @@ export default function QuestionsPage() {
     setSearchQuery("")
     setSelectedCategories([])
     setSelectedTags([])
+    setCurrentPage(1) // Reset to first page when clearing filters
   }
 
   const handleDeleteClick = (id) => {
@@ -154,14 +192,8 @@ export default function QuestionsPage() {
         // API'ye DELETE request gönder
         await HttpClient.delete(`/questions/${questionToDelete}`)
         
-        // Başarılı olursa state'i güncelle
-        setQuestions(questions.filter((q) => q.id !== questionToDelete))
-        setFilteredQuestions(filteredQuestions.filter((q) => q.id !== questionToDelete))
-        const newTotalPages = Math.ceil((filteredQuestions.length - 1) / itemsPerPage)
-        setTotalPages(newTotalPages)
-        if (currentPage > newTotalPages && newTotalPages > 0) {
-          setCurrentPage(newTotalPages)
-        }
+        // Refresh data with current filters after successful deletion
+        fetchQuestions(searchQuery, selectedCategories, selectedTags)
       } catch (error) {
         console.error("Soru silinirken hata oluştu:", error)
         // Hata durumunda kullanıcıya bilgi verilebilir
@@ -191,8 +223,8 @@ export default function QuestionsPage() {
   const hasActiveFilters = searchQuery || selectedCategories.length > 0 || selectedTags.length > 0
 
   const stats = {
-    total: questions.length,
-    filtered: filteredQuestions.length,
+    total: totalElements, // Total questions from API
+    filtered: questions.length, // Questions on current page
     categories: allCategories.length,
     tags: allTags.length
   }
@@ -231,7 +263,7 @@ export default function QuestionsPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  fetchQuestions()
+                  fetchQuestions(searchQuery, selectedCategories, selectedTags)
                   fetchCategories()
                   fetchTags()
                 }}
@@ -316,8 +348,8 @@ export default function QuestionsPage() {
 
       {/* Search and Filter Controls */}
       <Card className="relative bg-white border border-gray-200 shadow-xl">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" />
-        <CardHeader className="relative z-10 border-b bg-gradient-to-r from-emerald-50/50 to-emerald-100/50">
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-emerald-600/5" /> */}
+        <CardHeader className="relative z-10 border-b bg-gradient-to-r from-emerald-50/50 to-emerald-100/50 mb-2">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <CardTitle className="flex items-center gap-2 text-gray-900">
               <Search className="h-5 w-5" />
@@ -355,8 +387,8 @@ export default function QuestionsPage() {
                   type="search"
                   placeholder="Sualları axtarın..."
                   className="pl-10 h-12 text-base border-2 focus:border-blue-300 dark:focus:border-blue-700 transition-colors"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  defaultValue={searchQuery}
+                  onChange={(e) => debouncedSearch(e.target.value)}
                 />
               </div>
 
@@ -536,7 +568,7 @@ export default function QuestionsPage() {
       </Card>
 
       {/* Questions Display */}
-      {paginatedQuestions.length === 0 ? (
+      {questions.length === 0 ? (
         <Card className="border-2 shadow-lg">
           <CardContent className="py-16">
             <div className="text-center space-y-4">
@@ -575,7 +607,7 @@ export default function QuestionsPage() {
         <>
           {viewMode === 'card' ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {paginatedQuestions.map((question) => (
+              {questions.map((question) => (
                 <Card key={question.id} className="group relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-slate-800/50 hover:-translate-y-1 border-2 hover:border-blue-200 dark:hover:border-blue-800">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-3">
@@ -664,7 +696,7 @@ export default function QuestionsPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y">
-                      {paginatedQuestions.map((question) => (
+                      {questions.map((question) => (
                         <tr key={question.id} className="group hover:bg-muted/30 transition-colors">
                           <td className="px-6 py-4">
                             <div className="space-y-1">
@@ -723,10 +755,10 @@ export default function QuestionsPage() {
       )}
 
       {/* Pagination */}
-      {paginatedQuestions.length > 0 && (
+      {questions.length > 0 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Toplam {filteredQuestions.length} sualdan {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, filteredQuestions.length)} arası gösteriliyor
+            Toplam {questions.length} sualdan {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, questions.length)} arası gösteriliyor
           </p>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
@@ -751,6 +783,7 @@ export default function QuestionsPage() {
                           onClick={() => {
                             setItemsPerPage(value)
                             setItemsPerPageMenuOpen(false)
+                            setCurrentPage(1) // Reset to first page when changing items per page
                           }}
                           className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
                             itemsPerPage === value 
@@ -771,7 +804,10 @@ export default function QuestionsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                onClick={() => {
+                  const newPage = Math.max(currentPage - 1, 1)
+                  setCurrentPage(newPage)
+                }}
                 disabled={currentPage === 1}
                 className="gap-2"
               >
@@ -812,7 +848,10 @@ export default function QuestionsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() => {
+                  const newPage = Math.min(currentPage + 1, totalPages)
+                  setCurrentPage(newPage)
+                }}
                 disabled={currentPage === totalPages || totalPages === 0}
                 className="gap-2"
               >
