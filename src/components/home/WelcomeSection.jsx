@@ -1,7 +1,7 @@
 "use client";
-import { motion } from "framer-motion";
 import { FaQuran, FaGraduationCap, FaHeart, FaUsers } from "react-icons/fa";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 const features = [
     {
@@ -27,17 +27,49 @@ const features = [
 ];
 
 const WelcomeSection = () => {
+    const leftContentRef = useRef(null);
+    const rightImageRef = useRef(null);
+    const featureRefs = useRef([]);
+
+    useEffect(() => {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-triggered');
+                }
+            });
+        }, observerOptions);
+
+        // Observe left content
+        if (leftContentRef.current) {
+            observer.observe(leftContentRef.current);
+        }
+
+        // Observe right image
+        if (rightImageRef.current) {
+            observer.observe(rightImageRef.current);
+        }
+
+        // Observe feature cards
+        featureRefs.current.forEach((ref) => {
+            if (ref) {
+                observer.observe(ref);
+            }
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div className="container mx-auto px-4 max-w-7xl">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
                 {/* Left Content */}
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="space-y-8"
-                >
+                <div ref={leftContentRef} className="space-y-8 animate-slide-in-left">
                     <div>
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#43b365]/10 rounded-full text-[#43b365] font-medium text-sm mb-6">
                             <span className="w-2 h-2 bg-[#43b365] rounded-full"></span>
@@ -57,13 +89,11 @@ const WelcomeSection = () => {
                     {/* Features Grid */}
                     <div className="grid sm:grid-cols-2 gap-6">
                         {features.map((feature, index) => (
-                            <motion.div
+                            <div
                                 key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                viewport={{ once: true }}
-                                className="group p-6 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-[#43b365]/20"
+                                ref={(el) => featureRefs.current[index] = el}
+                                className="group p-6 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-[#43b365]/20 animate-slide-in-up"
+                                style={{ animationDelay: `${index * 0.1}s` }}
                             >
                                 <div className="flex items-start gap-4">
                                     <div className="flex-shrink-0 w-12 h-12 bg-[#43b365]/10 rounded-xl flex items-center justify-center group-hover:bg-[#43b365]/20 transition-colors">
@@ -74,19 +104,13 @@ const WelcomeSection = () => {
                                         <p className="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
-                </motion.div>
+                </div>
 
                 {/* Right Image */}
-                <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="relative"
-                >
+                <div ref={rightImageRef} className="relative animate-slide-in-right">
                     <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
                         <Image
                             src="/about_us.png"
@@ -100,13 +124,7 @@ const WelcomeSection = () => {
                     </div>
                     
                     {/* Floating card */}
-                    {/* <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        viewport={{ once: true }}
-                        className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-xl border border-gray-100"
-                    >
+                    {/* <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-xl border border-gray-100 animate-scale-in">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-[#43b365] rounded-xl flex items-center justify-center">
                                 <FaQuran className="w-6 h-6 text-white" />
@@ -116,9 +134,91 @@ const WelcomeSection = () => {
                                 <div className="text-sm text-gray-600">Tələbə</div>
                             </div>
                         </div>
-                    </motion.div> */}
-                </motion.div>
+                    </div> */}
+                </div>
             </div>
+
+            <style jsx>{`
+                @keyframes slideInLeft {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-50px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+
+                @keyframes slideInRight {
+                    from {
+                        opacity: 0;
+                        transform: translateX(50px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+
+                @keyframes slideInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                @keyframes scaleIn {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.8);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+
+                .animate-slide-in-left {
+                    opacity: 0;
+                    transform: translateX(-50px);
+                }
+
+                .animate-slide-in-left.animate-triggered {
+                    animation: slideInLeft 0.8s ease-out forwards;
+                }
+
+                .animate-slide-in-right {
+                    opacity: 0;
+                    transform: translateX(50px);
+                }
+
+                .animate-slide-in-right.animate-triggered {
+                    animation: slideInRight 0.8s ease-out forwards;
+                }
+
+                .animate-slide-in-up {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                .animate-slide-in-up.animate-triggered {
+                    animation: slideInUp 0.6s ease-out forwards;
+                }
+
+                .animate-scale-in {
+                    opacity: 0;
+                    transform: scale(0.8);
+                }
+
+                .animate-scale-in.animate-triggered {
+                    animation: scaleIn 0.6s ease-out 0.4s forwards;
+                }
+            `}</style>
         </div>
     );
 };
