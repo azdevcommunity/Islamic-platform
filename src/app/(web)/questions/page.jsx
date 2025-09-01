@@ -1,6 +1,4 @@
 import NewQuestionsPage from "@/components/questions/NewQuestionsPage"
-import {useCallback} from "react";
-import HttpClient from "@/util/HttpClient";
 import {BASE_URL} from "@/util/Const";
 
 export const metadata = {
