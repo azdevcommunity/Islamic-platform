@@ -1,12 +1,14 @@
 import NewQuestionsPage from "@/components/questions/NewQuestionsPage"
 import {useCallback} from "react";
 import HttpClient from "@/util/HttpClient";
+import {BASE_URL} from "@/util/Const";
 
 export const metadata = {
     title: "Sual və Cavablar | Dini Məsələlər",
     description: "Dini məsələlər haqqında suallarınızın cavablarını tapın. İslam dini, namaz, oruc, zəkat və digər mövzular üzrə ətraflı məlumatlar.",
     keywords: "sual cavab, dini məsələlər, islam, namaz, oruc, zəkat, dini suallar",
 }
+export const revalidate = 60;
 
 const Page = async () => {
     let statistics = {
@@ -16,7 +18,7 @@ const Page = async () => {
         totalViewCount: 0
     }
     try {
-        const response = await HttpClient.get('/questions/statistics');
+        const response = await fetch(`${BASE_URL}/questions/statistics`, {next: {revalidate: 60}});
 
         const data = await response.json();
 
