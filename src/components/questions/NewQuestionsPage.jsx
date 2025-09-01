@@ -394,7 +394,7 @@ const NoResults = ({ onReset, hasFilters }) => (
     </motion.div>
 );
 
-export default function NewQuestionsPage() {
+export default function NewQuestionsPage({statistics}) {
     // State Management
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -410,31 +410,7 @@ export default function NewQuestionsPage() {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [totalElements, setTotalElements] = useState(1);
-    const [statistics, setStatistics] = useState({
-        totalQuestions: 0,
-        totalCategories: 0,
-        totalTags: 0,
-        totalViewCount: 0
-    });
 
-    // Data Fetching
-    const fetchStatistics = useCallback(async () => {
-        try {
-            const response = await HttpClient.get('/questions/statistics');
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-
-            setStatistics({
-                totalQuestions: data.totalQuestions || 0,
-                totalCategories: data.totalCategories || 0,
-                totalTags: data.totalTags || 0,
-                totalViewCount: data.totalViewCount || 0
-            });
-        } catch (err) {
-            console.error("Error fetching statistics:", err);
-            // Keep default values if API fails
-        }
-    }, []);
 
     const fetchQuestions = useCallback(async () => {
         setLoading(true);
@@ -484,11 +460,7 @@ export default function NewQuestionsPage() {
         }
     }, [page, filters.searchQuery, filters.categories, filters.tags, layout]);
 
-    // Effects
-    useEffect(() => {
-        // Fetch statistics on component mount
-        fetchStatistics();
-    }, [fetchStatistics]);
+
 
     useEffect(() => {
         if (isFiltersInitialized) {
