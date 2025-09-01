@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -21,13 +21,40 @@ const slides = [
 
 export default function VideoSlider() {
   const videoRefs = useRef([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
 
-  // Optional: Handle video play/pause on slide change for performance
+  useEffect(() => {
+    // Check for reduced motion preference
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setShouldReduceMotion(mediaQuery.matches);
+
+    const handleChange = (e) => {
+      setShouldReduceMotion(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+
+    // Set loaded state after a short delay to prevent flash
+    const timer = setTimeout(() => setIsLoaded(true), 100);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // Optimized slide change handler
   const handleSlideChange = (swiper) => {
+    if (!isLoaded) return;
+    
     videoRefs.current.forEach((video, index) => {
       if (!video) return;
       if (index === swiper.realIndex) {
-        video.play().catch(error => console.log("Autoplay prevented:", error));
+        // Use requestAnimationFrame for better performance
+        requestAnimationFrame(() => {
+          video.play().catch(error => console.log("Autoplay prevented:", error));
+        });
       } else {
         video.pause();
       }
@@ -40,22 +67,22 @@ export default function VideoSlider() {
         @keyframes fadeInDown {
           from {
             opacity: 0;
-            transform: translateY(-30px);
+            transform: translate3d(0, -30px, 0);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
         
         @keyframes fadeInUp {
           from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translate3d(0, 30px, 0);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
         
@@ -70,14 +97,19 @@ export default function VideoSlider() {
         
         .animate-fade-in-down {
           animation: fadeInDown 0.8s ease-out forwards;
+          will-change: opacity, transform;
+          transform: translate3d(0, 0, 0);
         }
         
         .animate-fade-in-up {
           animation: fadeInUp 0.8s ease-out forwards;
+          will-change: opacity, transform;
+          transform: translate3d(0, 0, 0);
         }
         
         .animate-fade-in {
           animation: fadeIn 1s ease-out forwards;
+          will-change: opacity;
         }
         
         .animate-delay-200 {
@@ -99,6 +131,17 @@ export default function VideoSlider() {
         .opacity-0 {
           opacity: 0;
         }
+        
+        /* Performance optimization for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          .animate-fade-in-down,
+          .animate-fade-in-up,
+          .animate-fade-in {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
+        }
       `}</style>
       
       <Swiper
@@ -106,12 +149,14 @@ export default function VideoSlider() {
         pagination={{ clickable: true }}
         navigation={true}
         loop={true}
-        autoplay={{
+        autoplay={shouldReduceMotion ? false : {
           delay: 8000,
           disableOnInteraction: true,
         }}
         className="h-screen w-full videoSlider"
         onSlideChange={handleSlideChange}
+        preloadImages={false}
+        lazy={true}
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={slide.id} className="relative h-full w-full">
@@ -120,12 +165,13 @@ export default function VideoSlider() {
               ref={(el) => (videoRefs.current[index] = el)}
               width="1920"
               height="1080"
-              autoPlay={index === 0}
+              autoPlay={index === 0 && !shouldReduceMotion}
               muted
               loop
               playsInline
-              preload="metadata"
+              preload={index === 0 ? "metadata" : "none"}
               className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+              style={{ willChange: 'transform' }}
             >
               <source src={slide.videoSrc} type="video/mp4" />
               Your browser does not support the video tag.

@@ -142,50 +142,51 @@ const WelcomeSection = () => {
                 @keyframes slideInLeft {
                     from {
                         opacity: 0;
-                        transform: translateX(-50px);
+                        transform: translate3d(-50px, 0, 0);
                     }
                     to {
                         opacity: 1;
-                        transform: translateX(0);
+                        transform: translate3d(0, 0, 0);
                     }
                 }
 
                 @keyframes slideInRight {
                     from {
                         opacity: 0;
-                        transform: translateX(50px);
+                        transform: translate3d(50px, 0, 0);
                     }
                     to {
                         opacity: 1;
-                        transform: translateX(0);
+                        transform: translate3d(0, 0, 0);
                     }
                 }
 
                 @keyframes slideInUp {
                     from {
                         opacity: 0;
-                        transform: translateY(20px);
+                        transform: translate3d(0, 20px, 0);
                     }
                     to {
                         opacity: 1;
-                        transform: translateY(0);
+                        transform: translate3d(0, 0, 0);
                     }
                 }
 
                 @keyframes scaleIn {
                     from {
                         opacity: 0;
-                        transform: scale(0.8);
+                        transform: scale3d(0.8, 0.8, 1);
                     }
                     to {
                         opacity: 1;
-                        transform: scale(1);
+                        transform: scale3d(1, 1, 1);
                     }
                 }
 
                 .animate-slide-in-left {
                     opacity: 0;
-                    transform: translateX(-50px);
+                    transform: translate3d(-50px, 0, 0);
+                    will-change: opacity, transform;
                 }
 
                 .animate-slide-in-left.animate-triggered {
@@ -194,7 +195,8 @@ const WelcomeSection = () => {
 
                 .animate-slide-in-right {
                     opacity: 0;
-                    transform: translateX(50px);
+                    transform: translate3d(50px, 0, 0);
+                    will-change: opacity, transform;
                 }
 
                 .animate-slide-in-right.animate-triggered {
@@ -203,7 +205,8 @@ const WelcomeSection = () => {
 
                 .animate-slide-in-up {
                     opacity: 0;
-                    transform: translateY(20px);
+                    transform: translate3d(0, 20px, 0);
+                    will-change: opacity, transform;
                 }
 
                 .animate-slide-in-up.animate-triggered {
@@ -212,11 +215,24 @@ const WelcomeSection = () => {
 
                 .animate-scale-in {
                     opacity: 0;
-                    transform: scale(0.8);
+                    transform: scale3d(0.8, 0.8, 1);
+                    will-change: opacity, transform;
                 }
 
                 .animate-scale-in.animate-triggered {
                     animation: scaleIn 0.6s ease-out 0.4s forwards;
+                }
+                
+                /* Performance optimization for reduced motion */
+                @media (prefers-reduced-motion: reduce) {
+                    .animate-slide-in-left,
+                    .animate-slide-in-right,
+                    .animate-slide-in-up,
+                    .animate-scale-in {
+                        animation: none !important;
+                        opacity: 1 !important;
+                        transform: none !important;
+                    }
                 }
             `}</style>
         </div>

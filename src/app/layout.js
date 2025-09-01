@@ -5,6 +5,9 @@ import { Analytics } from "@vercel/analytics/next"
 
 import { Roboto } from "next/font/google"
 
+// Import performance monitor
+import "@/util/PerformanceMonitor"
+
 const roboto = Roboto({
   weight: "400",
   subsets: ["latin"],
@@ -178,6 +181,15 @@ export default function RootLayout({ children }) {
             __html: `
               (function() {
                 try {
+                  // Performance optimizations
+                  if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function() {
+                      navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                      });
+                    });
+                  }
+                  
                   // Prevent flash of unstyled content
                   document.documentElement.style.backgroundColor = '#ffffff';
                   document.body.style.backgroundColor = '#ffffff';
@@ -186,6 +198,9 @@ export default function RootLayout({ children }) {
                   if (!document.documentElement || !document.body) {
                     return;
                   }
+                  
+                  // Performance optimization: Use transform3d for better GPU acceleration
+                  document.documentElement.style.transform = 'translate3d(0, 0, 0)';
                   
                   const storedTheme = localStorage.getItem('color-theme');
                   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -200,6 +215,21 @@ export default function RootLayout({ children }) {
                     document.body.classList.remove('dark');
                     document.documentElement.style.colorScheme = 'light';
                   }
+                  
+                  // Performance optimization: Preload critical resources
+                  const criticalResources = [
+                    '/esm_logo.png',
+                    '/favicon.ico'
+                  ];
+                  
+                  criticalResources.forEach(resource => {
+                    const link = document.createElement('link');
+                    link.rel = 'preload';
+                    link.as = resource.endsWith('.png') ? 'image' : 'image';
+                    link.href = resource;
+                    document.head.appendChild(link);
+                  });
+                  
                 } catch (e) {
                   console.warn('Theme initialization failed:', e);
                 }

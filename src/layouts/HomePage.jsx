@@ -5,11 +5,12 @@ import SocialMediaStats from "@/components/home/SocialMediaStats";
 import Feedbacks from "@/components/home/Feedbacks";
 import WelcomeSection from "@/components/home/WelcomeSection";
 import StatsSection from "@/components/home/StatsSection";
+import PerformanceOptimizer from "@/components/common/PerformanceOptimizer";
 
 
 const HomePage = () => {
     return (
-        <main className="overflow-hidden">
+            <main className="overflow-hidden">
             {/* Hero Section */}
             <section id="hero" className="relative bg-black">
                 <VideoSlider />
@@ -95,7 +96,7 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
-        </main>
+            </main>
     );
 };
 
