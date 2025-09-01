@@ -211,34 +211,6 @@ body {
   color-scheme: dark;
 }
 
-/* Performance optimizations */
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  /* Enable hardware acceleration */
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-body {
-  /* Optimize for animations */
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-}
-
-/* Optimize images and videos */
-img, video {
-  max-width: 100%;
-  height: auto;
-  /* Enable hardware acceleration */
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -259,7 +231,7 @@ img, video {
   background: #a8a8a8;
 }
 
-/* Modern Animations - Optimized for Performance */
+/* Modern Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -272,21 +244,21 @@ img, video {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translate3d(0, 30px, 0);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    transform: translateY(0);
   }
 }
 
 @keyframes slideUp {
   from {
-    transform: translate3d(0, 20px, 0);
+    transform: translateY(20px);
     opacity: 0;
   }
   to {
-    transform: translate3d(0, 0, 0);
+    transform: translateY(0);
     opacity: 1;
   }
 }
@@ -294,79 +266,65 @@ img, video {
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale3d(0.9, 0.9, 1);
+    transform: scale(0.9);
   }
   to {
     opacity: 1;
-    transform: scale3d(1, 1, 1);
+    transform: scale(1);
   }
 }
 
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translate3d(-30px, 0, 0);
+    transform: translateX(-30px);
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    transform: translateX(0);
   }
 }
 
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translate3d(30px, 0, 0);
+    transform: translateX(30px);
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    transform: translateX(0);
   }
 }
 
-/* Optimized animation classes with will-change and transform3d */
 .animate-fadeIn {
   animation: fadeIn 0.6s ease-out;
-  will-change: opacity;
 }
 
 .animate-fadeInUp {
   animation: fadeInUp 0.8s ease-out;
   animation-fill-mode: both;
-  will-change: opacity, transform;
-  transform: translate3d(0, 0, 0);
 }
 
 .animate-slideUp {
   animation: slideUp 0.6s ease-out;
-  will-change: opacity, transform;
-  transform: translate3d(0, 0, 0);
 }
 
 .animate-scaleIn {
   animation: scaleIn 0.6s ease-out;
-  will-change: opacity, transform;
-  transform: translate3d(0, 0, 0);
 }
 
 .animate-slideInLeft {
   animation: slideInLeft 0.8s ease-out;
-  will-change: opacity, transform;
-  transform: translate3d(0, 0, 0);
 }
 
 .animate-slideInRight {
   animation: slideInRight 0.8s ease-out;
-  will-change: opacity, transform;
-  transform: translate3d(0, 0, 0);
 }
 
-/* Staggered animations - optimized */
+/* Staggered animations */
 .animate-stagger > * {
   animation: fadeInUp 0.8s ease-out;
   animation-fill-mode: both;
-  will-change: opacity, transform;
-  transform: translate3d(0, 0, 0);
 }
 
 .animate-stagger > *:nth-child(1) { animation-delay: 0.1s; }
@@ -375,21 +333,6 @@ img, video {
 .animate-stagger > *:nth-child(4) { animation-delay: 0.4s; }
 .animate-stagger > *:nth-child(5) { animation-delay: 0.5s; }
 .animate-stagger > *:nth-child(6) { animation-delay: 0.6s; }
-
-/* Performance optimization for reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .animate-fadeIn,
-  .animate-fadeInUp,
-  .animate-slideUp,
-  .animate-scaleIn,
-  .animate-slideInLeft,
-  .animate-slideInRight,
-  .animate-stagger > * {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
 
 /* Modern Glass Morphism Effects */
 .glass {
@@ -1554,56 +1497,6 @@ uestions Page Styles */
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
   border-radius: 0.375rem;
-}
-
-/* Performance optimization classes */
-.reduce-motion * {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-}
-
-.mobile-optimized {
-  /* Mobile-specific optimizations */
-}
-
-.low-performance {
-  /* Low-end device optimizations */
-}
-
-.low-performance * {
-  animation-duration: 0.1ms !important;
-  transition-duration: 0.1ms !important;
-}
-
-/* Performance optimizer loading state */
-.performance-optimizer-loading {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.performance-optimizer {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-/* Optimize video performance */
-video {
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-}
-
-/* Optimize Swiper performance */
-.swiper-wrapper {
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-}
-
-.swiper-slide {
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
 }/* L
 ine clamp utilities for compact design */
 .line-clamp-1 {

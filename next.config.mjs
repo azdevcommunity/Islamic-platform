@@ -23,37 +23,6 @@ const nextConfig = {
     experimental: {
         optimizeCss: false,
         scrollRestoration: true,
-        // Performans optimizasyonları
-        optimizePackageImports: ['framer-motion', 'lucide-react', '@radix-ui/react-icons'],
-    },
-    // Performans optimizasyonları
-    compiler: {
-        // CSS optimizasyonu
-        removeConsole: process.env.NODE_ENV === 'production',
-    },
-    // Webpack optimizasyonları
-    webpack: (config, { dev, isServer }) => {
-        // Production optimizasyonları
-        if (!dev && !isServer) {
-            config.optimization.splitChunks = {
-                chunks: 'all',
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: 'vendors',
-                        chunks: 'all',
-                    },
-                    framerMotion: {
-                        test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
-                        name: 'framer-motion',
-                        chunks: 'all',
-                        priority: 10,
-                    },
-                },
-            };
-        }
-        
-        return config;
     },
     async rewrites() {
         return [
