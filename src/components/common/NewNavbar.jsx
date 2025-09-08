@@ -94,7 +94,7 @@ export function NewNavbar({ menus }) {
                         Əhli-Sünnə Mədrəsəsi
                     </span>
                     {/* Show abbreviation below lg screens */}
-                    <span className="lg:hidden font-bold text-white group-hover:text-emerald-100 transition-colors">ƏSM</span>
+                    <span className="lg:hidden font-bold text-white group-hover:text-emerald-100 transition-colors">Əhli-Sünnə Mədrəsəsi</span>
                 </Link>
 
                 {/* Desktop Navigation */}
