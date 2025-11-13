@@ -11,9 +11,9 @@ export default async function Articles() {
 
     if (!res.ok) {
         return (
-            <div className="text-center py-12">
-                <div className="text-red-600 text-lg font-medium">Məqalələr yüklənmədi</div>
-                <p className="text-gray-500 mt-2">Zəhmət olmasa bir az sonra yenidən cəhd edin</p>
+            <div className="text-center ">
+                {/*<div className="text-red-600 text-lg font-medium">Məqalələr yüklənmədi</div>*/}
+                {/*<p className="text-gray-500 mt-2">Zəhmət olmasa bir az sonra yenidən cəhd edin</p>*/}
             </div>
         );
     }
