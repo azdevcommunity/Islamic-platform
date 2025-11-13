@@ -16,6 +16,7 @@ export async function generateStaticParams() {
             id: String(post.id),
         }))
     } catch (error) {
+        console.log(BASE_URL)
         console.error("Error generating static params:", error)
         return []
     }
@@ -31,7 +32,7 @@ async function getArticle(id) {
         if (!res.ok) {
             return null;
         }
-        
+
         const data = await res.json();
         return data;
     } catch (error) {
