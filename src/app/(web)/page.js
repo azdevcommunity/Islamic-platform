@@ -1,4 +1,4 @@
-import HomePage from "@/layouts/HomePage"
+import IslamicHomePage from "@/layouts/IslamicHomePage"
 import Head from "next/head"
 import Script from "next/script"
 
@@ -14,14 +14,14 @@ export default function Home() {
       "@type": "Person",
       name: "Yusif Hasanov",
     },
-    description: "Əli sunnə mədrəsəsi, 4 məzhəb",
+    description: "Əhli-Sünnə mədrəsəsi, 4 məzhəb",
   }
   return (
     <>
       <Head>
         <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
       </Head>
-      <HomePage />
+      <IslamicHomePage />
     </>
   )
 }

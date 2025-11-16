@@ -1,21 +1,22 @@
-import AboutUsPage from "@/layouts/AboutUsPage"
+import IslamicAboutPage from "@/components/about/IslamicAboutPage";
 import Head from "next/head"
 import Script from "next/script"
 
 export const metadata = {
-  title: "Haqqımızda",
+  title: "Haqqımızda | Nizamiyyə Mədrəsəsi",
+  description: "Nizamiyyə Mədrəsəsi haqqında məlumat. İslami təhsil və mənəvi tərbiyə sahəsində xidmət göstəririk.",
 }
 
 const Page = () => {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Şirket Adı",
+    name: "Nizamiyyə Mədrəsəsi",
     url: "https://www.nizamiyyemedresesi.az",
-    logo: "https://yourwebsite.com/path/to/logo.jpg",
+    logo: "https://www.nizamiyyemedresesi.az/esm_logo.png",
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+1-800-555-5555",
+      telephone: "+994 55 585 03 69",
       contactType: "Customer Service",
     },
   }
@@ -25,7 +26,7 @@ const Page = () => {
         <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
       </Head>
 
-      <AboutUsPage />
+      <IslamicAboutPage />
     </>
   )
 }

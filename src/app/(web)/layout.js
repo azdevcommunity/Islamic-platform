@@ -1,7 +1,6 @@
-import {NewNavbar} from "@/components/common/NewNavbar"
 import {BASE_URL} from "@/util/Const"
-import Footer from "@/components/common/Footer";
-import {ModernNavbar} from "@/components/Navbar/ModernNavbar";
+import {IslamicNavbar} from "@/components/Navbar/IslamicNavbar";
+import IslamicFooter from "@/components/common/IslamicFooter";
 import React from "react";
 
 export const dynamic = 'force-dynamic';
@@ -68,12 +67,9 @@ const Layout = async ({children}) => {
 
     return (
         <>
-            {/*<Navbar/>*/}
-            <NewNavbar menus={menus}/>
-            {/*<ModernNavbar menus={menus} />*/}
-            {/*<NavbarOld/>*/}
+            <IslamicNavbar menus={menus} />
             {children}
-            <Footer/>
+            <IslamicFooter />
         </>
     )
 }
