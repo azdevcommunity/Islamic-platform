@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN || 'https://www.ehlisunnemedresesi.az';
+const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN || 'https://www.nizamiyyemedresesi.az';
 const API = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || '';
 
 async function safeArticles() {

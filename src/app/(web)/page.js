@@ -9,7 +9,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     url: "https://yourwebsite.com",
-    name: "ehlisunnemedresesi.az",
+    name: "nizamiyyemedresesi.az",
     author: {
       "@type": "Person",
       name: "Yusif Hasanov",

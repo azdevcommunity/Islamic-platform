@@ -22,7 +22,7 @@ const TagFilter = ({
     return (
         <div className="pt-1">
             <div className="flex flex-wrap gap-1.5 px-1 py-1">
-                {allTags.length > 0 ? (
+                {allTags?.length > 0 ? (
                     allTags.map((tag) => (
                         <button
                             key={tag.id}

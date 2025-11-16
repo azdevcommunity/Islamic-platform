@@ -79,22 +79,36 @@ export function NewNavbar({ menus }) {
     };
 
     return (
-        // Updated Header Styling: Green background, light text, shadow
-        <header className="sticky top-0 z-50 w-full  bg-emerald-700 text-emerald-50 shadow-md">
-            <div className=" flex h-16 items-center justify-between px-4 md:px-6">
-                {/* Logo and Brand */}
+        // Modern Header with gradient and enhanced shadow
+        <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-700 text-emerald-50 shadow-lg border-b border-emerald-800/20">
+            <div className="flex h-20 items-center justify-between px-4 md:px-8 max-w-[1400px] mx-auto">
+                {/* Logo and Brand - Enhanced Design */}
                 <Link
                     href="/"
-                    className="flex items-center gap-2 mr-4 flex-shrink-0 group" // Added group for potential hover effects
+                    className="flex items-center gap-3 mr-6 flex-shrink-0 group transition-all duration-300 hover:scale-105"
                     onClick={() => setIsMobileMenuOpen(false)}
                 >
-                    <Image height={35} width={40} src={"/esm_logo.png"} alt="Əhli Sünnə Mədrəsəsi Logo" className="h-8 w-auto sm:h-9" />
-                    {/* Brighter text for brand name - Change sm:inline-block to lg:inline-block */}
-                    <span className="hidden font-bold lg:inline-block text-white whitespace-nowrap group-hover:text-emerald-100 transition-colors">
-                        Əhli-Sünnə Mədrəsəsi
+                    {/* Logo with subtle glow effect */}
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-white/20 rounded-full blur-md group-hover:bg-white/30 transition-all duration-300"></div>
+                        <Image
+                            height={48}
+                            width={48}
+                            src={"/esm_logo.png"}
+                            alt="Nizamiyyə Mədrəsəsi Logo"
+                            className="h-12 w-12 rounded relative z-10 drop-shadow-lg"
+                        />
+                    </div>
+                    {/* Brand name with improved typography */}
+                    <div className="hidden lg:flex flex-col">
+                        <span className="font-bold text-xl text-white leading-tight group-hover:text-emerald-50 transition-colors">
+                            Nizamiyyə Mədrəsəsi
+                        </span>
+                    </div>
+                    {/* Compact version for medium screens */}
+                    <span className="lg:hidden font-bold text-lg text-white group-hover:text-emerald-50 transition-colors">
+                        Nizamiyyə Mədrəsəsi
                     </span>
-                    {/* Show abbreviation below lg screens */}
-                    <span className="lg:hidden font-bold text-white group-hover:text-emerald-100 transition-colors">Əhli-Sünnə Mədrəsəsi</span>
                 </Link>
 
                 {/* Desktop Navigation */}
@@ -114,30 +128,32 @@ export function NewNavbar({ menus }) {
                                                 <NavigationMenuTrigger
                                                     onClick={() => router.push(itemHref)}
                                                     className={cn(
-                                                        // Base styles for trigger on green bg
-                                                        "text-sm font-medium bg-transparent px-2 text-emerald-100 hover:bg-emerald-600 hover:text-white focus:bg-emerald-600 focus:text-white data-[active]:bg-emerald-600/80 data-[state=open]:bg-emerald-600/80",
+                                                        // Enhanced base styles with better hover effects
+                                                        "text-sm font-medium bg-transparent px-4 py-2 text-emerald-50 hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white data-[active]:bg-white/15 data-[state=open]:bg-white/15 transition-all duration-200 rounded-md",
                                                         // Active state (section active)
-                                                        isActive && "text-white",
+                                                        isActive && "text-white bg-white/10",
                                                         // More prominent if this specific link is active
-                                                        isDirectlyActive && "font-semibold"
+                                                        isDirectlyActive && "font-semibold bg-white/20"
                                                     )}
                                                 >
                                                     {item.name}
                                                 </NavigationMenuTrigger>
                                                 <NavigationMenuContent>
-                                                    {/* Mega Menu Layout - Now on white background */}
-                                                    <div className="grid   w-[550px] gap-x-6 gap-y-4 p-6 md:w-[650px] lg:w-[750px] grid-flow-col auto-cols-max bg-white text-slate-800 shadow-lg rounded-md">
+                                                    {/* Enhanced Mega Menu with modern styling */}
+                                                    <div className="grid w-[550px] gap-x-8 gap-y-5 p-8 md:w-[650px] lg:w-[800px] grid-flow-col auto-cols-max bg-white text-slate-800 shadow-2xl rounded-lg border border-emerald-100">
                                                         {item.subcategories?.map((subItemL1) => (
-                                                            <div key={subItemL1.name || subItemL1.id} className="flex flex-col space-y-1 items-start">
-                                                                {/* Level 1 Subcategory Title (Link) - Adjusted for white bg */}
+                                                            <div key={subItemL1.name || subItemL1.id} className="flex flex-col space-y-2 items-start">
+                                                                {/* Level 1 Subcategory Title with enhanced styling */}
                                                                 <Link
                                                                     href={generateHref(subItemL1)}
                                                                     passHref
                                                                     legacyBehavior
                                                                 >
                                                                     <NavigationMenuLink className={cn(
-                                                                        "text-sm font-semibold leading-none hover:text-emerald-700 pb-1 mb-1 transition-colors", // Hover color is main green
-                                                                        isLinkActive(subItemL1) ? "text-emerald-700" : "text-slate-800" // Active color is main green
+                                                                        "text-sm font-bold leading-none hover:text-emerald-600 pb-2 mb-1 border-b-2 transition-all duration-200",
+                                                                        isLinkActive(subItemL1)
+                                                                            ? "text-emerald-700 border-emerald-700"
+                                                                            : "text-slate-800 border-transparent hover:border-emerald-200"
                                                                     )}>
                                                                         {subItemL1.name}
                                                                     </NavigationMenuLink>
@@ -169,13 +185,11 @@ export function NewNavbar({ menus }) {
                                                 <NavigationMenuLink
                                                     className={cn(
                                                         navigationMenuTriggerStyle(), // Base style adapts
-                                                        // Custom styling for links on green bg
-                                                        "text-sm font-medium bg-transparent text-emerald-100 hover:bg-emerald-600 hover:text-white focus:bg-emerald-600 focus:text-white data-[active]:bg-emerald-600/80 data-[state=open]:bg-emerald-600/80 ",
-                                                        // Direct active state
-                                                        isDirectlyActive && "bg-emerald-600 text-white font-semibold"
+                                                        // Enhanced custom styling for links
+                                                        "text-sm font-medium bg-transparent px-4 py-2 text-emerald-50 hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white data-[active]:bg-white/15 data-[state=open]:bg-white/15 transition-all duration-200 rounded-md",
+                                                        // Direct active state with stronger highlight
+                                                        isDirectlyActive && "bg-white/20 text-white font-semibold"
                                                     )}
-                                                    // Shadcn 'active' prop might not work perfectly with custom styles, rely on manual check
-                                                    // active={isDirectlyActive}
                                                 >
                                                     {item.name}
                                                 </NavigationMenuLink>
@@ -194,22 +208,31 @@ export function NewNavbar({ menus }) {
                     {/* Add Theme Toggle, Auth Button etc. here if needed */}
                 </div>
 
-                {/* Mobile Navigation Trigger */}
+                {/* Mobile Navigation Trigger - Enhanced */}
                 <div className="lg:hidden flex items-center">
                     <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                         <SheetTrigger asChild>
-                            {/* Ensure button contrasts on green */}
-                            <Button variant="ghost" size="icon" aria-label="Menyu aç" className="text-emerald-100 hover:text-white hover:bg-emerald-600 focus:bg-emerald-600">
+                            {/* Modern hamburger button with better styling */}
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label="Menyu aç"
+                                className="text-white hover:text-white hover:bg-white/15 focus:bg-white/15 transition-all duration-200 rounded-md"
+                            >
                                 <Menu className="h-6 w-6" />
                             </Button>
                         </SheetTrigger>
-                        {/* Mobile Menu Content: White background */}
+                        {/* Mobile Menu Content with enhanced header */}
                         <SheetContent side="left" className="w-full max-w-xs sm:max-w-sm p-0 flex flex-col bg-white text-slate-800">
-                            <SheetHeader className="border-b border-slate-200 p-4">
-                                <SheetTitle className="flex items-center gap-2">
-                                    <Image height={30} width={35} src={"/esm_logo.png"} alt="Əhli Sünnə Mədrəsəsi Logo" />
-                                    {/* Use a darker text color for title on white */}
-                                    <span className="font-bold text-emerald-700">Menyu</span>
+                            <SheetHeader className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-white p-5">
+                                <SheetTitle className="flex items-center gap-3">
+                                    <div className="relative">
+                                        <Image height={40} width={40} src={"/esm_logo.png"} alt="Nizamiyyə Mədrəsəsi Logo" className="drop-shadow-md" />
+                                    </div>
+                                    <div className="flex flex-col items-start">
+                                        <span className="font-bold text-emerald-700 text-base">Menyu</span>
+                                        <span className="text-xs text-emerald-600/70 font-medium">Naviqasiya</span>
+                                    </div>
                                 </SheetTitle>
                             </SheetHeader>
                             <ScrollArea className="flex-1">
@@ -246,19 +269,19 @@ const MobileMenuItem = ({ item, pathname, level, closeMenu, isLinkActive }) => {
     const paddingLeft = `${1 + level * 1.25}rem`; // Indentation
 
     if (!hasSubcategories) {
-        // Leaf node: Simple Link
+        // Leaf node: Enhanced Simple Link
         return (
             <SheetClose asChild>
                 <Link
                     href={itemHref}
                     style={{ paddingLeft }}
                     className={cn(
-                        "flex items-center rounded-md px-3 py-2.5 text-sm transition-colors", // Base styles
-                        // Adjusted hover/active for white background
-                        "hover:bg-emerald-50 hover:text-emerald-800",
+                        "flex items-center rounded-lg px-4 py-3 text-sm transition-all duration-200", // Enhanced base styles
+                        // Better hover/active states
+                        "hover:bg-emerald-50 hover:text-emerald-700 hover:translate-x-1",
                         isExactlyActive
-                            ? "bg-emerald-100 font-medium text-emerald-700" // Active state
-                            : "text-slate-700" // Default text color
+                            ? "bg-emerald-100 font-semibold text-emerald-700 shadow-sm" // Active state
+                            : "text-slate-700 font-medium" // Default text color
                     )}
                 >
                     {item.name}
@@ -276,10 +299,10 @@ const MobileMenuItem = ({ item, pathname, level, closeMenu, isLinkActive }) => {
                 <AccordionTrigger
                     style={{ paddingLeft }}
                     className={cn(
-                        "py-2.5 px-3 text-sm font-medium hover:no-underline hover:bg-emerald-50 rounded-md [&[data-state=open]>svg]:rotate-180 transition-colors w-full justify-between",
-                        // Highlight trigger if section is active or exact link is active
-                        isActive ? "text-emerald-700" : "text-slate-700 hover:text-slate-900",
-                        isExactlyActive && "bg-emerald-100 font-semibold text-emerald-700" // Stronger highlight for exact match
+                        "py-3 px-4 text-sm font-medium hover:no-underline hover:bg-emerald-50 rounded-lg [&[data-state=open]>svg]:rotate-180 transition-all duration-200 w-full justify-between",
+                        // Enhanced highlight for active states
+                        isActive ? "text-emerald-700 bg-emerald-50/50" : "text-slate-700 hover:text-emerald-700",
+                        isExactlyActive && "bg-emerald-100 font-semibold text-emerald-700 shadow-sm" // Stronger highlight for exact match
                     )}
                 >
                     {/* Wrap link text to navigate, but allow chevron area to toggle accordion */}
@@ -290,7 +313,7 @@ const MobileMenuItem = ({ item, pathname, level, closeMenu, isLinkActive }) => {
                             e.stopPropagation(); // Prevent accordion toggle if link clicked
                             closeMenu();
                         }}
-                        className="flex-1 text-left mr-2" // Take up space
+                        className="flex-1 text-left mr-2 hover:text-emerald-600 transition-colors" // Take up space
                     >
                         {item.name}
                     </Link>
@@ -326,21 +349,17 @@ const ListItem = React.forwardRef(
                     ref={ref}
                     href={href}
                     className={cn(
-                        "block select-none rounded-md px-3 py-2 leading-none no-underline outline-none transition-colors",
-                        // Adjusted hover/active styles for white background
-                        "text-sm hover:bg-emerald-50 hover:text-emerald-800 focus:bg-emerald-50 focus:text-emerald-800",
+                        "block select-none rounded-lg px-4 py-2.5 leading-none no-underline outline-none transition-all duration-200",
+                        // Enhanced hover/active styles
+                        "text-sm hover:bg-emerald-50 hover:text-emerald-700 hover:translate-x-1 focus:bg-emerald-50 focus:text-emerald-700",
                         active
-                            ? "bg-emerald-100 font-medium text-emerald-700" // Active state
-                            : "text-slate-600", // Default state (slightly muted)
+                            ? "bg-emerald-100 font-semibold text-emerald-700 shadow-sm" // Active state
+                            : "text-slate-600 font-medium", // Default state
                         className
                     )}
                     {...props}
                 >
-                    <div className="text-sm font-medium leading-snug">{title}</div>
-                    {/* Optional description */}
-                    {/* <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
-                        Description...
-                    </p> */}
+                    <div className="text-sm leading-snug">{title}</div>
                 </Link>
             </NavigationMenuLink>
         );

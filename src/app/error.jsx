@@ -99,7 +99,7 @@ export default function Error({ error, reset }) {
 
         {/* Footer */}
         <div className="mt-8 text-sm text-gray-500">
-          <p>Əhli-Sünnə Mədrəsəsi - Texniki Dəstək</p>
+          <p>Nizamiyyə Mədrəsəsi - Texniki Dəstək</p>
         </div>
       </div>
     </div>

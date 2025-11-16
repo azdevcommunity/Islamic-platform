@@ -56,7 +56,7 @@ export default function NotFound() {
 
         {/* Footer */}
         <div className="mt-12 text-sm text-gray-500">
-          <p>Əhli-Sünnə Mədrəsəsi</p>
+          <p>Nizamiyyə Mədrəsəsi</p>
         </div>
       </div>
     </div>

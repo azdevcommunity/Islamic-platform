@@ -121,10 +121,10 @@ const BookDetailContent = ({ book }) => { // Renamed to avoid conflict if used w
     return (
         <>
             <Head>
-                <title>{book.title} - Əhli-Sünnə Mədrəsəsi</title>
-                <meta name="description" content={book.description?.substring(0, 160) || `Əhli-Sünnə Mədrəsəsi tərəfindən nəşr olunan ${book.title} kitabı haqqında məlumat.`} />
+                <title>{book.title} - Nizamiyyə Mədrəsəsi</title>
+                <meta name="description" content={book.description?.substring(0, 160) || `Nizamiyyə Mədrəsəsi tərəfindən nəşr olunan ${book.title} kitabı haqqında məlumat.`} />
                 {/* Add Open Graph tags for social sharing */}
-                <meta property="og:title" content={`${book.title} - Əhli-Sünnə Mədrəsəsi`} />
+                <meta property="og:title" content={`${book.title} - Nizamiyyə Mədrəsəsi`} />
                 <meta property="og:description" content={book.description?.substring(0, 160)} />
                 <meta property="og:image" content={book.image} /> {/* Use absolute URL */}
                 <meta property="og:type" content="book" />

@@ -12,7 +12,7 @@ export default function robots() {
         disallow: ["/search?q=", "/admin/"],
       },
     ],
-    sitemap: ["https://www.ehlisunnemedresesi.az/sitemap.xml"],
+    sitemap: ["https://www.nizamiyyemedresesi.az/sitemap.xml"],
   }
 }
 

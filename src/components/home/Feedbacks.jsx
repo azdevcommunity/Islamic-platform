@@ -13,7 +13,7 @@ const testimonials = [
     {
         id: 1,
         author: "Elçin S.",
-        text: "Əhli Sünnə Mədrəsəsi vasitəsilə ruhumun dərinliklərinə səyahət etdim. Hər söhbət və dərs mənə iman və mənəviyyatın əhəmiyyətini bir daha xatırlatdı. Həyatımda yeni bir səhifə açdı.",
+        text: "Nizamiyyə Mədrəsəsi vasitəsilə ruhumun dərinliklərinə səyahət etdim. Hər söhbət və dərs mənə iman və mənəviyyatın əhəmiyyətini bir daha xatırlatdı. Həyatımda yeni bir səhifə açdı.",
         rating: 5,
     },
     {
@@ -25,7 +25,7 @@ const testimonials = [
     {
         id: 3,
         author: "Fərid M.",
-        text: "Əhli Sünnə Mədrəsəsində öyrəndiklərim gündəlik həyatımda yol göstərici oldu. Dərslərin dərinliyi və hocaların əxlaqı mənəvi zənginliyimə böyük töhfə verdi.",
+        text: "Nizamiyyə Mədrəsəsində öyrəndiklərim gündəlik həyatımda yol göstərici oldu. Dərslərin dərinliyi və hocaların əxlaqı mənəvi zənginliyimə böyük töhfə verdi.",
         rating: 5,
     },
 ];

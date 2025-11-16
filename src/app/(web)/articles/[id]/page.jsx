@@ -54,29 +54,29 @@ export async function generateMetadata({params}) {
     }
 
     const cleanDescription = article.content?.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)
-        || 'Əhli-Sünnə Mədrəsəsi - İslam dini haqqında dəyərli məqalələr.';
+        || 'Nizamiyyə Mədrəsəsi - İslam dini haqqında dəyərli məqalələr.';
 
     const keywords = [
         article.title,
         ...(article.categories?.map(c => c.name) || []),
         ...(article.tags?.map(t => t.name) || []),
-        'Əhli-Sünnə Mədrəsəsi', 'İslam', 'din', 'məqalə',
+        'Nizamiyyə Mədrəsəsi', 'İslam', 'din', 'məqalə',
     ].filter(Boolean).join(', ');
 
-    const imageUrl = article.image || 'https://www.ehlisunnemedresesi.az/favicon.ico';
+    const imageUrl = article.image || 'https://www.nizamiyyemedresesi.az/favicon.ico';
 
     return {
-        title: `${article.title} | Əhli-Sünnə Mədrəsəsi`,
+        title: `${article.title} | Nizamiyyə Mədrəsəsi`,
         description: cleanDescription,
         keywords: keywords,
         alternates: {
             canonical: `/articles/${article.id}`,
         },
         openGraph: {
-            title: `${article.title} | Əhli-Sünnə Mədrəsəsi`,
+            title: `${article.title} | Nizamiyyə Mədrəsəsi`,
             description: cleanDescription,
-            url: `https://www.ehlisunnemedresesi.az/articles/${article.id}`,
-            siteName: 'Əhli-Sünnə Mədrəsəsi',
+            url: `https://www.nizamiyyemedresesi.az/articles/${article.id}`,
+            siteName: 'Nizamiyyə Mədrəsəsi',
             images: [
                 {
                     url: imageUrl,
@@ -89,13 +89,13 @@ export async function generateMetadata({params}) {
             type: 'article',
             publishedTime: article.publishedAt,
             modifiedTime: article.updatedAt || article.publishedAt,
-            authors: [article.author?.name || 'Əhli-Sünnə Mədrəsəsi'],
+            authors: [article.author?.name || 'Nizamiyyə Mədrəsəsi'],
             section: article.categories?.[0]?.name,
             tags: article.tags?.map(t => t.name) || [],
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${article.title} | Əhli-Sünnə Mədrəsəsi`,
+            title: `${article.title} | Nizamiyyə Mədrəsəsi`,
             description: cleanDescription,
             images: [imageUrl],
         },
@@ -123,30 +123,30 @@ const Page = async ({params}) => {
     }
 
         const cleanJsonLdDescription = article.content?.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim().substring(0, 200)
-            || 'Əhli-Sünnə Mədrəsəsi - İslam dini haqqında məqalə.';
+            || 'Nizamiyyə Mədrəsəsi - İslam dini haqqında məqalə.';
 
         const jsonLd = {
             '@context': 'https://schema.org',
             '@type': 'Article',
             mainEntityOfPage: {
                 '@type': 'WebPage',
-                '@id': `https://www.ehlisunnemedresesi.az/articles/${article.id}`,
+                '@id': `https://www.nizamiyyemedresesi.az/articles/${article.id}`,
             },
             headline: article.title,
             description: cleanJsonLdDescription,
-            image: article.image || 'https://www.ehlisunnemedresesi.az/images/schema-default.jpg',
+            image: article.image || 'https://www.nizamiyyemedresesi.az/images/schema-default.jpg',
             datePublished: article.publishedAt,
             dateModified: article.updatedAt || article.publishedAt,
             author: {
                 '@type': 'Person',
-                name: article.author?.name || 'Əhli-Sünnə Mədrəsəsi',
+                name: article.author?.name || 'Nizamiyyə Mədrəsəsi',
             },
             publisher: {
                 '@type': 'Organization',
-                name: 'Əhli-Sünnə Mədrəsəsi',
+                name: 'Nizamiyyə Mədrəsəsi',
                 logo: {
                     '@type': 'ImageObject',
-                    url: 'https://www.ehlisunnemedresesi.az/esm_logo.png',
+                    url: 'https://www.nizamiyyemedresesi.az/esm_logo.png',
                 },
             },
             keywords: article.tags?.map(t => t.name).join(', ') || '',

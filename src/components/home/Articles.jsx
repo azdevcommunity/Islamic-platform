@@ -5,20 +5,26 @@ import { ArrowRight } from "lucide-react";
 
 
 export default async function Articles() {
-    const res = await fetch(`${BASE_URL}/articles/popular`, {
-        next: { revalidate: 60 },
-    });
+    let articles;
+    try {
+        const res = await fetch(`${BASE_URL}/articles/popular`, {
+            next: { revalidate: 60 },
+        });
 
-    if (!res.ok) {
-        return (
-            <div className="text-center py-12">
-                <div className="text-red-600 text-lg font-medium">Məqalələr yüklənmədi</div>
-                <p className="text-gray-500 mt-2">Zəhmət olmasa bir az sonra yenidən cəhd edin</p>
-            </div>
-        );
+        if (!res.ok) {
+            return (
+                <div className="text-center ">
+                    {/*<div className="text-red-600 text-lg font-medium">Məqalələr yüklənmədi</div>*/}
+                    {/*<p className="text-gray-500 mt-2">Zəhmət olmasa bir az sonra yenidən cəhd edin</p>*/}
+                </div>
+            );
+        }
+
+        articles = await res.json();
+    } catch (e) {
+        console.log(e)
     }
 
-    const articles = await res.json();
 
     if (!articles || articles.length === 0) {
         return (

@@ -53,29 +53,29 @@ export async function generateMetadata({params}) {
     }
 
     const cleanDescription = questionData.answer?.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)
-        || `Əhli-Sünnə Mədrəsəsi - ${questionData.question} sualına cavab.`;
+        || `Nizamiyyə Mədrəsəsi - ${questionData.question} sualına cavab.`;
 
     const keywords = [
         questionData.question,
         ...(questionData.categories?.map(c => c.name) || []),
         ...(questionData.tags?.map(t => t.name) || []),
-        'Əhli-Sünnə Mədrəsəsi', 'İslam', 'sual', 'cavab', 'din',
+        'Nizamiyyə Mədrəsəsi', 'İslam', 'sual', 'cavab', 'din',
     ].filter(Boolean).join(', ');
 
-    const imageUrl = questionData.image || 'https://www.ehlisunnemedresesi.az/images/og-question-default.jpg'; // Default OG
+    const imageUrl = questionData.image || 'https://www.nizamiyyemedresesi.az/images/og-question-default.jpg'; // Default OG
 
     return {
-        title: `${questionData.question} | Əhli-Sünnə Mədrəsəsi`,
+        title: `${questionData.question} | Nizamiyyə Mədrəsəsi`,
         description: cleanDescription,
         keywords: keywords,
         alternates: {
             canonical: `/questions/${questionData.id}`,
         },
         openGraph: {
-            title: `${questionData.question} | Əhli-Sünnə Mədrəsəsi`,
+            title: `${questionData.question} | Nizamiyyə Mədrəsəsi`,
             description: cleanDescription,
-            url: `https://www.ehlisunnemedresesi.az/questions/${questionData.id}`,
-            siteName: 'Əhli-Sünnə Mədrəsəsi',
+            url: `https://www.nizamiyyemedresesi.az/questions/${questionData.id}`,
+            siteName: 'Nizamiyyə Mədrəsəsi',
             images: [{url: imageUrl, width: 1200, height: 630, alt: questionData.question}],
             locale: 'az_AZ',
             type: 'article',
@@ -84,7 +84,7 @@ export async function generateMetadata({params}) {
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${questionData.question} | Əhli-Sünnə Mədrəsəsi`,
+            title: `${questionData.question} | Nizamiyyə Mədrəsəsi`,
             description: cleanDescription,
             images: [imageUrl],
         },
@@ -117,8 +117,8 @@ export default async function QuestionPage({params}) {
         // author: { '@type': 'Person', name: 'Asker Name' },
         publisher: {
             '@type': 'Organization',
-            name: 'Əhli-Sünnə Mədrəsəsi',
-            logo: {'@type': 'ImageObject', url: 'https://www.ehlisunnemedresesi.az/esm_logo.png'},
+            name: 'Nizamiyyə Mədrəsəsi',
+            logo: {'@type': 'ImageObject', url: 'https://www.nizamiyyemedresesi.az/esm_logo.png'},
         },
     };
 

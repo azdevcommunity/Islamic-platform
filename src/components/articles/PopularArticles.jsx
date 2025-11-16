@@ -2,10 +2,16 @@ import { BASE_URL } from "@/util/Const"
 import Link from "next/link"
 
 const PopularArticles = async () => {
-  const res = await fetch(`${BASE_URL}/articles/popular`, {
-    next: { revalidate: 60 },
-  })
-  const articles = await res.json()
+  let articles
+  try {
+    const res = await fetch(`${BASE_URL}/articles/popular`, {
+      next: { revalidate: 60 },
+    })
+    articles = await res.json()
+  } catch (err) {
+    console.log(err)
+    articles=[]
+  }
 
   return (
     <div>

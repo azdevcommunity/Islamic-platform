@@ -44,7 +44,7 @@ export default function VideoNotFound() {
           </div>
           <p className="text-gray-600 text-lg leading-relaxed">
             Dini mövzularda maraqlı və faydalı videolarımızı izləyin. 
-            Əhli-Sünnə Mədrəsəsinin zəngin video arxivindən istifadə edin.
+            Nizamiyyə Mədrəsəsinin zəngin video arxivindən istifadə edin.
           </p>
         </div>
 

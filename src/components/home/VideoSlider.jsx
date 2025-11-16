@@ -13,9 +13,10 @@ const slides = [
     id: 1,
     videoSrc: "https://res.cloudinary.com/dhhlnrons/video/upload/v1743080791/esm/homepage/lubjcf8kkdivjgk2hdox.mp4",
     title: "Ramazan Avari",
-    subtitle: "Əhli-Sünnə Mədrəsəsinin Fəaliyyəti ilə Bağlı Önəmli Açıqlama",
+    subtitle: "Nizamiyyə Mədrəsəsinin Fəaliyyəti ilə Bağlı Önəmli Açıqlama",
     description: "İletişim bilgileri ve daha fazlası için hemen şimdi bizimle iletişime geçin.",
-    youtubeLink: "https://youtu.be/6cKKB1_fick?si=FC3KoBmP6cG7FpDw",
+    // youtubeLink: "https://youtu.be/6cKKB1_fick?si=FC3KoBmP6cG7FpDw",
+    youtubeLink: process.env.NEXT_PUBLIC_YTB_CHANNEL_URL,
   },
 ];
 
@@ -100,7 +101,7 @@ export default function VideoSlider() {
           opacity: 0;
         }
       `}</style>
-      
+
       <Swiper
         modules={[Pagination, Navigation, Autoplay]}
         pagination={{ clickable: true }}
@@ -142,14 +143,14 @@ export default function VideoSlider() {
                 className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-red-600/90 backdrop-blur-sm text-white px-4 py-3 rounded-xl hover:bg-red-600 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <FaYoutube className="h-5 w-5" />
-                <span className="hidden sm:inline font-medium">Videoya keçid et</span>
+                <span className="hidden sm:inline font-medium">Kanala keçid et</span>
               </a>
 
               {/* Content */}
               <div className="text-center lg:text-left space-y-6 max-w-2xl lg:max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white/90 font-medium text-sm mb-4 opacity-0 animate-fade-in-down">
                   <span className="w-2 h-2 bg-white rounded-full"></span>
-                  Əhli-Sünnə Mədrəsəsi
+                  Nizamiyyə Mədrəsəsi
                 </div>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold drop-shadow-lg leading-tight opacity-0 animate-fade-in-down animate-delay-200">

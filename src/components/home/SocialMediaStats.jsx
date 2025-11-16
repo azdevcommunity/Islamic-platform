@@ -24,7 +24,7 @@ const SocialMediaStats = () => {
                     oldu. Sizinlə paylaşdığımız hər məzmun aramızda bir körpü qurdu.
                 </p>
                 <p className="text-white/70 leading-relaxed text-base md:text-lg">
-                    Əhli Sünnə Mədrəsəsi olaraq, milyonların ürəyində iman həqiqətlərinin yer alması bizə ümid verir.
+                    Nizamiyyə Mədrəsəsi olaraq, milyonların ürəyində iman həqiqətlərinin yer alması bizə ümid verir.
                 </p>
             </div>
 

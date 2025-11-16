@@ -73,14 +73,14 @@ const WelcomeSection = () => {
                     <div>
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#43b365]/10 rounded-full text-[#43b365] font-medium text-sm mb-6">
                             <span className="w-2 h-2 bg-[#43b365] rounded-full"></span>
-                            Əhli-Sünnə Mədrəsəsi
+                            Nizamiyyə Mədrəsəsi
                         </div>
                         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                             İlahi Nur və Hikmət
                             <span className="block text-[#43b365]">Mərkəzi</span>
                         </h2>
                         <p className="text-xl text-gray-600 leading-relaxed mb-8">
-                            Əhli-Sünnə Mədrəsəsi olaraq, İslami elmlərin öyrədilməsi və mənəvi tərbiyənin 
+                            Nizamiyyə Mədrəsəsi olaraq, İslami elmlərin öyrədilməsi və mənəvi tərbiyənin 
                             verilməsi sahəsində xidmət göstəririk. Quran və Sünnət işığında, müasir dövrdə 
                             İslami şüurun formalaşmasına töhfə veririk.
                         </p>
@@ -114,7 +114,7 @@ const WelcomeSection = () => {
                     <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
                         <Image
                             src="/about_us.png"
-                            alt="Əhli-Sünnə Mədrəsəsi"
+                            alt="Nizamiyyə Mədrəsəsi"
                             fill
                             className="object-cover"
                             sizes="(max-width: 768px) 100vw, 50vw"
