@@ -26,30 +26,30 @@ const keywords = [
   "Ehli Sünne",
   "Medrese",
   "İslam Maarifi",
-  "Əhli-Sünnə Mədrəsəsi",
+  "Nizamiyyə Mədrəsəsi",
   "Din Maarifi",
   "Dini Təhsil",
   "İslam Mədrəsəsi",
   "Ehli Sünne Mədrəsəsi",
   "Əhli-Sünnə Məzhəbi",
   "Dini Maarifləndirmə",
-  "Əhli-Sünnə Mədrəsəsi Bakı",
-  "Əhli-Sünnə Mədrəsəsi Azərbaycan",
+  "Nizamiyyə Mədrəsəsi Bakı",
+  "Nizamiyyə Mədrəsəsi Azərbaycan",
   "İslam Mədrəsəsi Bakı",
   "Bakı Ehli Sünne Mədrəsəsi",
   "Dini təhsil Bakı",
-  "Əhli-Sünnə Mədrəsəsi Gəncə",
-  "Əhli-Sünnə Mədrəsəsi Naxçıvan",
+  "Nizamiyyə Mədrəsəsi Gəncə",
+  "Nizamiyyə Mədrəsəsi Naxçıvan",
   "Azərbaycan Ehli Sünne Mədrəsəsi",
   "Ehli Sünne Məktəbi",
   "Quran dərsləri Ehli Sünne Mədrəsəsində",
-  "Əhli-Sünnə Mədrəsəsi tarixi",
-  "Əhli-Sünnə Mədrəsəsinin xidmətləri",
+  "Nizamiyyə Mədrəsəsi tarixi",
+  "Nizamiyyə Mədrəsəsinin xidmətləri",
   "Ehli Sünne Mədrəsəsi nədir?",
-  "Əhli-Sünnə Mədrəsəsi və Quran dərsləri",
+  "Nizamiyyə Mədrəsəsi və Quran dərsləri",
   "Ehli Sünne inancı və prinsipləri",
-  "İslam maarifi və Əhli-Sünnə Mədrəsəsi",
-  "Əhli-Sünnə Mədrəsəsi dərnəkləri",
+  "İslam maarifi və Nizamiyyə Mədrəsəsi",
+  "Nizamiyyə Mədrəsəsi dərnəkləri",
   "Fiqh dərsləri Mədrəsədə",
   "Hədis elmi və Əhli-Sünnə",
   "Uşaqlar üçün dini təhsil",
@@ -73,22 +73,22 @@ const keywords = [
 ]
 
 export const metadata = {
-  title: "Əhli-Sünnə Mədrəsəsi",
-  description: "İslam dini haqqında maarifləndirici məlumatlar və resurslar təqdim edən Əhli-Sünnə Mədrəsəsi.",
-  metadataBase: new URL("https://www.ehlisunnemedresesi.az"),
+  title: "Nizamiyyə Mədrəsəsi",
+  description: "İslam dini haqqında maarifləndirici məlumatlar və resurslar təqdim edən Nizamiyyə Mədrəsəsi.",
+  metadataBase: new URL("https://www.nizamiyyemedresesi.az"),
   openGraph: {
-    siteName: "Əhli-Sünnə Mədrəsəsi",
+    siteName: "Nizamiyyə Mədrəsəsi",
     type: "website",
     locale: "az_AZ",
-    url: "https://www.ehlisunnemedresesi.az",
-    title: "Əhli-Sünnə Mədrəsəsi",
-    description: "İslam dini haqqında maarifləndirici məlumatlar və resurslar təqdim edən Əhli-Sünnə Mədrəsəsi.",
+    url: "https://www.nizamiyyemedresesi.az",
+    title: "Nizamiyyə Mədrəsəsi",
+    description: "İslam dini haqqında maarifləndirici məlumatlar və resurslar təqdim edən Nizamiyyə Mədrəsəsi.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Əhli-Sünnə Mədrəsəsi Banner",
+        alt: "Nizamiyyə Mədrəsəsi Banner",
       },
     ],
   },
@@ -101,12 +101,12 @@ export const metadata = {
   },
   alternates: {
     types: {
-      "application/rss+xml": "https://www.ehlisunnemedresesi.az/rss.xml",
+      "application/rss+xml": "https://www.nizamiyyemedresesi.az/rss.xml",
     },
   },
-  applicationName: "Əhli-Sünnə Mədrəsəsi",
+  applicationName: "Nizamiyyə Mədrəsəsi",
   appleWebApp: {
-    title: "Əhli-Sünnə Mədrəsəsi",
+    title: "Nizamiyyə Mədrəsəsi",
     statusBarStyle: "default",
     capable: true,
   },
@@ -134,27 +134,27 @@ export default function RootLayout({ children }) {
     "@type": "BlogPosting",
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": "https://www.ehlisunnemedresesi.az/makale-detay",
+      "@id": "https://www.nizamiyyemedresesi.az/makale-detay",
     },
     keywords: keywords,
 
     headline: "İslam Dininə Aid Dəyərli Məqalələr",
-    description: "Əhli-Sünnə Mədrəsəsi saytında İslam dini haqqında dəyərli və maarifləndirici məqalələri oxuyun.",
-    image: "https://www.ehlisunnemedresesi.az/images/blog-thumbnail.png",
+    description: "Nizamiyyə Mədrəsəsi saytında İslam dini haqqında dəyərli və maarifləndirici məqalələri oxuyun.",
+    image: "https://www.nizamiyyemedresesi.az/images/blog-thumbnail.png",
     dateCreated: "2024-01-11T11:35:00+04:00",
     datePublished: "2024-01-11T11:35:00+04:00",
     dateModified: "2024-01-11T11:35:00+04:00",
     author: {
       "@type": "Person",
-      name: "Əhli-Sünnə Mədrəsəsi",
-      url: "https://www.ehlisunnemedresesi.az/about",
+      name: "Nizamiyyə Mədrəsəsi",
+      url: "https://www.nizamiyyemedresesi.az/about",
     },
     publisher: {
       "@type": "Organization",
-      name: "Əhli-Sünnə Mədrəsəsi",
+      name: "Nizamiyyə Mədrəsəsi",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.ehlisunnemedresesi.az/logo.png",
+        url: "https://www.nizamiyyemedresesi.az/logo.png",
       },
     },
     inLanguage: "az-AZ",
@@ -165,13 +165,13 @@ export default function RootLayout({ children }) {
       <html lang="az-AZ" className={roboto.className} suppressHydrationWarning>
       <head>
         <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
-        <title>Əhli-Sünnə Mədrəsəsi</title>
+        <title>Nizamiyyə Mədrəsəsi</title>
         <link rel="canonical" href={domain}/>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="icon" href="/favicon.ico"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"/>
-        <meta name="description" content="Əhli-Sünnə Mədrəsəsi haqqında məlumatlar və maarifləndirici məqalələr."/>
+        <meta name="description" content="Nizamiyyə Mədrəsəsi haqqında məlumatlar və maarifləndirici məqalələr."/>
         <meta name="keywords" content={keywords.join(", ")}/>
         <script
           dangerouslySetInnerHTML={{

@@ -26,15 +26,15 @@ const Footer = () => {
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
                             <div className="relative h-16 w-16  rounded-lg overflow-hidden">
-                                <Image src="/esm_logo.png" alt="Əhli Sünnə Mədrəsəsi" fill
+                                <Image src="/esm_logo.png" alt="Nizamiyyə Mədrəsəsi" fill
                                        className="object-contain p-1"/>
                             </div>
                             <div className="font-bold text-lg">
-                                Əhli Sünnə Mədrəsəsi
+                                Nizamiyyə Mədrəsəsi
                             </div>
                         </div>
                         <p className="text-gray-300  text-sm leading-relaxed">
-                            Əhli Sünnə Mədrəsəsi iman, fiqh və siyer mövzularında mənəvi dünyanızı zənginləşdirmək üçün
+                            Nizamiyyə Mədrəsəsi iman, fiqh və siyer mövzularında mənəvi dünyanızı zənginləşdirmək üçün
                             məzmunlar
                             təqdim edir.
                         </p>
@@ -42,7 +42,7 @@ const Footer = () => {
                         {/* Social Media Icons */}
                         <div className="flex space-x-4 pt-2">
                             <a
-                                href="https://www.facebook.com/ehlisunnemedresesi/"
+                                href={process.env.NEXT_PUBLIC_FACEBOOK_CHANNEL_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="bg-gray-700 hover:bg-blue-600 p-2 rounded-full transition-colors duration-300"
@@ -51,7 +51,7 @@ const Footer = () => {
                                 <FaFacebook size={18}/>
                             </a>
                             <a
-                                href="https://www.instagram.com/ehlisunnemedresesi/"
+                                href={process.env.NEXT_PUBLIC_INSTAGRAM_CHANNEL_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="bg-gray-700 hover:bg-pink-600 p-2 rounded-full transition-colors duration-300"
@@ -60,7 +60,7 @@ const Footer = () => {
                                 <FaInstagram size={18}/>
                             </a>
                             <a
-                                href="https://www.youtube.com/@ehlisunnemedresesi"
+                                href={process.env.NEXT_PUBLIC_YTB_CHANNEL_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="bg-gray-700 hover:bg-red-600 p-2 rounded-full transition-colors duration-300"
@@ -69,14 +69,13 @@ const Footer = () => {
                                 <FaYoutube size={18}/>
                             </a>
                             <a
-                                href="https://wa.me/994509871992" // Correct WhatsApp link format (number without '+')
-                                target="_blank" // Opens in new tab/app
-                                rel="noopener noreferrer" // Security best practice for target="_blank"
-                                // Style it similarly, but use WhatsApp's green color theme
+                                href={process.env.NEXT_PUBLIC_WP_CHANNEL_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="bg-gray-700 hover:bg-green-700 text-white p-2 rounded-full transition-colors duration-300"
-                                aria-label="WhatsApp ilə əlaqə" // Accessibility label (Contact via WhatsApp)
+                                aria-label="WhatsApp ilə əlaqə"
                             >
-                                <FaWhatsapp size={18}/> {/* Use the WhatsApp icon */}
+                                <FaWhatsapp size={18}/>
                             </a>
                         </div>
                     </div>
@@ -174,20 +173,8 @@ const Footer = () => {
                             dəstəyinizə ehtiyacımız var. Aşağıdakı kart hesablarına ianələrinizi göndərə bilərsiniz.
                         </p>
 
-                        {/* Kart Məlumatları Listi */}
-                        {/* === TƏHLÜKƏSİZLİK XƏBƏRDARLIĞI ===
-        Aşağıdakı nömrələr yalnız nümunədir. İctimai saytda tam kart nömrələrini
-        göstərmək ÇOX RİSKLİDİR. Bunun əvəzinə IBAN və ya təhlükəsiz ödəniş
-        sistemləri istifadə edin.
-    */}
                         <div className="space-y-3"> {/* Kartlar arası boşluq */}
-                            {/* Nümunə Kart 1 */}
-
-                            {/*     bankData.map((bank, index) => (*/}
-                            {/*         <FooterBankNumber key={index} bank={bank}/>*/}
-                            {/*     ))*/}
-                                <SupportButton bankData={bankData} />
-
+                            <SupportButton bankData={bankData}/>
                         </div>
 
                         {/* Təşəkkür mesajı */}
@@ -203,7 +190,7 @@ const Footer = () => {
             <div className="border-t border-gray-700 py-6">
                 <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
                     <p className="text-gray-400 text-sm text-center md:text-left">
-                        © {currentYear} Əhli Sünnə Mədrəsəsi. Bütün hüquqlar qorunur.
+                        © {currentYear} Nizamiyyə Mədrəsəsi. Bütün hüquqlar qorunur.
                     </p>
                     {/*<div className="mt-4 md:mt-0">*/}
                     {/*    <ul className="flex space-x-4 text-sm text-gray-400">*/}

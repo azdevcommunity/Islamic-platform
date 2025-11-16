@@ -25,7 +25,7 @@ const AboutUsPage = () => {
           <div className="mb-8">
             <div className="inline-flex items-center gap-2 bg-emerald-500/20 backdrop-blur-sm px-4 py-2 rounded-full text-emerald-200 text-sm font-medium mb-6">
               <Heart className="w-4 h-4" />
-              <span>Əhli Sünnə Mədrəsəsi</span>
+              <span>Nizamiyyə Mədrəsəsi</span>
             </div>
           </div>
 

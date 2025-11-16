@@ -92,7 +92,7 @@ export default function GlobalError({error, reset}) {
 
                 {/* Footer */}
                 <div className="mt-8 text-xs text-gray-400">
-                    <p>Əhli-Sünnə Mədrəsəsi - Sistem Xəta Səhifəsi</p>
+                    <p>Nizamiyyə Mədrəsəsi - Sistem Xəta Səhifəsi</p>
                 </div>
             </div>
         </div>

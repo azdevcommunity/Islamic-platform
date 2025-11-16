@@ -15,7 +15,7 @@ export const booksData = [
         id: 1,
         image: "https://res.cloudinary.com/dhhlnrons/image/upload/v1742722148/esm/books/tujvd6zrscuqiqhskvxp.jpg",
         title: "Əhli-Sünnə Əqidəsi",
-        authorName: "Əhli-Sünnə Mədrəsəsi",
+        authorName: "Nizamiyyə Mədrəsəsi",
         category: 'Əqidə',
         description: 'İslam əqidəsinin əsasları, tövhid, şirk və digər mühüm mövzular Əhli-Sünnə prizmasından geniş izah olunur. Hər bir müsəlmanın bilməsi vacib olan məsələlər əhatə olunub.',
         price: '3 AZN',
@@ -27,7 +27,7 @@ export const booksData = [
         id: 2,
         image: "https://res.cloudinary.com/dhhlnrons/image/upload/v1742722145/esm/books/qwqgjoagkondanp5gktf.jpg",
         title: "Müxtəsər Elmihal", // Example: Different title
-        authorName: "Əhli-Sünnə Mədrəsəsi",
+        authorName: "Nizamiyyə Mədrəsəsi",
         category: 'Fiqh',
         description: 'Gündəlik ibadətlər (namaz, oruc, zəkat, həcc), təharət qaydaları və muamilatla bağlı əsas fiqhi hökmlər sadə dildə izah edilir.',
         price: '4 AZN',
@@ -39,7 +39,7 @@ export const booksData = [
         id: 3,
         image: "https://res.cloudinary.com/dhhlnrons/image/upload/v1742722117/esm/books/zxwlxh1zsjutjhocvi1x.jpg",
         title: "İmanın Əsasları", // Example: Different title
-        authorName: "Əhli-Sünnə Mədrəsəsi",
+        authorName: "Nizamiyyə Mədrəsəsi",
         category: 'Əqidə',
         description: 'İmanın altı şərti (Allaha, mələklərə, kitablara, peyğəmbərlərə, axirət gününə, qədərə iman) dəlillərlə və ətraflı şəkildə şərh olunur.',
         price: '3 AZN',
@@ -51,7 +51,7 @@ export const booksData = [
         id: 4,
         image: "https://res.cloudinary.com/dhhlnrons/image/upload/v1742722148/esm/books/tujvd6zrscuqiqhskvxp.jpg", // Placeholder image
         title: "Fiqh Dərsləri",
-        authorName: "Əhli-Sünnə Mədrəsəsi",
+        authorName: "Nizamiyyə Mədrəsəsi",
         category: 'Əqidə',
         description: 'İmanın altı şərti (Allaha, mələklərə, kitablara, peyğəmbərlərə, axirət gününə, qədərə iman) dəlillərlə və ətraflı şəkildə şərh olunur.',
         price: '3 AZN',

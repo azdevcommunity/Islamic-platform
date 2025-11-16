@@ -7,11 +7,11 @@ export async function generateMetadata({searchParams}) {
     // e.g., total video count, featured playlists, etc.
     // const initialData = await fetchSomeVideoData(searchParams);
 
-    const pageTitle = "İslami Videolar | Əhli-Sünnə Mədrəsəsi";
-    const pageDescription = "Əhli-Sünnə Mədrəsəsi tərəfindən hazırlanan dini videolar, dərslər və söhbətlər. İslamı öyrənmək üçün video mənbələr.";
-    const pageKeywords = "İslami videolar, dini videolar, Əhli-Sünnə Mədrəsəsi, video dərslər, Quran, hədis, fiqh, söhbətlər";
-    const pageUrl = "https://www.ehlisunnemedresesi.az/videos";
-    const imageUrl = "https://www.ehlisunnemedresesi.az/images/og-videos-default.jpg"; // Default image for videos page
+    const pageTitle = "İslami Videolar | Nizamiyyə Mədrəsəsi";
+    const pageDescription = "Nizamiyyə Mədrəsəsi tərəfindən hazırlanan dini videolar, dərslər və söhbətlər. İslamı öyrənmək üçün video mənbələr.";
+    const pageKeywords = "İslami videolar, dini videolar, Nizamiyyə Mədrəsəsi, video dərslər, Quran, hədis, fiqh, söhbətlər";
+    const pageUrl = "https://www.nizamiyyemedresesi.az/videos";
+    const imageUrl = "https://www.nizamiyyemedresesi.az/images/og-videos-default.jpg"; // Default image for videos page
 
     return {
         title: pageTitle,
@@ -24,7 +24,7 @@ export async function generateMetadata({searchParams}) {
             title: pageTitle,
             description: pageDescription,
             url: pageUrl,
-            siteName: 'Əhli-Sünnə Mədrəsəsi',
+            siteName: 'Nizamiyyə Mədrəsəsi',
             images: [
                 {
                     url: imageUrl,
@@ -57,8 +57,8 @@ export default async function VideosPage({searchParams}) {
         '@context': 'https://schema.org',
         '@type': 'ItemList', // Represents a list of items, in this case, videos
         name: 'İslami Videolar',
-        description: 'Əhli-Sünnə Mədrəsəsi tərəfindən hazırlanan dini video dərslər və söhbətlər.',
-        url: `https://www.ehlisunnemedresesi.az/videos${awaitedParams ? '?' + new URLSearchParams(awaitedParams).toString() : ''}`,
+        description: 'Nizamiyyə Mədrəsəsi tərəfindən hazırlanan dini video dərslər və söhbətlər.',
+        url: `https://www.nizamiyyemedresesi.az/videos${awaitedParams ? '?' + new URLSearchParams(awaitedParams).toString() : ''}`,
         // You would ideally populate itemListElement dynamically if you fetch initial videos here
         // Otherwise, this provides general context for the list page.
         // Example (if you fetched first few videos):
@@ -72,7 +72,7 @@ export default async function VideosPage({searchParams}) {
         //     thumbnailUrl: video.thumbnailUrl,
         //     uploadDate: video.uploadDate,
         //     duration: video.duration, // ISO 8601 format e.g., PT15M3S
-        //     url: `https://www.ehlisunnemedresesi.az/videos?videoId=${video.id}`,
+        //     url: `https://www.nizamiyyemedresesi.az/videos?videoId=${video.id}`,
         //     // embedUrl: video.embedUrl // If available
         //   }
         // }))

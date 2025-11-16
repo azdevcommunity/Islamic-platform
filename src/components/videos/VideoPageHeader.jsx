@@ -76,7 +76,7 @@ const VideoPageHeader = () => {
                             </span>
                         </h1>
                         <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                            Əhli-Sünnə Mədrəsəsinin zəngin video arxivindən dini dərslər, söhbətlər və təlim materialları
+                            Nizamiyyə Mədrəsəsinin zəngin video arxivindən dini dərslər, söhbətlər və təlim materialları
                         </p>
                     </motion.div>
 
