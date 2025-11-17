@@ -153,7 +153,7 @@ const IslamicAboutPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
                                 viewport={{ once: true }}
-                                className="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-stone-200 hover:border-primary-200"
+                                className="group p-8 bg-white rounded-2xl hover:shadow-sm transition-all duration-300 border border-stone-200 hover:border-primary-200"
                             >
                                 <div className="flex flex-col items-center text-center space-y-4">
                                     <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center group-hover:bg-primary-100 transition-colors border border-primary-100">

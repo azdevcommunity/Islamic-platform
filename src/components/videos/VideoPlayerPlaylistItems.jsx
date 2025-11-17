@@ -29,7 +29,7 @@ const VideoPlayerPlaylistItems = ({ playlistId, videos, page, searchParams, cont
 
   return (
     <div className="divide-y divide-gray-700">
-      {videos?.map((video) => {
+      {videos?.map((video, index) => {
         // Debug: Check if video selection is working
         if (video.videoId === videoId) {
           console.log("Selected video:", video.title, "ID:", video.videoId)
@@ -37,7 +37,7 @@ const VideoPlayerPlaylistItems = ({ playlistId, videos, page, searchParams, cont
         return (
             <Link
                 href={generateRoute(playlistId, video.videoId)}
-                key={video.videoId}
+                key={`${video.videoId}-${index}`}
                 className={`flex p-3 hover:bg-gray-700/50 transition-colors ${
                     video.videoId === videoId ? "bg-emerald-900/30 border-l-4 !border-l-emerald-500" : ""
                 }`}
