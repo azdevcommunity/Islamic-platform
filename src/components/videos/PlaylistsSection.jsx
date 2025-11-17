@@ -50,7 +50,7 @@ const PlaylistsSection = async ({ playlistId, search }) => {
             {playlists.map((playlist, index) => (
               <Link
                 href={`/videos?playlistId=${playlist.playlistId}`}
-                key={playlist.playlistId}
+                key={`${playlist.playlistId}-${index}`}
                 className="bg-white playlistCard cursor-pointer rounded-2xl overflow-hidden  shadow-sm"
               >
                 {/*<Image*/}

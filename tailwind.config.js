@@ -18,33 +18,35 @@ module.exports = {
     		colors: {
     			background: 'hsl(var(--background))',
     			foreground: 'hsl(var(--foreground))',
+    			// Modern Soft Green - Ana rəng paleti
     			primary: {
-    				'50': '#EBFAF4',
-    				'100': '#D0F5E6',
-    				'200': '#A2EAD0',
-    				'300': '#74DEB9',
-    				'400': '#45D3A2',
-    				'500': '#26C48E',
-    				'600': '#1C9E74',
-    				'700': '#007A4C',
-    				'800': '#00613C',
-    				'900': '#00472C',
-    				'950': '#002D1B',
+    				'50': '#f0fdf7',
+    				'100': '#dcfce9',
+    				'200': '#bbf7d6',
+    				'300': '#86efb4',
+    				'400': '#4ade8a',
+    				'500': '#12a19a', // Ana soft yeşil
+    				'600': '#0d8a84',
+    				'700': '#0a6e6a',
+    				'800': '#085854',
+    				'900': '#064845',
+    				'950': '#032826',
     				DEFAULT: 'hsl(var(--primary))',
     				foreground: 'hsl(var(--primary-foreground))'
     			},
+    			// Soft Gold - Minimal akcent üçün
     			accent: {
-    				'50': '#FFFDE6',
-    				'100': '#FFF9C2',
-    				'200': '#FFF599',
-    				'300': '#FFEF70',
-    				'400': '#F7E652',
-    				'500': '#EBCC1F',
-    				'600': '#DBAC13',
-    				'700': '#B7810F',
-    				'800': '#936315',
-    				'900': '#7A5117',
-    				'950': '#422B0D',
+    				'50': '#fefce8',
+    				'100': '#fef9c3',
+    				'200': '#fef08a',
+    				'300': '#fde047',
+    				'400': '#facc15',
+    				'500': '#d4a574', // Soft gold
+    				'600': '#b8935f',
+    				'700': '#9a7a4d',
+    				'800': '#7c6240',
+    				'900': '#5e4a30',
+    				'950': '#3d2f1e',
     				DEFAULT: 'hsl(var(--accent))',
     				foreground: 'hsl(var(--accent-foreground))'
     			},
@@ -165,6 +167,21 @@ module.exports = {
     			lg: 'var(--radius)',
     			md: 'calc(var(--radius) - 2px)',
     			sm: 'calc(var(--radius) - 4px)'
+    		},
+    		// İslami geometrik pattern üçün
+    		backgroundImage: {
+    			'islamic-pattern': "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2312a19a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+    			'islamic-subtle': "url(\"data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2312a19a' fill-opacity='0.02'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2l-2 2V0zm0 4l4-4h2l-6 6V4zm0 4l8-8h2L40 10V8zm0 4L52 0h2L40 14v-2zm0 4L56 0h2L40 18v-2zm0 4L60 0h2L40 22v-2zm0 4L64 0h2L40 26v-2zm0 4L68 0h2L40 30v-2zm0 4L72 0h2L40 34v-2zm0 4L76 0h2L40 38v-2zm0 4L80 0v2L42 40h-2zm4 0L80 4v2L46 40h-2zm4 0L80 8v2L50 40h-2zm4 0l28-28v2L54 40h-2zm4 0l24-24v2L58 40h-2zm4 0l20-20v2L62 40h-2zm4 0l16-16v2L66 40h-2zm4 0l12-12v2L70 40h-2zm4 0l8-8v2l-6 6h-2zm4 0l4-4v2l-2 2h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+    		},
+    		fontFamily: {
+    			sans: ['Inter', 'system-ui', 'sans-serif'],
+    			serif: ['Crimson Pro', 'Georgia', 'serif'],
+    			arabic: ['Amiri', 'serif'],
+    		},
+    		spacing: {
+    			'18': '4.5rem',
+    			'88': '22rem',
+    			'128': '32rem',
     		}
     	}
     },
