@@ -130,7 +130,7 @@ export default function IslamicVideoSlider() {
             </video>
 
             {/* Məzmun Overlay - Daha soft və minimal */}
-            <div className="absolute inset-0 flex items-center justify-center lg:justify-start text-white bg-gradient-to-r from-stone-900/80 via-stone-900/60 to-transparent p-6 md:p-10 lg:p-16">
+            <div className="absolute inset-0 flex items-center justify-center lg:justify-start text-white bg-gradient-to-r from-black/70 via-black/50 to-transparent p-6 md:p-10 lg:p-16">
               {/* YouTube Link - Minimal dizayn */}
               <a
                 href={slide.youtubeLink}
