@@ -24,7 +24,7 @@ class HttpClient {
     // but handle cases where one or both might be missing.
     const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
     const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-    console.log(`Base url ${cleanBase}`);
+    ///console.log(`Base url ${cleanBase}`);
     return `${cleanBase}/${cleanPath}`;
   }
 

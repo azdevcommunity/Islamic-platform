@@ -131,8 +131,8 @@ export default function ArticlesPage({ page: initialPage, category: initialCateg
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
             {/* Hero Section */}
-            <section className="relative py-20 md:py-28 bg-gradient-to-br from-[#43b365] via-[#2d7a47] to-[#1e5a32] overflow-hidden">
-                {/* Background Pattern */}
+            <section className="relative py-20 md:py-28 bg-gradient-to-br from-[#12a19a] via-[#12a19a] to-[#0d8a84] overflow-hidden">
+                {/* Background Pattern - Noktalar */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
                         backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
@@ -173,10 +173,10 @@ export default function ArticlesPage({ page: initialPage, category: initialCateg
 
                         {/* Stats */}
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12"
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12"
                         >
                             {[
                                 { label: "Məqalələr", count: statistics.totalArticles || 0 },
@@ -184,15 +184,18 @@ export default function ArticlesPage({ page: initialPage, category: initialCateg
                                 { label: "Müəlliflər", count: statistics.totalAuthors || 0 },
                                 { label: "Oxunma", count: statistics.totalReadCount >= 1000 ? `${Math.floor(statistics.totalReadCount / 1000)}K+` : statistics.totalReadCount || 0 }
                             ].map((stat, index) => (
-                                <div
+                                <motion.div
                                     key={index}
-                                    className="group p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                                    className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
                                 >
                                     <div className="text-center">
                                         <div className="text-2xl md:text-3xl font-bold text-white">{stat.count}</div>
                                         <div className="text-sm text-white/70 mt-1">{stat.label}</div>
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </motion.div>
                     </div>
