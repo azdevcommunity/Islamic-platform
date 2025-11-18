@@ -41,6 +41,14 @@ const IslamicAboutPage = () => {
         <main className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-stone-50">
             {/* Hero Section */}
             <section className="relative py-20 md:py-28 bg-gradient-to-br from-primary-600 via-primary-500 to-primary-700 overflow-hidden">
+                {/* Background Pattern - Noktalar */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
+                        backgroundSize: '60px 60px'
+                    }}></div>
+                </div>
+                
                 <div className="absolute inset-0 bg-islamic-pattern opacity-10"></div>
                 
                 <div className="container mx-auto px-4 max-w-7xl relative">
