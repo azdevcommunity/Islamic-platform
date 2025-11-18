@@ -1,7 +1,11 @@
+/* Modern İslami Estetik - Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Crimson+Pro:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap');
+
 /* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 /*:root {*/
 /*  --background: #ffffff;*/
@@ -27,14 +31,17 @@ html {
 
 /* Prevent flash of unstyled content */
 html, body {
-  background-color: #ffffff !important;
+  background-color: #fafaf9 !important;
 }
 
 body {
-  font-family: "Inter", sans-serif;
-  color: #1a1a1a;
-  background-color: #f8f9fa;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #1c1917;
+  background-color: #fafaf9;
   transition: background-color 0.3s ease, color 0.3s ease;
+  font-feature-settings: "kern" 1, "liga" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Smooth theme transitions */
@@ -559,7 +566,9 @@ body {
 }
 
 nav {
-  background: linear-gradient(90deg, #007a4c, #004d2b);
+  /*background: linear-gradient(90deg, #4ade8a, #0d8a84);*/
+  background-color: #12a19a;
+  border-radius: 15px;
 }
 
 .menu-item {
@@ -1343,25 +1352,25 @@ uestions Page Styles */
   .modern-question-card {
     padding: 1.5rem;
   }
-  
+
   .modern-question-card .question-title {
     font-size: 1.25rem;
     line-height: 1.4;
   }
-  
+
   .modern-question-card .answer-preview {
     font-size: 0.875rem;
     line-height: 1.5;
   }
-  
+
   .modern-header {
     padding: 1.5rem;
   }
-  
+
   .modern-header .header-title {
     font-size: 1.5rem;
   }
-  
+
   .modern-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
@@ -1372,26 +1381,26 @@ uestions Page Styles */
   .modern-question-card {
     padding: 1rem;
   }
-  
+
   .modern-question-card .question-icon {
     width: 3rem;
     height: 3rem;
   }
-  
+
   .modern-question-card .question-icon svg {
     width: 1.5rem;
     height: 1.5rem;
   }
-  
+
   .modern-header {
     padding: 1rem;
   }
-  
+
   .modern-search-controls {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
-  
+
   .modern-layout-toggle {
     justify-self: stretch;
   }
@@ -1410,12 +1419,12 @@ uestions Page Styles */
     background: rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
-  
+
   .modern-question-card {
     background: rgba(0, 0, 0, 0.4);
     color: #f8fafc;
   }
-  
+
   .modern-header {
     background: rgba(0, 0, 0, 0.4);
     color: #f8fafc;
@@ -1428,18 +1437,18 @@ uestions Page Styles */
     border: 2px solid #000;
     background: #fff;
   }
-  
+
   .modern-header {
     border: 2px solid #000;
     background: #fff;
   }
-  
+
   .btn-modern {
     border: 2px solid #000;
     background: #fff;
     color: #000;
   }
-  
+
   .btn-modern:hover {
     background: #000;
     color: #fff;
@@ -1455,11 +1464,11 @@ uestions Page Styles */
   .animate-modern-pulse-soft {
     animation: none;
   }
-  
+
   .modern-hover-lift:hover {
     transform: none;
   }
-  
+
   .modern-card-hover:hover {
     transform: none;
   }
@@ -1474,17 +1483,17 @@ uestions Page Styles */
     break-inside: avoid;
     margin-bottom: 1rem;
   }
-  
+
   .modern-header {
     background: white !important;
     border: 1px solid #000 !important;
     box-shadow: none !important;
   }
-  
+
   .btn-modern {
     display: none !important;
   }
-  
+
   .animate-modern-fadeInUp,
   .animate-modern-slideInRight,
   .animate-modern-scaleIn {
@@ -1685,7 +1694,7 @@ ine clamp utilities for text truncation */
   .search-card-hover:hover {
     transform: translateY(-2px) scale(1.01);
   }
-  
+
   .search-input-focus:focus-within {
     transform: scale(1.01);
   }

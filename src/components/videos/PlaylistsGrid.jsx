@@ -91,7 +91,7 @@ const PlaylistsGrid = async ({playlistId, search, videoId, content}) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {sortedPlaylists?.map((playlist, index) => (
                             <div
-                                key={playlist.playlistId}
+                                key={`${playlist.playlistId}-${index}`}
                                 className="animate-fadeInUp"
                                 style={{animationDelay: `${index * 0.1}s`}}
                             >
