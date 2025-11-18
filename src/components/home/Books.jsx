@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 
 
 // Static data defined outside component
-export const booksData = [
+export const booksData2 = [
     {
         id: 1,
         image: "https://res.cloudinary.com/dhhlnrons/image/upload/v1742722148/esm/books/tujvd6zrscuqiqhskvxp.jpg",
@@ -60,7 +60,7 @@ export const booksData = [
 
     },
 ];
-
+export const booksData =[]
 export default function Books() {
     // useEffect(() => {
     //   // Fetch books data here if needed
@@ -103,7 +103,7 @@ export default function Books() {
                                 />
                                 {/* Gradient overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                
+
                                 {/* Price badge */}
                                 <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500 text-white text-sm font-bold rounded-full shadow-lg">
                                     {book.price}
@@ -126,7 +126,7 @@ export default function Books() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="mt-6 space-y-2">
                                 <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#43b365] transition-colors duration-300 line-clamp-2">
                                     {book.title}

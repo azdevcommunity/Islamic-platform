@@ -8,7 +8,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-export const booksData = [
+export const booksData=[]
+export const booksData2 = [
     {
         id: 1,
         image: "https://res.cloudinary.com/dhhlnrons/image/upload/v1742722148/esm/books/tujvd6zrscuqiqhskvxp.jpg",
@@ -89,7 +90,7 @@ export default function IslamicBooks() {
                                 />
                                 {/* Soft gradient overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                
+
                                 {/* Qiymət badge - Minimal */}
                                 <div className="absolute top-4 right-4 px-3 py-1.5 bg-accent-500 text-white text-sm font-semibold rounded-full shadow-md">
                                     {book.price}
@@ -112,7 +113,7 @@ export default function IslamicBooks() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="mt-5 space-y-2">
                                 <h3 className="text-base font-bold text-stone-900 group-hover:text-primary-700 transition-colors duration-300 line-clamp-2">
                                     {book.title}
