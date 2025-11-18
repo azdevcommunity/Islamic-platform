@@ -110,7 +110,7 @@ export default function BooksPage() {
                         backgroundSize: '60px 60px'
                     }}></div>
                 </div>
-                
+
                 {/* İslami naxış */}
                 <div className="absolute inset-0 bg-islamic-pattern opacity-10"></div>
 
@@ -361,7 +361,7 @@ const OptimizedBookCard = memo(function BookCard({ book }) {
             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 px-6 py-4 border-t border-gray-100">
                 <div className="flex items-center justify-between">
                     <Link
-                        href={`/books/${book.id}`}
+                        href={`/books_aaaaaaa/${book.id}`}
                         className="text-emerald-600 hover:text-emerald-700 font-medium text-sm flex items-center transition-colors"
                     >
                         Kitabı Oxu <ChevronRight className="ml-1 h-4 w-4" />

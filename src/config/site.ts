@@ -9,19 +9,19 @@ export const siteConfig = {
   url: "https://www.nizamiyyemedresesi.az",
   ogImage: "/og-image.jpg",
   locale: "az-AZ",
-  
+
   links: {
     facebook: process.env.NEXT_PUBLIC_FACEBOOK_CHANNEL_URL || "",
     instagram: process.env.NEXT_PUBLIC_INSTAGRAM_CHANNEL_URL || "",
     youtube: process.env.NEXT_PUBLIC_YTB_CHANNEL_URL || "",
     whatsapp: process.env.NEXT_PUBLIC_WP_CHANNEL_URL || "",
   },
-  
+
   contact: {
     phones: ["+994 70 624 00 62"],
     email: "info@nizamiyyemedresesi.az",
   },
-  
+
   support: {
     banks: [
       {
@@ -54,11 +54,11 @@ export const navItems = [
     href: "/questions",
     subcategories: [],
   },
-  {
-    name: "Kitablar",
-    href: "/books",
-    subcategories: [],
-  },
+  // {
+  //   name: "Kitablar",
+  //   href: "/books",
+  //   subcategories: [],
+  // },
   {
     name: "Haqqımızda",
     href: "/about",
