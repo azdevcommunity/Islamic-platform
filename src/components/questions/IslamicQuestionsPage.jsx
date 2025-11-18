@@ -2,8 +2,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
+import Pagination from "@/components/common/Pagination";
 import HttpClient from "@/util/HttpClient";
-import { Search, Grid, List, SortAsc } from "lucide-react";
+import { Search, Grid, List } from "lucide-react";
 
 // Sadə Question Card komponenti
 const IslamicQuestionCard = ({ question }) => {
@@ -29,31 +30,6 @@ const IslamicQuestionCard = ({ question }) => {
                 <span>{question.readCount} oxunma</span>
             </div>
         </a>
-    );
-};
-
-// Sadə Pagination komponenti
-const SimplePagination = ({ currentPage, totalPages, onPageChange }) => {
-    return (
-        <div className="flex justify-center items-center gap-2">
-            <button
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-white border border-stone-200 rounded-lg hover:bg-stone-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-                Əvvəlki
-            </button>
-            <span className="px-4 py-2 text-stone-700">
-                {currentPage} / {totalPages}
-            </span>
-            <button
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-white border border-stone-200 rounded-lg hover:bg-stone-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-                Növbəti
-            </button>
-        </div>
     );
 };
 
@@ -181,9 +157,20 @@ export default function IslamicQuestionsPage() {
     }, [totalPages]);
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-stone-50">
+        <main style={{
+             backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
+                        backgroundSize: '60px 60px'
+        }} className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-stone-50">
             {/* Hero Section - İslami estetik */}
             <section className="relative py-20 md:py-28 bg-gradient-to-br from-primary-600 via-primary-500 to-primary-700 overflow-hidden">
+                {/* Background Pattern - Noktalar */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
+                        backgroundSize: '60px 60px'
+                    }}></div>
+                </div>
+                
                 {/* İslami naxış */}
                 <div className="absolute inset-0 bg-islamic-pattern opacity-10"></div>
 
@@ -353,8 +340,8 @@ export default function IslamicQuestionsPage() {
                                             transition={{ duration: 0.5, delay: 0.3 }}
                                             className="mt-16"
                                         >
-                                            <SimplePagination
-                                                currentPage={page + 1}
+                                            <Pagination
+                                                clientPage={page + 1}
                                                 totalPages={totalPages}
                                                 onPageChange={paginate}
                                             />

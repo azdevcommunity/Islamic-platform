@@ -137,13 +137,13 @@ function NavItem({ item, pathname }) {
             {/* Dropdown Menu - Premium dizayn */}
             {open && hasChildren && (
                 <div
-                    className="absolute  left-0 top-full z-50 mt-1 min-w-[260px] rounded-b-2xl border border-stone-200/80 bg-white shadow-2xl animate-in fade-in slide-in-from-top-2"
+                    className="absolute  left-0 top-full z-50 mt-1 min-w-[260px] rounded-md border border-stone-200/80 bg-white shadow-2xl animate-in fade-in slide-in-from-top-2"
                     style={{
                         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
                     }}
                 >
                     {/* İncə üst xətt - dekorativ */}
-                    <div className="h-1   bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500"></div>
+                    {/*<div className="h-1   bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500"></div>*/}
 
                     <div className="p-2">
                         <DropdownMenu items={item.subcategories} level={0} />
@@ -239,7 +239,7 @@ function DropdownItem({ item, level = 0 }) {
                     }}
                 >
                     {/* İncə sol xətt - dekorativ */}
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 via-primary-600 to-primary-500 rounded-l-2xl"></div>
+                    {/*<div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 via-primary-600 to-primary-500 rounded-l-2xl"></div>*/}
 
                     {/* İslami naxış - çox subtle */}
                     <div className="absolute inset-0 bg-islamic-subtle opacity-5 pointer-events-none rounded-2xl"></div>

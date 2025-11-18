@@ -102,52 +102,55 @@ export default function BooksPage() {
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
             {/* Hero Section */}
-            <section className="relative py-20 md:py-28 bg-gradient-to-br from-[#43b365] via-[#2d7a47] to-[#1e5a32] overflow-hidden">
-                {/* Background Pattern */}
+            <section className="relative py-20 md:py-28 bg-gradient-to-br from-primary-600 via-primary-500 to-primary-700 overflow-hidden">
+                {/* Background Pattern - Noktalar */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
                         backgroundImage: `radial-gradient(circle at 25% 25%, white 2px, transparent 2px)`,
                         backgroundSize: '60px 60px'
                     }}></div>
                 </div>
+                
+                {/* İslami naxış */}
+                <div className="absolute inset-0 bg-islamic-pattern opacity-10"></div>
 
                 <div className="container mx-auto px-4 max-w-7xl relative">
-                    <div className="text-center space-y-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-center space-y-8"
+                    >
                         {/* Badge */}
                         <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 font-medium text-sm"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full text-white/90 font-medium border border-white/20"
                         >
-                            <span className="w-2 h-2 bg-white rounded-full"></span>
-                            Kitablar Arxivi
+                            <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                            İslami Elm və Hikmət Mərkəzi
                         </motion.div>
 
-                        {/* Main Title */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="space-y-6"
-                        >
+                        {/* Başlıq */}
+                        <div className="space-y-6">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                                İslami Elm və
-                                <span className="block text-transparent bg-gradient-to-r from-yellow-200 to-yellow-400 bg-clip-text">
-                                    Maarifləndirici Kitablar
+                                Kitablar Arxivi
+                                <span className="block text-accent-200 mt-2">
+                                    Maarifləndirici Qaynaqlar
                                 </span>
                             </h1>
                             <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
                                 Nizamiyyə Mədrəsəsi tərəfindən hazırlanmış elmi və mənəvi qaynaqları kəşf edin və ruhunuzu zənginləşdirin
                             </p>
-                        </motion.div>
+                        </div>
 
                         {/* Stats */}
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12"
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12"
                         >
                             {[
                                 { label: "Kitablar", count: "4+" },
@@ -155,18 +158,21 @@ export default function BooksPage() {
                                 { label: "Müəlliflər", count: "2+" },
                                 { label: "Oxunma", count: "500+" }
                             ].map((stat, index) => (
-                                <div
+                                <motion.div
                                     key={index}
-                                    className="group p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                                    className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
                                 >
                                     <div className="text-center">
                                         <div className="text-2xl md:text-3xl font-bold text-white">{stat.count}</div>
                                         <div className="text-sm text-white/70 mt-1">{stat.label}</div>
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </motion.div>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* Decorative Elements */}

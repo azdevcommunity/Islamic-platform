@@ -1,96 +1,75 @@
 import Link from "next/link"
 import Image from "next/image"
-import { FiCalendar, FiUser, FiArrowRight } from "react-icons/fi"
+import { Calendar, ArrowRight } from "lucide-react"
 
 const ArticleCard = ({ id, title, description, image, date, authorName, authorImage }) => {
+  const formattedDate = date ? new Date(date).toLocaleDateString("az-AZ", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }) : "Tarix yoxdur"
+
   return (
-    <article className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-[#43b365]/20 h-full flex flex-col">
+    <article className="group flex flex-col h-full bg-white rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-2xl hover:border-primary-300 transition-all duration-500 overflow-hidden">
       {/* Image Container */}
-      <Link href={`/articles/${id}`} className="block overflow-hidden relative aspect-[4/3]">
+      <Link href={`/articles/${id}`} className="block overflow-hidden relative aspect-[16/9]">
         <Image
           src={image || "/placeholder.svg"}
           alt={title}
           fill
-          priority
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-all duration-500 group-hover:scale-110"
+          className="object-cover group-hover:scale-110 transition-transform duration-700"
+          priority={false}
         />
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         
-        {/* Date badge */}
-        <div className="absolute top-4 left-4 px-3 py-1 bg-[#43b365] text-white text-xs font-medium rounded-full">
+        {/* Category badge */}
+        <div className="absolute top-4 left-4 px-3 py-1.5 bg-primary-600/90 backdrop-blur-sm text-white text-xs font-semibold rounded-full">
           Məqalə
-        </div>
-
-        {/* Read more overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
-            <span>Oxu</span>
-            <FiArrowRight className="w-4 h-4" />
-          </div>
         </div>
       </Link>
 
       {/* Content */}
-      <div className="p-6 flex flex-col flex-grow space-y-4">
-        {/* Date */}
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <FiCalendar className="w-4 h-4" />
-          <span>
-            {new Date(date).toLocaleDateString("az-AZ", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </span>
-        </div>
-
+      <div className="flex flex-col flex-1 p-6">
         {/* Title */}
         <Link href={`/articles/${id}`}>
-          <h2 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-[#43b365] transition-colors duration-300 leading-tight">
+          <h2 className="text-lg font-bold text-stone-900 group-hover:text-primary-700 mb-3 line-clamp-2 transition-colors duration-300 leading-tight">
             {title}
           </h2>
         </Link>
 
         {/* Description */}
-        <p className="text-gray-600 line-clamp-3 flex-grow leading-relaxed">
-          {description}
-        </p>
+        {description && (
+          <p className="text-sm text-stone-600 line-clamp-2 mb-4 leading-relaxed">
+            {description}
+          </p>
+        )}
 
-        {/* Author section */}
-        <div className="mt-auto pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative h-10 w-10 rounded-full overflow-hidden bg-gray-200">
-                <Image 
-                  src={authorImage || "/default-avatar.png"} 
-                  alt={authorName} 
-                  fill 
-                  className="object-cover" 
-                />
-              </div>
-              <div>
-                <div className="flex items-center gap-1 text-sm text-gray-500">
-                  <FiUser className="w-3 h-3" />
-                  <span>Müəllif</span>
-                </div>
-                <span className="text-sm font-semibold text-gray-900">{authorName}</span>
-              </div>
-            </div>
-            
-            <Link 
-              href={`/articles/${id}`}
-              className="text-[#43b365] hover:text-[#2d7a47] transition-colors duration-200"
-            >
-              <FiArrowRight className="w-5 h-5" />
-            </Link>
+        {/* Meta Info */}
+        <div className="flex items-center gap-4 text-xs text-stone-500 mb-4 mt-auto">
+          <div className="flex items-center gap-1.5">
+            <Calendar className="h-4 w-4 text-stone-400" />
+            <span>{formattedDate}</span>
           </div>
+          {authorName && (
+            <div className="flex items-center gap-1.5">
+              <div className="h-4 w-4 rounded-full bg-primary-200 flex items-center justify-center text-xs font-semibold text-primary-700">
+                {authorName.charAt(0)}
+              </div>
+              <span className="line-clamp-1">{authorName}</span>
+            </div>
+          )}
+        </div>
+        
+        {/* Footer with CTA */}
+        <div className="flex items-center justify-between pt-4 border-t border-stone-100 group-hover:border-primary-200 transition-colors">
+          <span className="text-xs font-semibold text-primary-600 group-hover:text-primary-700">
+            Oxu
+          </span>
+          <ArrowRight className="h-4 w-4 text-stone-400 group-hover:text-primary-600 transform group-hover:translate-x-1 transition-all duration-300" />
         </div>
       </div>
-
-      {/* Hover border effect */}
-      <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-[#43b365]/20 transition-colors duration-300 pointer-events-none"></div>
     </article>
   )
 }
