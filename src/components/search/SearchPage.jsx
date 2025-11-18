@@ -164,7 +164,7 @@ export default function SearchPage() {
                   </button>
                 </div>
                 {/* Decorative gradient line */}
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-400 to-accent-400 rounded-full opacity-60"></div>
+                {/*<div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-400 to-accent-400 rounded-full opacity-60"></div>*/}
               </form>
             </div>
           </div>
@@ -326,8 +326,8 @@ function ModernSection({ title, data, children, icon: Icon, gradient = "from-pri
 // --- Enhanced Card Component ---
 function ModernCard({ href, image, title, info1Label, info1, info1Icon: Info1Icon, info2Label, info2, info2Icon: Info2Icon, animationDelay = 0 }) {
   return (
-      <Link 
-        href={href} 
+      <Link
+        href={href}
         className="group block bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 animate-fadeInUp"
         style={{ animationDelay: `${animationDelay}s` }}
       >
