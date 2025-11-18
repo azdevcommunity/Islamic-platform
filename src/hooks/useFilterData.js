@@ -46,7 +46,7 @@ export const useFilterData = ({
     const fetchCategories = useCallback(async () => {
         try {
             // Try to get from cache first
-            CacheProvider.fetchData('all-categories',60,
+            CacheProvider.fetchData('all-categories',1,
                 async() =>await HttpClient.get('/categories'))
                 .then((response) => {
                     setAllCategories(response);
