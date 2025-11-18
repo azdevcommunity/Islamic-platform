@@ -49,6 +49,12 @@ export default function IslamicQuestionsPage() {
     const [isFiltersInitialized, setIsFiltersInitialized] = useState(false);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    const [statistics, setStatistics] = useState({
+        totalQuestions: 0,
+        totalCategories: 0,
+        totalTags: 0,
+        totalViewCount: 0
+    });
 
     // Data Fetching
     const fetchQuestions = useCallback(async () => {
@@ -107,6 +113,23 @@ export default function IslamicQuestionsPage() {
             setLoading(false);
         }
     }, [page, filters.searchQuery, filters.categories, filters.tags, sortBy, layout]);
+
+    const fetchStatistics = useCallback(async () => {
+        try {
+            const response = await HttpClient.get('/questions/statistics');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            setStatistics(data);
+        } catch (err) {
+            console.error("Error fetching statistics:", err);
+            // Keep default values if API fails
+        }
+    }, []);
+
+
+    useEffect(() => {
+        fetchStatistics();
+    }, [fetchStatistics]);
 
     useEffect(() => {
         if (isFiltersInitialized) {
@@ -170,7 +193,7 @@ export default function IslamicQuestionsPage() {
                         backgroundSize: '60px 60px'
                     }}></div>
                 </div>
-                
+
                 {/* İslami naxış */}
                 <div className="absolute inset-0 bg-islamic-pattern opacity-10"></div>
 
@@ -213,10 +236,10 @@ export default function IslamicQuestionsPage() {
                             className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12"
                         >
                             {[
-                                { label: "Aktiv Suallar", count: questions.length || "200+" },
-                                { label: "Kateqoriyalar", count: "15+" },
-                                { label: "Cavablar", count: "180+" },
-                                { label: "Oxunma", count: "10K+" }
+                                { label: "Aktiv Suallar", count: statistics.totalQuestions },
+                                { label: "Kateqoriyalar", count: statistics.totalCategories},
+                                { label: "Teqlər", count: statistics.totalTags },
+                                { label: "Oxunma", count: statistics.totalViewCount}
                             ].map((stat, index) => (
                                 <motion.div
                                     key={index}
