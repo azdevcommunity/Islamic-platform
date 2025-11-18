@@ -29,25 +29,7 @@ const IslamicHomePage = () => {
 
             {/* Books Section - Soft background */}
             <section id="books" className="py-20 md:py-28 bg-gradient-to-br from-stone-50 to-white relative">
-                {/* İslami naxış */}
-                <div className="absolute inset-0 bg-islamic-subtle opacity-20"></div>
-                
-                <div className="container mx-auto px-4 max-w-7xl relative">
-                    <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-50 rounded-full text-accent-700 font-medium text-sm mb-4 border border-accent-100">
-                            <span className="w-2 h-2 bg-accent-500 rounded-full"></span>
-                            Kitablarımız
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6 leading-tight">
-                            Ruhani Sərvətlər
-                        </h2>
-                        <p className="text-lg text-stone-600 max-w-3xl mx-auto leading-relaxed">
-                            İslami elm və mənəviyyatın dərin mənbələrindən hazırlanmış kitablarımız
-                        </p>
-                        <div className="mt-8 w-24 h-0.5 bg-gradient-to-r from-accent-400 to-accent-600 mx-auto rounded-full"></div>
-                    </div>
-                    <IslamicBooks />
-                </div>
+                {/*<IslamicBooks />*/}
             </section>
 
             {/* Social Media Stats - Koyu fon */}
