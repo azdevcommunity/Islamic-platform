@@ -50,7 +50,7 @@ export const navItems = [
     subcategories: [],
   },
   {
-    name: "Suallar",
+    name: "Sual və Cavab",
     href: "/questions",
     subcategories: [],
   },
