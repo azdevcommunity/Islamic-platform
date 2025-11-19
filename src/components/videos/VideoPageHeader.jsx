@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { FaPlay, FaVideo, FaList, FaClock, FaEye } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import HttpClient from "@/util/HttpClient";
+import Link from "next/link";
+
 
 const VideoPageHeader = () => {
     const [stats, setStats] = useState({
@@ -140,20 +142,20 @@ const VideoPageHeader = () => {
                         transition={{ duration: 0.8, delay: 0.6 }}
                         className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
                     >
-                        <a
+                        <Link
                             href="#content"
                             className="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                         >
                             <FaPlay className="mr-2" />
                             Videoları İzlə
-                        </a>
-                        <a
-                            href="?content=playlists"
+                        </Link>
+                        <Link
+                            href="?content=playlists#content"
                             className="inline-flex items-center justify-center px-8 py-4 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/30 transition-all duration-300 border border-white/30"
                         >
                             <FaList className="mr-2" />
                             Playlistlər
-                        </a>
+                        </Link>
                     </motion.div>
                 </div>
             </div>
