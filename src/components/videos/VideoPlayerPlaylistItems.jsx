@@ -30,10 +30,7 @@ const VideoPlayerPlaylistItems = ({ playlistId, videos, page, searchParams, cont
   return (
     <div className="divide-y divide-gray-700">
       {videos?.map((video, index) => {
-        // Debug: Check if video selection is working
-        if (video.videoId === videoId) {
-          console.log("Selected video:", video.title, "ID:", video.videoId)
-        }
+     
         return (
             <Link
                 href={generateRoute(playlistId, video.videoId)}

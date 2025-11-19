@@ -10,12 +10,14 @@ export const revalidate = 60
 const LIMIT = 12
 
 const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
+
+
     const clientPage = Number.parseInt(page, 10) || 1
     const backendPage = clientPage - 1
 
     const isShorts = content === "shorts" ? 1 : 0
-    let videos;
-    let totalPages;
+    let videos = [];
+    let totalPages = 1;
     try {
         const res = await fetch(
             `${BASE_URL}/videos?page=${backendPage}&size=${LIMIT}&search=${search ?? ""}&shorts=${isShorts}`,
@@ -24,15 +26,41 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
             },
         )
 
+        if (!res.ok) {
+            console.error('API request failed:', res.status, res.statusText)
+            return <div>API hatası oluştu</div>
+        }
+
         const data = await res.json()
-        videos = data.content ?? data
-        totalPages = data.page.totalPages ?? 1
+        
+        // Safely extract videos array
+        if (Array.isArray(data)) {
+            videos = data
+        } else if (data && Array.isArray(data.content)) {
+            videos = data.content
+        } else if (data && data.data && Array.isArray(data.data)) {
+            videos = data.data
+        } else {
+            console.error('Unexpected API response format:', data)
+            videos = []
+        }
+        
+        // Safely extract totalPages
+        if (data && data.page && typeof data.page.totalPages === 'number') {
+            totalPages = data.page.totalPages
+        } else if (data && typeof data.totalPages === 'number') {
+            totalPages = data.totalPages
+        } else {
+            totalPages = 1
+        }
     } catch (err) {
-        console.log(err)
+        console.error('Error fetching videos:', err)
+        videos = []
+        totalPages = 1
     }
 
-    if (playlistId) {
-        videos = videos?.sort((a, b) => (a.videoId === videoId ? -1 : b.videoId === videoId ? 1 : 0))
+    if (playlistId && Array.isArray(videos)) {
+        videos = videos.sort((a, b) => (a.videoId === videoId ? -1 : b.videoId === videoId ? 1 : 0))
     }
 
     const buildPageLink = (newPage, dynamicVideoId) => {
@@ -56,6 +84,9 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
         }
         return `?${params.toString()}`
     }
+
+
+         console.log("totalPages",totalPages)
 
     return (
         <div>
@@ -172,7 +203,7 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
                             </div>
                         ))}
                     </div>
-
+                   
                     {/* Pagination */}
                     {totalPages > 1 && (
                         <div className="mt-16">

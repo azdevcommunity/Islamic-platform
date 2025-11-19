@@ -96,6 +96,34 @@ class HttpClient {
     return this._safeJsonParse(response);
   }
 
+  static async patch(path, body = null, headers = null, customBaseUrl = null) {
+    const customHeaders = headers ?? {}
+    const url = this._getUrl(path, customBaseUrl);
+
+    console.log(`PATCH Request to: ${url}`);
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      body: body ? JSON.stringify(body) : undefined,
+      headers: {
+        ...this.defaultHeaders,
+        ...customHeaders,
+      },
+    })
+
+    if (!response.ok) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorResponse = await response.json()
+        throw new Error(errorResponse.message || "Request failed with status " + response.status)
+      } else {
+        throw new Error("Request failed with status " + response.status)
+      }
+    }
+
+    return this._safeJsonParse(response);
+  }
+
   static async delete(path, headers = null, customBaseUrl = null) {
     const customHeaders = headers ? Object.fromEntries(headers) : {}
     const url = this._getUrl(path, customBaseUrl);

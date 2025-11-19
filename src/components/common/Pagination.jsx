@@ -2,6 +2,9 @@ import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange }) => {
+
+console.log("clientPage",clientPage, totalPages, buildPageLink, onPageChange )
+
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pageNumbers = []

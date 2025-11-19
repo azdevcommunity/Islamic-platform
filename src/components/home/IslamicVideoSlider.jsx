@@ -6,14 +6,15 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { FaYoutube } from "react-icons/fa";
+import Link from "next/link";
 
 const slides = [
   {
     id: 1,
     videoSrc: "https://res.cloudinary.com/dhhlnrons/video/upload/v1743080791/esm/homepage/lubjcf8kkdivjgk2hdox.mp4",
     title: "Ramazan Avari",
-    subtitle: "Nizamiyyə Mədrəsəsinin Fəaliyyəti ilə Bağlı Önəmli Açıqlama",
-    description: "İletişim bilgileri və daha fazlası için hemen şimdi bizimle iletişime geçin.",
+    //subtitle: "Nizamiyyə Mədrəsəsinin Fəaliyyəti ilə Bağlı Önəmli Açıqlama",
+    //description: "İletişim bilgileri və daha fazlası için hemen şimdi bizimle iletişime geçin.",
     youtubeLink: process.env.NEXT_PUBLIC_YTB_CHANNEL_URL,
   },
 ];
@@ -165,18 +166,18 @@ export default function IslamicVideoSlider() {
                 )}
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 opacity-0 animate-fade-in-up animate-delay-800">
-                  <a
-                    href="#articles"
+                  <Link
+                    href="/articles"
                     className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     Məqalələri Oxu
-                  </a>
-                  <a
-                    href="#books"
+                  </Link>
+                  <Link
+                    href="/videos"
                     className="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/30"
                   >
-                    Kitabları Kəşf Et
-                  </a>
+                    Videoları Kəşf Et
+                  </Link>
                 </div>
               </div>
             </div>

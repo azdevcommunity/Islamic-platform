@@ -62,10 +62,22 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
             fetch(`${BASE_URL}/playlists/${playlistId}`, { next: { revalidate: 60 } }),
             fetch(`${BASE_URL}/videos?playlistId=${playlistId}`, { next: { revalidate: 60 } }),
         ])
-        
+      
         if (playlistRes.ok && videosRes.ok) {
             playlist = await playlistRes.json()
-            videos = await videosRes.json()
+            const videosData = await videosRes.json()
+            
+            // Safely extract videos array
+            if (Array.isArray(videosData)) {
+                videos = videosData
+            } else if (videosData && Array.isArray(videosData.content)) {
+                videos = videosData.content
+            } else if (videosData && videosData.data && Array.isArray(videosData.data)) {
+                videos = videosData.data
+            } else {
+                console.error('Unexpected videos API response format:', videosData)
+                videos = []
+            }
         } else {
             console.error("Failed to fetch playlist or videos:", playlistId)
             videos = []
@@ -98,23 +110,24 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
                 const selectedVideoResponse = await fetch(`${BASE_URL}/videos/${videoId}`, {
                     next: { revalidate: 60 },
                 })
+
                 if (selectedVideoResponse.ok) {
                     selectedVideo = await selectedVideoResponse.json()
                 } else {
                     console.error("Failed to fetch selected video:", videoId)
-                    selectedVideo = videos.find((v) => v.videoId === videoId) ?? videos[0]
+                    selectedVideo = Array.isArray(videos) ? (videos.find((v) => v.videoId === videoId) ?? videos[0]) : null
                 }
             } catch (error) {
                 console.error("Error fetching selected video:", error)
-                selectedVideo = videos.find((v) => v.videoId === videoId) ?? videos[0]
+                selectedVideo = Array.isArray(videos) ? (videos.find((v) => v.videoId === videoId) ?? videos[0]) : null
             }
         } else {
-            selectedVideo = videos.find((v) => v.videoId === videoId) ?? videos[0]
+            selectedVideo = Array.isArray(videos) ? (videos.find((v) => v.videoId === videoId) ?? videos[0]) : null
         }
     }
 
     // Final fallback if selectedVideo is somehow still null
-    if (!selectedVideo && videos.length > 0) {
+    if (!selectedVideo && Array.isArray(videos) && videos.length > 0) {
         selectedVideo = videos[0];
     }
 
@@ -122,6 +135,8 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
     const mainVideoFormattedDate = selectedVideo?.publishedAt
         ? formatDate(selectedVideo.publishedAt, { year: "numeric", month: "long", day: "numeric" })
         : "";
+
+
 
     return (
         <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">

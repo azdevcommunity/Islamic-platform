@@ -95,7 +95,7 @@ export default function AdminQuestionDetailPage() {
         try {
             // For contact API, we only have "mark as read" functionality
             if (actionType === 'approve') {
-                await HttpClient.patch(`/contact/${id}/read`);
+                await HttpClient.put('/contact/update-batch', [parseInt(id)]);
 
                 // Update local state on success
                 setQuestion(prev => ({ ...prev, status: 'approved' }));

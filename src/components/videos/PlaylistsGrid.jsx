@@ -9,16 +9,41 @@ export const revalidate = 60
 
 const PlaylistsGrid = async ({playlistId, search, videoId, content}) => {
     console.log("search", search ?? "")
-    const res = await fetch(`${BASE_URL}/playlists?search=${search ?? ""}`, {
-        next: {revalidate: 60},
-    })
-    let playlists = await res.json()
+    let playlists = [];
+    
+    try {
+        const res = await fetch(`${BASE_URL}/playlists?search=${search ?? ""}`, {
+            next: {revalidate: 60},
+        })
+        
+        if (!res.ok) {
+            console.error('API request failed:', res.status, res.statusText)
+            return <div>API hatası oluştu</div>
+        }
+        
+        const data = await res.json()
+        
+        // Safely extract playlists array
+        if (Array.isArray(data)) {
+            playlists = data
+        } else if (data && Array.isArray(data.content)) {
+            playlists = data.content
+        } else if (data && data.data && Array.isArray(data.data)) {
+            playlists = data.data
+        } else {
+            console.error('Unexpected API response format:', data)
+            playlists = []
+        }
+    } catch (err) {
+        console.error('Error fetching playlists:', err)
+        playlists = []
+    }
 
     // if (search && search !== '') {
     //     playlists = playlists.filter(x => x.title.toLowerCase().includes(search.toLowerCase()));
     // }
 
-    if (playlistId) {
+    if (playlistId && Array.isArray(playlists)) {
         playlists = playlists.sort((a, b) => (a.playlistId === playlistId ? -1 : b.playlistId === playlistId ? 1 : 0))
     }
 
