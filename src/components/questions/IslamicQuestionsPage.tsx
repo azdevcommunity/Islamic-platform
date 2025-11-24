@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import Pagination from "@/components/common/Pagination";
 import { apiClient } from "@/lib/api-client";
-import { Search, Grid, List } from "lucide-react";
+import { Search, Grid, List, Link } from "lucide-react";
 
 interface Question {
     id: number;
@@ -22,7 +22,7 @@ interface QuestionCardProps {
 // Sadə Question Card komponenti
 const IslamicQuestionCard = ({ question }: QuestionCardProps) => {
     return (
-        <a
+        <Link
             href={`/questions/${question.id}`}
             className="group block bg-white rounded-2xl border border-stone-200 shadow-sm hover:shadow-lg hover:border-primary-200 transition-all duration-300 p-6"
         >
@@ -42,7 +42,7 @@ const IslamicQuestionCard = ({ question }: QuestionCardProps) => {
                 </div>
                 <span>{question.readCount} oxunma</span>
             </div>
-        </a>
+        </Link>
     );
 };
 
