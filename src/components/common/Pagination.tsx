@@ -172,7 +172,17 @@ const PaginationButton = ({ children, onClick, href, disabled = false, className
 
   if (href && !disabled) {
     return (
-      <Link href={href} className={baseClassName} {...props}>
+      <Link 
+        href={href} 
+        className={baseClassName} 
+        onClick={(e) => {
+          if (onClick) {
+            onClick();
+          }
+        }}
+        scroll={false}
+        {...props}
+      >
         {children}
       </Link>
     )

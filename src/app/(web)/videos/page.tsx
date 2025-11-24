@@ -43,7 +43,17 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function VideosPage() {
+interface VideosPageProps {
+  searchParams: Promise<{
+    content?: string;
+    search?: string;
+    page?: string;
+  }>;
+}
+
+export default async function VideosPage({ searchParams }: VideosPageProps) {
+  const params = await searchParams;
+  
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -67,7 +77,11 @@ export default function VideosPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <VideosClientPage />
+      <VideosClientPage
+        initialContent={params.content || "videos"}
+        initialSearch={params.search || ""}
+        initialPage={parseInt(params.page || "1")}
+      />
     </>
   );
 }

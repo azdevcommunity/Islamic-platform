@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar } from "lucide-react";
 import { getBestThumbnailUrl } from "@/util/Thumbnail.js";
-
 import { BASE_URL } from "@/util/Const.js";
 
 interface Playlist {
@@ -20,41 +20,178 @@ interface PlaylistsGridClientProps {
   search: string;
 }
 
-export default function PlaylistsGridClient({ search }: PlaylistsGridClientProps) {
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [loading, setLoading] = useState(true);
+interface PageInfo {
+  size: number;
+  number: number;
+  totalElements: number;
+  totalPages: number;
+}
 
+interface PlaylistsResponse {
+  content: Playlist[];
+  page: PageInfo;
+  last: boolean;
+}
+
+const LIMIT = 12;
+
+async function fetchPlaylists({
+  pageParam = 0,
+  search,
+}: {
+  pageParam?: number;
+  search: string;
+}): Promise<PlaylistsResponse> {
+  const res = await fetch(
+    `${BASE_URL}/playlists?page=${pageParam}&size=${LIMIT}&search=${search || ""}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch playlists");
+  }
+
+  const data = await res.json();
+
+  // Handle different API response formats
+  if (Array.isArray(data)) {
+    return {
+      content: data,
+      page: {
+        number: 0,
+        size: data.length,
+        totalPages: 1,
+        totalElements: data.length,
+      },
+      last: true,
+    };
+  }
+
+  // Backend-dən gələn page obyekti (kiçik hərflərlə)
+  const pageInfo: PageInfo = data.page || {
+    number: pageParam,
+    size: LIMIT,
+    totalPages: 1,
+    totalElements: data.content?.length || 0,
+  };
+
+  // Son səhifəni hesabla: number (current page) >= totalPages - 1
+  const isLastPage = pageInfo.number >= pageInfo.totalPages - 1;
+
+  return {
+    content: data.content || data.data || [],
+    page: pageInfo,
+    last: isLastPage,
+  };
+}
+
+export default function PlaylistsGridClient({
+  search,
+}: PlaylistsGridClientProps) {
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["playlists-infinite", search],
+    queryFn: ({ pageParam = 0 }) => fetchPlaylists({ pageParam, search }),
+    getNextPageParam: (lastPage) => {
+      // Son səhifədirsə undefined qaytar
+      if (lastPage.last) return undefined;
+      
+      // Növbəti səhifə nömrəsi
+      const nextPage = lastPage.page.number + 1;
+      
+      // Növbəti səhifə totalPages-dən kiçikdirsə qaytar
+      if (nextPage < lastPage.page.totalPages) {
+        return nextPage;
+      }
+      
+      return undefined;
+    },
+    initialPageParam: 0,
+  });
+
+  // Intersection Observer for infinite scroll
   useEffect(() => {
-    const fetchPlaylists = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`${BASE_URL}/playlists?search=${search || ""}`);
-        if (res.ok) {
-          const data = await res.json();
-          const playlistsList = Array.isArray(data)
-            ? data
-            : data.content || data.data || [];
-          setPlaylists(playlistsList);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
-      } catch (error) {
-        console.error("Error fetching playlists:", error);
-      } finally {
-        setLoading(false);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
       }
     };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    fetchPlaylists();
-  }, [search]);
+  const allPlaylists = data?.pages.flatMap((page) => page.content) || [];
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-20">
-        <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+      <div>
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900">
+                Playlistlər
+              </h3>
+              <div className="h-5 w-32 bg-gray-200 rounded mt-1 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {Array.from({ length: 12 }).map((_, index) => (
+            <div
+              key={index}
+              className="animate-fadeInUp"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              <div className="group block bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+                <div className="relative aspect-video bg-gray-200">
+                  <div className="absolute top-3 left-3">
+                    <div className="h-6 w-20 bg-gray-300 rounded-full"></div>
+                  </div>
+                  <div className="absolute bottom-3 right-3">
+                    <div className="h-6 w-16 bg-gray-300 rounded-lg"></div>
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-full h-full bg-gray-100 rounded-xl -z-10 opacity-30"></div>
+                  <div className="absolute -bottom-2 -right-2 w-full h-full bg-gray-50 rounded-xl -z-20 opacity-20"></div>
+                </div>
+                <div className="p-6">
+                  <div className="space-y-2 mb-3">
+                    <div className="h-5 bg-gray-200 rounded w-full"></div>
+                    <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                  </div>
+                  <div className="flex items-center text-sm space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 
-  if (playlists.length === 0) {
+  if (allPlaylists.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div className="w-32 h-32 bg-gradient-to-br from-red-100 to-red-200 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
@@ -90,18 +227,18 @@ export default function PlaylistsGridClient({ search }: PlaylistsGridClientProps
           <div>
             <h3 className="text-xl font-semibold text-gray-900">Playlistlər</h3>
             <p className="text-gray-600 mt-1">
-              {playlists.length} playlist tapıldı
+              {allPlaylists.length} playlist tapıldı
             </p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {playlists.map((playlist, index) => (
+        {allPlaylists.map((playlist, index) => (
           <div
             key={`${playlist.playlistId}-${index}`}
             className="animate-fadeInUp"
-            style={{ animationDelay: `${index * 0.1}s` }}
+            style={{ animationDelay: `${(index % 12) * 0.05}s` }}
           >
             <Link
               href={`/videos/playlist/${playlist.playlistId}`}
@@ -109,7 +246,10 @@ export default function PlaylistsGridClient({ search }: PlaylistsGridClientProps
             >
               <div className="relative aspect-video">
                 <Image
-                  src={getBestThumbnailUrl(playlist.thumbnail) || "/placeholder.svg"}
+                  src={
+                    getBestThumbnailUrl(playlist.thumbnail) ||
+                    "/placeholder.svg"
+                  }
                   alt={playlist.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -167,6 +307,23 @@ export default function PlaylistsGridClient({ search }: PlaylistsGridClientProps
             </Link>
           </div>
         ))}
+      </div>
+
+      {/* Intersection Observer Target */}
+      <div ref={observerRef} className="h-20 flex items-center justify-center">
+        {isFetchingNextPage && (
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-gray-600 font-medium">
+              Daha çox playlist yüklənir...
+            </span>
+          </div>
+        )}
+        {!hasNextPage && allPlaylists.length > 0 && (
+          <p className="text-gray-500 text-sm">
+            Bütün playlistlər yükləndi
+          </p>
+        )}
       </div>
     </div>
   );

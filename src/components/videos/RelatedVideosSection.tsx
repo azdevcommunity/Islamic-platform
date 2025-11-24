@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock } from "lucide-react";
@@ -26,62 +27,100 @@ interface RelatedVideosSectionProps {
   currentVideoId?: string;
 }
 
+async function fetchVideos(currentVideoId?: string): Promise<Video[]> {
+  const res = await fetch(`${BASE_URL}/videos?page=0&size=8`);
+  
+  if (!res.ok) {
+    throw new Error("Failed to fetch videos");
+  }
+
+  const vData = await res.json();
+  let videosList = Array.isArray(vData)
+    ? vData
+    : vData.content || vData.data || [];
+  
+  // Filter out current video
+  if (currentVideoId) {
+    videosList = videosList.filter(
+      (v: Video) => v.videoId !== currentVideoId
+    );
+  }
+  
+  return videosList.slice(0, 8);
+}
+
+async function fetchPlaylists(): Promise<Playlist[]> {
+  const res = await fetch(`${BASE_URL}/playlists`);
+  
+  if (!res.ok) {
+    throw new Error("Failed to fetch playlists");
+  }
+
+  const pData = await res.json();
+  const playlistsList = Array.isArray(pData)
+    ? pData
+    : pData.content || pData.data || [];
+  
+  return playlistsList.slice(0, 8);
+}
+
 export default function RelatedVideosSection({
   currentVideoId,
 }: RelatedVideosSectionProps) {
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [activeTab, setActiveTab] = useState<"videos" | "playlists">("videos");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchRelatedContent = async () => {
-      setLoading(true);
-      try {
-        const [videosRes, playlistsRes] = await Promise.all([
-          fetch(`${BASE_URL}/videos?page=0&size=8`),
-          fetch(`${BASE_URL}/playlists`),
-        ]);
+  const { data: videos = [], isLoading: videosLoading } = useQuery({
+    queryKey: ["related-videos", currentVideoId],
+    queryFn: () => fetchVideos(currentVideoId),
+  });
 
-        if (videosRes.ok) {
-          const vData = await videosRes.json();
-          let videosList = Array.isArray(vData)
-            ? vData
-            : vData.content || vData.data || [];
-          
-          // Filter out current video
-          if (currentVideoId) {
-            videosList = videosList.filter(
-              (v: Video) => v.videoId !== currentVideoId
-            );
-          }
-          
-          setVideos(videosList.slice(0, 8));
-        }
+  const { data: playlists = [], isLoading: playlistsLoading } = useQuery({
+    queryKey: ["related-playlists"],
+    queryFn: fetchPlaylists,
+  });
 
-        if (playlistsRes.ok) {
-          const pData = await playlistsRes.json();
-          const playlistsList = Array.isArray(pData)
-            ? pData
-            : pData.content || pData.data || [];
-          setPlaylists(playlistsList.slice(0, 8));
-        }
-      } catch (error) {
-        console.error("Error fetching related content:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRelatedContent();
-  }, [currentVideoId]);
+  const loading = videosLoading || playlistsLoading;
 
   if (loading) {
     return (
       <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-gray-50">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex justify-center items-center py-20">
-            <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="mb-12">
+            <div className="h-10 w-64 bg-gray-200 rounded animate-pulse mb-6"></div>
+            <div className="flex gap-4 border-b border-gray-200">
+              <div className="h-12 w-32 bg-gray-200 rounded-t animate-pulse"></div>
+              <div className="h-12 w-32 bg-gray-200 rounded-t animate-pulse"></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className="animate-fadeInUp"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <div className="group block bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+                  <div className="relative aspect-video bg-gray-200">
+                    <div className="absolute top-3 left-3">
+                      <div className="h-6 w-16 bg-gray-300 rounded-full"></div>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-2 mb-3">
+                      <div className="h-5 bg-gray-200 rounded w-full"></div>
+                      <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                    </div>
+                    <div className="flex items-center text-sm space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                        <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

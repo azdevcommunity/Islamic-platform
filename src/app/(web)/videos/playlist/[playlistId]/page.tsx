@@ -29,18 +29,15 @@ interface Video {
 // Generate static params for all playlists
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${BASE_URL}/playlists`, {
+    const res = await fetch(`${BASE_URL}/playlists/ids`, {
       next: { revalidate: 3600 },
     });
 
     if (!res.ok) return [];
 
     const data = await res.json();
-    const playlists = Array.isArray(data)
-      ? data
-      : data.content || data.data || [];
 
-    return playlists.map((playlist: Playlist) => ({
+    return data.map((playlist: Playlist) => ({
       playlistId: playlist.playlistId,
     }));
   } catch (error) {
@@ -71,7 +68,7 @@ async function getPlaylistData(playlistId: string) {
       videos = Array.isArray(vData) ? vData : vData.content || vData.data || [];
     }
 
-    return { playlist, videos };
+    return { playlist, videos , totalVideos: playlist.videoCount };
   } catch (error) {
     console.error("Error fetching playlist:", error);
     return null;
@@ -146,7 +143,7 @@ export default async function PlaylistPage({
     notFound();
   }
 
-  const { playlist, videos } = data;
+  const { playlist, videos, totalVideos } = data;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -181,7 +178,7 @@ export default async function PlaylistPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PlaylistDetailPage playlist={playlist} videos={videos} />
+      <PlaylistDetailPage playlist={playlist} videos={videos} totalVideos={totalVideos} />
     </>
   );
 }

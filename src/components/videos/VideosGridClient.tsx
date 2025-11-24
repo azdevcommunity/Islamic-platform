@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, Calendar } from "lucide-react";
 import { getBestThumbnailUrl } from "@/util/Thumbnail.js";
 import Pagination from "@/components/common/Pagination";
-
 import { BASE_URL } from "@/util/Const.js";
 
 const LIMIT = 12;
@@ -25,45 +24,46 @@ interface VideosGridClientProps {
   onPageChange: (page: number) => void;
 }
 
+async function fetchVideos(
+  content: string,
+  search: string,
+  page: number
+): Promise<{ videos: Video[]; totalPages: number }> {
+  const isShorts = content === "shorts" ? 1 : 0;
+  const backendPage = page - 1;
+  const res = await fetch(
+    `${BASE_URL}/videos?page=${backendPage}&size=${LIMIT}&search=${search || ""}&shorts=${isShorts}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch videos");
+  }
+
+  const data = await res.json();
+  const videosList = Array.isArray(data)
+    ? data
+    : data.content || data.data || [];
+  
+  // Backend-dən gələn page obyekti (kiçik hərflərlə)
+  const totalPages = data?.page?.totalPages || data?.totalPages || 1;
+
+  return { videos: videosList, totalPages };
+}
+
 export default function VideosGridClient({
   content,
   search,
   page,
   onPageChange,
 }: VideosGridClientProps) {
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useQuery({
+    queryKey: ["videos", content, search, page],
+    queryFn: () => fetchVideos(content, search, page),
+  });
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      setLoading(true);
-      try {
-        const isShorts = content === "shorts" ? 1 : 0;
-        const backendPage = page - 1;
-        const res = await fetch(
-          `${BASE_URL}/videos?page=${backendPage}&size=${LIMIT}&search=${search || ""}&shorts=${isShorts}`
-        );
-
-        if (res.ok) {
-          const data = await res.json();
-          const videosList = Array.isArray(data)
-            ? data
-            : data.content || data.data || [];
-          setVideos(videosList);
-          setTotalPages(
-            data?.page?.totalPages || data?.totalPages || 1
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching videos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVideos();
-  }, [content, search, page]);
+  const videos = data?.videos || [];
+  const totalPages = data?.totalPages || 1;
+  const loading = isLoading;
 
   const buildPageLink = (newPage: number) => {
     return `/videos?content=${content}&page=${newPage}${search ? `&search=${search}` : ""}`;
@@ -71,8 +71,51 @@ export default function VideosGridClient({
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-20">
-        <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+      <div>
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900">
+                {content === "shorts" ? "Qısa Videolar" : "Videolar"}
+              </h3>
+              <div className="h-5 w-32 bg-gray-200 rounded mt-1 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {Array.from({ length: 12 }).map((_, index) => (
+            <div
+              key={index}
+              className="animate-fadeInUp"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              <div className="group block bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+                <div className="relative aspect-video bg-gray-200">
+                  <div className="absolute top-3 left-3">
+                    <div className="h-6 w-16 bg-gray-300 rounded-full"></div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="space-y-2 mb-3">
+                    <div className="h-5 bg-gray-200 rounded w-full"></div>
+                    <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                  </div>
+                  <div className="flex items-center text-sm space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 w-12 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -190,6 +233,7 @@ export default function VideosGridClient({
             clientPage={page}
             totalPages={totalPages}
             buildPageLink={buildPageLink}
+            onPageChange={onPageChange}
           />
         </div>
       )}

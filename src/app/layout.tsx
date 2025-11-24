@@ -128,6 +128,8 @@ interface RootLayoutProps {
   children: ReactNode;
 }
 
+import QueryProvider from "@/providers/QueryProvider";
+
 export default function RootLayout({ children }: RootLayoutProps) {
   const domain = process.env.NEXT_PUBLIC_DOMAIN;
 
@@ -218,8 +220,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className="antialiased">
-        {children}
-        <Toaster position="top-right" richColors />
+        <QueryProvider>
+          {children}
+          <Toaster position="top-right" richColors />
+        </QueryProvider>
       </body>
     </html>
   );

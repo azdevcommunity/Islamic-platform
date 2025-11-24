@@ -1,5 +1,5 @@
 import { CalendarIcon } from "lucide-react";
-import VideoPlayerPlaylistItemsStatic from "./VideoPlayerPlaylistItemsStatic";
+import VideoPlayerPlaylistItems from "./VideoPlayerPlaylistItems";
 import RelatedVideosSection from "./RelatedVideosSection";
 
 interface Playlist {
@@ -22,6 +22,7 @@ interface Video {
 interface PlaylistDetailPageProps {
   playlist: Playlist;
   videos: Video[];
+  totalVideos: number;
 }
 
 const formatDate = (
@@ -42,7 +43,7 @@ const formatDate = (
 
 export default function PlaylistDetailPage({
   playlist,
-  videos,
+  videos,totalVideos
 }: PlaylistDetailPageProps) {
   // First video is auto-selected
   const selectedVideo = videos[0];
@@ -121,13 +122,14 @@ export default function PlaylistDetailPage({
                     {playlist.title}
                   </h3>
                   <p className="text-red-100 text-sm mt-2">
-                    {videos.length} video
+                    {totalVideos} video
                   </p>
                 </div>
                 <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
-                  <VideoPlayerPlaylistItemsStatic
-                    videos={videos}
+                  <VideoPlayerPlaylistItems
+                    playlistId={playlist.playlistId}
                     currentVideoId={selectedVideo?.videoId}
+                    initialVideos={videos}
                   />
                 </div>
               </div>
