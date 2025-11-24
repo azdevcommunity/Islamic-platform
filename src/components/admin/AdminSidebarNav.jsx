@@ -9,10 +9,8 @@ import {
   FolderOpen,
   Users,
   Tag,
-  BookOpen,
   HelpCircle,
-  MessageSquare,
-  TestTube
+  MessageSquare
 } from 'lucide-react'
 
 // This defines the structure of the sidebar items
@@ -42,11 +40,11 @@ const sidebarItems = [
     label: "Taglər",
     icon: Tag,
   },
-  {
-    href: "/admin/books",
-    label: "Kitablar",
-    icon: BookOpen,
-  },
+  // {
+  //   href: "/admin/books",
+  //   label: "Kitablar",
+  //   icon: BookOpen,
+  // },
   {
     href: "/admin/questions",
     label: "Suallar",
@@ -57,11 +55,11 @@ const sidebarItems = [
     label: "Sorusulan Suallar",
     icon: MessageSquare,
   },
-  {
-    href: "/admin/test-editor",
-    label: "Editor Test",
-    icon: TestTube,
-  },
+  // {
+  //   href: "/admin/test-editor",
+  //   label: "Editor Test",
+  //   icon: TestTube,
+  // },
 ];
 
 const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
@@ -71,7 +69,7 @@ const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
     <aside
       id="logo-sidebar"
       className={cn(
-        "fixed top-0 left-0 z-40 w-72 h-screen pt-20 bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl border-r border-slate-200/60 dark:border-slate-800/60 transition-transform shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/20",
+        "fixed top-0 left-0 z-40 w-72 h-screen pt-20 bg-white/95 backdrop-blur-2xl border-r border-slate-200/60 transition-transform shadow-2xl shadow-slate-200/20",
         isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full',
         'sm:translate-x-0'
       )}
@@ -80,7 +78,7 @@ const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
       <div className="h-full px-6 pb-6 overflow-y-auto">
         <div className="space-y-2 pt-8">
           <div className="px-4 mb-8">
-            <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+            <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest">
               Əsas Bölmələr
             </h2>
             <div className="w-12 h-0.5 bg-gradient-to-r from-emerald-500 to-emerald-600 mt-2 rounded-full"></div>
@@ -98,7 +96,7 @@ const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
                   "group flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-300 relative overflow-hidden hover:scale-[1.02]",
                   isActive
                     ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-xl shadow-emerald-500/25'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-emerald-50/80 dark:hover:bg-emerald-900/20 hover:text-emerald-900 dark:hover:text-emerald-100'
+                    : 'text-slate-700 hover:bg-emerald-50/80 hover:text-emerald-900'
                 )}
               >
                 {isActive && (
@@ -111,7 +109,7 @@ const AdminSidebarNav = ({ isMobileSidebarOpen, onLinkClick }) => {
                   "p-2.5 rounded-xl transition-all duration-300 relative z-10 group-hover:scale-110",
                   isActive
                     ? 'bg-white/20 shadow-lg'
-                    : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/30 group-hover:shadow-md'
+                    : 'bg-slate-100 group-hover:bg-emerald-100 group-hover:shadow-md'
                 )}>
                   <IconComponent className="h-5 w-5 flex-shrink-0" />
                 </div>

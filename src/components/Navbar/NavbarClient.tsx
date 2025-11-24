@@ -23,7 +23,7 @@ export function NavbarClient({ menus = [] }) {
             {/* Desktop Navigation */}
             <nav style={{
                 maxWidth: "fit-content",
-            }} className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center pt-1 pb-1">
+            }} className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center p-1">
                 <ul className="flex items-center gap-1">
                     {menus.map((item, index) => (
                         <NavItem

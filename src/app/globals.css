@@ -55,168 +55,44 @@ body {
 }
 
 /* Force dark mode styles */
-.dark {
-  color-scheme: dark !important;
-}
 
-.dark body {
-  background-color: #0f172a !important;
-  color: #f1f5f9 !important;
-}
 
 /* Ensure proper dark mode for admin components */
-.dark .bg-white\/95 {
-  background-color: rgba(2, 6, 23, 0.95) !important;
-}
 
-.dark .bg-slate-950\/95 {
-  background-color: rgba(2, 6, 23, 0.95) !important;
-}
 
 /* Fix main content area dark mode */
-.dark main,
-[data-theme="dark"] main {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
-}
 
-/* Fix card backgrounds in dark mode */
-.dark .bg-white,
-[data-theme="dark"] .bg-white {
-  background-color: #1e293b !important;
-}
-
-.dark .bg-slate-50,
-[data-theme="dark"] .bg-slate-50 {
-  background-color: #334155 !important;
-}
-
-.dark .bg-slate-100,
-[data-theme="dark"] .bg-slate-100 {
-  background-color: #475569 !important;
-}
-
-/* Fix border colors in dark mode */
-.dark .border-slate-200,
-[data-theme="dark"] .border-slate-200 {
-  border-color: #475569 !important;
-}
-
-.dark .border-muted,
-[data-theme="dark"] .border-muted {
-  border-color: #475569 !important;
-}
-
-/* Fix text colors in dark mode */
-.dark .text-slate-900,
-[data-theme="dark"] .text-slate-900 {
-  color: #f1f5f9 !important;
-}
-
-.dark .text-slate-700,
-[data-theme="dark"] .text-slate-700 {
-  color: #cbd5e1 !important;
-}
-
-.dark .text-slate-600,
-[data-theme="dark"] .text-slate-600 {
-  color: #94a3b8 !important;
-}
-
-/* Fix muted backgrounds in dark mode */
-.dark .bg-muted,
-[data-theme="dark"] .bg-muted {
-  background-color: #334155 !important;
-}
-
-.dark .hover\:bg-muted\/30:hover,
-[data-theme="dark"] .hover\:bg-muted\/30:hover {
-  background-color: rgba(51, 65, 85, 0.3) !important;
-}
+/* Minimal dark mode fixes - let Tailwind handle most of it */
 
 /* Additional dark mode fixes */
-.dark .bg-gradient-to-br,
-[data-theme="dark"] .bg-gradient-to-br {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
-}
 
 /* Fix dropdown and popover backgrounds */
-.dark [data-radix-popper-content-wrapper],
-[data-theme="dark"] [data-radix-popper-content-wrapper] {
-  background-color: #1e293b !important;
-  border-color: #475569 !important;
-}
+
 
 /* Fix button hover states in dark mode */
-.dark .hover\:bg-slate-50:hover,
-[data-theme="dark"] .hover\:bg-slate-50:hover {
-  background-color: #334155 !important;
-}
 
-.dark .hover\:bg-slate-700:hover,
-[data-theme="dark"] .hover\:bg-slate-700:hover {
-  background-color: #475569 !important;
-}
 
-.dark .hover\:border-slate-300:hover,
-[data-theme="dark"] .hover\:border-slate-300:hover {
-  border-color: #64748b !important;
-}
 
-.dark .hover\:border-slate-600:hover,
-[data-theme="dark"] .hover\:border-slate-600:hover {
-  border-color: #64748b !important;
-}
+
+
+
 
 /* Fix outline button variant in dark mode */
-.dark .border-input,
-[data-theme="dark"] .border-input {
-  border-color: #475569 !important;
-}
 
-.dark .bg-background,
-[data-theme="dark"] .bg-background {
-  background-color: #1e293b !important;
-}
 
 /* Fix group hover effects in dark mode */
-.dark .group-hover\:bg-indigo-500:hover,
-[data-theme="dark"] .group-hover\:bg-indigo-500:hover {
-  background-color: #6366f1 !important;
-}
 
-.dark .group-hover\:text-white:hover,
-[data-theme="dark"] .group-hover\:text-white:hover {
-  color: #ffffff !important;
-}
 
 /* Fix button text colors in dark mode */
-.dark button,
-[data-theme="dark"] button {
-  color: inherit;
-}
 
-.dark .text-foreground,
-[data-theme="dark"] .text-foreground {
-  color: #f1f5f9 !important;
-}
 
 /* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-track {
-  background: #374151;
-}
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #6B7280;
-}
 
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
-}
+
+/* Radix UI dark mode support */
 
 /* ShadCN UI Dark Mode Enhancements */
-.dark {
-  color-scheme: dark;
-}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -834,34 +710,7 @@ nav {
     --highlight: oklch(0.852 0.199 91.936);
   }
 
-  .dark {
-    --background: 222 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222 84% 4.9%;
-    --secondary: 217 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 32.6% 17.5%;
-    --input: 217 32.6% 17.5%;
-    --ring: 212 72% 59%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --brand: oklch(0.707 0.165 254.624);
-    --highlight: oklch(0.852 0.199 91.936);
-  }
+
 }
 
 /*---break---*/
@@ -890,10 +739,6 @@ nav {
   transition: opacity 0.5s;
 }
 
-.dark .link-editor {
-  background-color: #1e293b;
-  border: 1px solid #475569;
-}
 
 .link-input {
   display: block;
@@ -911,10 +756,6 @@ nav {
   font-family: inherit;
 }
 
-.dark .link-input {
-  background-color: #334155;
-  color: #f1f5f9;
-}
 
 .link-input a {
   color: rgb(33, 111, 219);
@@ -926,9 +767,6 @@ nav {
   text-overflow: ellipsis;
 }
 
-.dark .link-input a {
-  color: #60a5fa;
-}
 
 .link-input a:hover {
   text-decoration: underline;
@@ -978,9 +816,6 @@ nav {
   text-decoration: none;
 }
 
-.dark .editor-link {
-  color: #60a5fa;
-}
 
 .editor-link:hover {
   text-decoration: underline;
@@ -1070,21 +905,7 @@ nav {
   cursor: pointer;
 }
 
-/* Dark mode styles for link editor */
-.dark .link-editor {
-  background-color: #1f2937;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.6);
-}
-
-.dark .link-input {
-  background-color: #374151;
-  color: #f9fafb;
-}
-
-.dark .link-input a {
-  color: #60a5fa;
-}/* Floatin
-g Link Editor Styles */
+/* Floating Link Editor Styles */
 .floating-link-editor {
   position: absolute;
   z-index: 100;
@@ -1117,10 +938,6 @@ g Link Editor Styles */
 }
 
 /* Dark mode styles for floating link editor */
-.dark .floating-link-editor {
-  background-color: #1f2937;
-  border-color: #374151;
-}
 /* Modern Q
 uestions Page Styles */
 

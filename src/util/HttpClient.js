@@ -45,8 +45,6 @@ class HttpClient {
     const customHeaders = headers ?? {}
     const url = this._getUrl(path, customBaseUrl);
 
-    console.log(`POST Request to: ${url}`);
-
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
@@ -71,8 +69,6 @@ class HttpClient {
   static async put(path, body, headers = null, customBaseUrl = null) {
     const customHeaders = headers ?? {}
     const url = this._getUrl(path, customBaseUrl);
-
-    console.log(`PUT Request to: ${url}`);
 
     const response = await fetch(url, {
       method: "PUT",
@@ -100,8 +96,6 @@ class HttpClient {
     const customHeaders = headers ?? {}
     const url = this._getUrl(path, customBaseUrl);
 
-    console.log(`PATCH Request to: ${url}`);
-
     const response = await fetch(url, {
       method: "PATCH",
       body: body ? JSON.stringify(body) : undefined,
@@ -127,8 +121,6 @@ class HttpClient {
   static async delete(path, headers = null, customBaseUrl = null) {
     const customHeaders = headers ? Object.fromEntries(headers) : {}
     const url = this._getUrl(path, customBaseUrl);
-
-    console.log(`DELETE Request to: ${url}`);
 
     const response = await fetch(url, {
       method: "DELETE",

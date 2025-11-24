@@ -116,7 +116,8 @@ const IslamicAboutPage = () => {
                                 <h2 className="text-2xl md:text-3xl text-stone-800 font-semibold mb-4">
                                     İslami təhsilin önəmi
                                 </h2>
-                                <p className="text-lg text-stone-600 leading-relaxed mb-6 text-justify">
+<p className="max-w-[750px] mx-auto text-[1.1rem] leading-[1.85] text-stone-700 text-justify tracking-[0.1px]">
+
                                     Əziz və Cəlil Allah belə buyurur: “Həqiqətən, Allah yanında (haqq) din İslamdır”.
                                     Yenə buyurur: “Siz insanlar üçün çıxarılmış ən xeyirli ümmətsiniz”. Yenə buyurur:
                                     “Qoy aranızdan bir qrup çıxsın ki, (insanları) yaxşılığa çağırsın, yaxşı əməlləri
@@ -152,7 +153,7 @@ const IslamicAboutPage = () => {
                                 <h2 className="text-2xl md:text-3xl text-stone-800 font-semibold mb-4">
                                     Nizamiyyə Mədrəsəsinin Əhəmiyyəti
                                 </h2>
-                                <p className="text-lg text-stone-600 leading-relaxed mb-6 text-justify">
+<p className="max-w-[750px] mx-auto text-[1.1rem] leading-[1.85] text-stone-700 text-justify tracking-[0.1px]">
                                     Mədrəsəmizin “Nizamiyyə” adlandırılmasının səbəbi tarixdə elmə, maarifə və səlim
                                     dini düşüncəyə göstərilmiş ən böyük xidmət nümunələrindən birinə işarə etməkdir.
                                     Nizamülmülkün təsis etdiyi Nizamiyyə mədrəsələri əsrlər boyu Əhli-Sünnə elmlərinin

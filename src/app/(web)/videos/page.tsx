@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import VideosPageLayout from "@/layouts/VideosPage";
 
-export const revalidate = 300;
+export const revalidate = 3600; // 1 saat - video list çox tez-tez dəyişmir
 
 interface VideosPageProps {
   searchParams: Promise<{

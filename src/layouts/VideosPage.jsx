@@ -5,7 +5,7 @@ import ModernSearchAndToggle from "@/components/videos/ModernSearchAndToggle";
 import VideoPageHeader from "@/components/videos/VideoPageHeader";
 
 
-export const revalidate = 60
+export const revalidate = 3600 // 1 saat
 
 const Videos =  ({ playlistId, search, videoId, content, page }) => {
     // Debug: Log received parameters

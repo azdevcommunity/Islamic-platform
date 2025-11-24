@@ -7,6 +7,7 @@ import ArticleReadScroll from "@/components/articledetail/ArticleReadScroll";
 import ShareArticle from "@/components/articledetail/ShareArticle";
 import RelatedArticles from "@/components/articledetail/RelatedArticles";
 import { lexicalToHtml } from "@/util/LexicalToHtml";
+import { sanitizeHtml } from "@/lib/utils/sanitize";
 
 const ArticleDetailPage = ({article}) => {
     const isLiked = true;
@@ -162,7 +163,7 @@ const ArticleDetailPage = ({article}) => {
                         {/* Main Article Content Section */}
                         <div>
                             <div className="prose prose-emerald text-justify max-w-none">
-                                <div dangerouslySetInnerHTML={{__html: lexicalToHtml(article.content)}}></div>
+                                <div dangerouslySetInnerHTML={{__html: sanitizeHtml(lexicalToHtml(article.content))}}></div>
                             </div>
 
                             {/* Action Buttons & Back Link */}

@@ -1,18 +1,17 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Upload, X, ChevronDown } from "lucide-react"
-import { Toast } from "primereact/toast"
+import { toast } from "sonner"
 
 import HttpClient from "@/util/HttpClient"
 
 // Sample authors data
 
 const BookCreatePage = () => {
-  const toast = useRef(null)
   const [authors, setAuthors] = useState([])
   const show = () => {
-    toast.current.show({ severity: "info", summary: "Info", detail: "Message Content" })
+    toast.info("Message Content", { description: "Info" })
   }
 
   const [title, setTitle] = useState("")
@@ -87,7 +86,6 @@ const BookCreatePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <Toast ref={toast} />
       <div className=" mx-auto bg-white rounded-lg shadow-md overflow-hidden">
         <div className="px-4 py-5 sm:p-6">
           <h1 className="text-2xl font-semibold text-gray-900 mb-6">Create New Book</h1>

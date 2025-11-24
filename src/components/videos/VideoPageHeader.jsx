@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { FaPlay, FaVideo, FaList, FaClock, FaEye } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import HttpClient from "@/util/HttpClient";
+import { apiClient } from "@/lib/api-client";
 import Link from "next/link";
 
 
@@ -18,7 +18,7 @@ const VideoPageHeader = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await HttpClient.get('/videos/statistics');
+                const response = await apiClient.get('/videos/statistics');
                 const data = await response.json();
                 setStats(data);
             } catch (error) {

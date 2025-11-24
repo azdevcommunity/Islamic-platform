@@ -16,7 +16,7 @@ export const revalidate = 300; // Revalidate menu every 5 minutes
 
 async function getMenuData(): Promise<MenuItem[]> {
   try {
-    const res = await fetch(
+      const res = await fetch(
       `${apiConfig.baseUrl}${apiConfig.endpoints.categories.menu}`,
       { 
         next: { revalidate: 300 },
@@ -40,8 +40,9 @@ function addHrefToMenuItems(menuItems: any[]): MenuItem[] {
   return menuItems.map((item) => ({
     ...item,
     href: `/search?categoryId=${item.id}`,
-    subcategories: item.subcategories
-      ? addHrefToMenuItems(item.subcategories)
+    // API returns 'children', but we need 'subcategories'
+    subcategories: item.children && item.children.length > 0
+      ? addHrefToMenuItems(item.children)
       : [],
   }));
 }

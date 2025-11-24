@@ -5,7 +5,7 @@ import {getBestThumbnailUrl} from "@/util/Thumbnail"
 import Image from "next/image"
 import {Clock, Calendar} from "lucide-react"
 
-export const revalidate = 60
+export const revalidate = 3600 // 1 saat
 
 const LIMIT = 12
 
@@ -22,7 +22,10 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
         const res = await fetch(
             `${BASE_URL}/videos?page=${backendPage}&size=${LIMIT}&search=${search ?? ""}&shorts=${isShorts}`,
             {
-                next: {revalidate: 60},
+                next: {
+                    revalidate: 3600, // 1 saat
+                    tags: ['videos', `videos-${content}`, `videos-page-${backendPage}`]
+                },
             },
         )
 
@@ -76,17 +79,17 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
         if (content) {
             params.set("content", content)
         }
+        
         if (search) {
             params.set("search", search)
         }
+
         if (playlistId) {
             params.set("playlistId", playlistId)
         }
+        
         return `?${params.toString()}`
     }
-
-
-         console.log("totalPages",totalPages)
 
     return (
         <div>

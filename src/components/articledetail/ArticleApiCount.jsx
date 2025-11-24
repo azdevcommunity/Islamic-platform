@@ -1,16 +1,15 @@
 "use client"
 import { useEffect } from "react"
 import { useParams } from "next/navigation"
-import HttpClient from "@/util/HttpClient"
+import { apiClient } from "@/lib/api-client"
 
 const ArticleApiCount = () => {
   const { id } = useParams()
 
   useEffect(() => {
-    HttpClient.put(`/articles/count/${id}`, null)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-  }, [])
+    apiClient.put(`/articles/count/${id}`, null)
+      .catch((err) => console.error("Error incrementing article count:", err))
+  }, [id])
 
   return <></>
 }

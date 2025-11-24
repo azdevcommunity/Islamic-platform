@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ThumbsUp, Share2 } from 'lucide-react';
-import HttpClient from '@/util/HttpClient'; // Assuming HttpClient is needed for like action
+import { apiClient } from '@/lib/api-client';
 
 export default function QuestionDetailClientInteractions({ questionId, initialLikeCount, questionTitle }) {
   const [hasLiked, setHasLiked] = useState(false); // TODO: Fetch initial liked state if available
@@ -13,7 +13,7 @@ export default function QuestionDetailClientInteractions({ questionId, initialLi
   useEffect(() => {
     const incrementViewCount = async () => {
       try {
-        await HttpClient.put(`/questions/${questionId}/increment-view`);
+        await apiClient.put(`/questions/${questionId}/increment-view`);
       } catch (error) {
         console.error("Error incrementing view count:", error);
         // Silently fail - view count increment is not critical for user experience
@@ -37,8 +37,7 @@ export default function QuestionDetailClientInteractions({ questionId, initialLi
 
     try {
       // Send API request to update like status/count
-      // Adjust endpoint and method as needed
-      await HttpClient.post(`/questions/${questionId}/like`);
+      await apiClient.post(`/questions/${questionId}/like`);
       // Optionally fetch the real count after success if needed
     } catch (error) {
       console.error("Error updating like status:", error);

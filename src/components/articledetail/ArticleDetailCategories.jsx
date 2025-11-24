@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import HttpClient from "@/util/HttpClient"
+import { apiClient } from "@/lib/api-client"
 import CacheProvider from "@/util/CacheProvider"
-import { ChevronDown, FolderTree, LayoutGrid } from "lucide-react" // Import necessary icons
+import { ChevronDown, FolderTree, LayoutGrid } from "lucide-react"
 
 const ArticleDetailCategories = () => {
     const [categories, setCategories] = useState([])
@@ -14,7 +14,7 @@ const ArticleDetailCategories = () => {
     useEffect(() => {
         setIsLoading(true)
         // Fetch categories using CacheProvider
-        CacheProvider.fetchData("article_categories", 300, async () => HttpClient.get("/categories")) // Use same cache key and time
+        CacheProvider.fetchData("article_categories", 300, async () => apiClient.get("/categories"))
             .then((data) => {
                 // Ensure data is an array
                 setCategories(Array.isArray(data) ? data : [])

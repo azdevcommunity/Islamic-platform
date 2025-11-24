@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/util/Const"
-import HomeArticleCard from "@/components/articles/HomeArticleCard";
+import ArticleCard from "@/components/articles/ArticleCard";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -58,7 +58,7 @@ export default async function Articles() {
                             className="animate-fadeInUp"
                             style={{ animationDelay: `${index * 0.1}s` }}
                         >
-                            <HomeArticleCard article={article} />
+                            <ArticleCard article={article} />
                         </div>
                     ))}
                 </div>

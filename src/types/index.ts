@@ -6,8 +6,13 @@
 export interface Article {
   id: string | number;
   title: string;
+  description?: string;
+  slug?: string;
   image?: string;
+  thumbnail?: string;
+  category?: string;
   createdDate?: string;
+  createdAt?: string;
   authorName?: string;
   content?: string;
   categories?: Category[];

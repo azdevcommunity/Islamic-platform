@@ -1,13 +1,9 @@
 "use client"
 
-import useTheme from "@/hooks/useTheme"
-import { LayoutProvider } from "@/components/layout/context/layoutcontext"
-import AppConfig from "@/components/layout/AppConfig"
 import AdminLayoutWrapper from "@/components/admin/SideBar"
 import { usePathname } from 'next/navigation';
 
 const Layout = ({ children }) => {
-    useTheme()
     const pathname = usePathname();
 
     const noAdminLayoutPaths = ['/admin/login', '/admin/register'];
@@ -15,18 +11,13 @@ const Layout = ({ children }) => {
 
     return (
         <>
-            <LayoutProvider>
-                {useAdminLayout ? (
-                    <AdminLayoutWrapper>
-                        {children}
-                    </AdminLayoutWrapper>
-                ) : (
-                    <>
-                        {children}
-                        {noAdminLayoutPaths.includes(pathname) && <AppConfig minimal />}
-                    </>
-                )}
-            </LayoutProvider>
+            {useAdminLayout ? (
+                <AdminLayoutWrapper>
+                    {children}
+                </AdminLayoutWrapper>
+            ) : (
+                children
+            )}
         </>
     )
 }

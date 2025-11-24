@@ -6,7 +6,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { apiConfig } from "@/config/api";
-import { ArticleCard } from "@/components/articles/article-card";
+import ArticleCard from "@/components/articles/ArticleCard";
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/section-header";
 import type { Article } from "@/types";

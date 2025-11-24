@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card } from 'primereact/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const AdminDashboardPage = () => {
   const router = useRouter();
@@ -19,27 +20,26 @@ const AdminDashboardPage = () => {
   // This prevents briefly showing the admin content before redirecting
   if (typeof window !== 'undefined' && localStorage.getItem('isAdminLoggedIn') !== 'true') {
     return (
-        <div className="flex items-center justify-center h-screen">
-             {/* Optional: Add a PrimeReact ProgressSpinner or similar */}
-             <p>Loading...</p>
+      <div className="flex items-center justify-center h-screen">
+        <div className="space-y-4">
+          <Skeleton className="h-12 w-[250px]" />
+          <Skeleton className="h-4 w-[200px]" />
         </div>
-    ); // Or a loading spinner component
+      </div>
+    );
   }
 
   return (
-    <div className="p-fluid">
-      <Card title="Admin Dashboard">
-        <p className="m-0">
-          Welcome to the admin dashboard. Use the sidebar to navigate through different sections.
-        </p>
-         {/* Add more dashboard widgets/cards here as needed */}
-         {/* Example:
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-            <Card title="Articles">Count</Card>
-            <Card title="Categories">Count</Card>
-            <Card title="Users">Count</Card>
-         </div>
-         */}
+    <div className="space-y-6 p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Admin Dashboard</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">
+            Welcome to the admin dashboard. Use the sidebar to navigate through different sections.
+          </p>
+        </CardContent>
       </Card>
     </div>
   );

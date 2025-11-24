@@ -7,49 +7,44 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import IslamicAboutPage from "@/components/about/IslamicAboutPage";
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: siteConfig.name,
-  url: siteConfig.url,
-  logo: `${siteConfig.url}/esm_logo.png`,
-  description: "İslami təhsil və mənəvi tərbiyə sahəsində xidmət göstərən təhsil müəssisəsi",
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: siteConfig.contact.phones[0],
-    contactType: "Customer Service",
-    availableLanguage: ["az", "tr"],
-  },
-  sameAs: [
-    siteConfig.links.facebook,
-    siteConfig.links.instagram,
-    siteConfig.links.youtube,
-  ].filter(Boolean),
-};
-
 export const metadata: Metadata = {
   title: `Haqqımızda | ${siteConfig.name}`,
-  description: "Nizamiyyə Mədrəsəsi haqqında məlumat. İslami təhsil və mənəvi tərbiyə sahəsində xidmət göstəririk.",
-  keywords: "Nizamiyyə Mədrəsəsi, İslami təhsil, Əhli-Sünnə, dini təhsil, İslam mədrəsəsi",
+  description:
+    "Nizamiyyə Mədrəsəsi - İslam dininin hikmətini və mənəvi dəyərlərini geniş auditoriyaya çatdırmaq üçün fəaliyyət göstəririk.",
+  keywords:
+    "Nizamiyyə Mədrəsəsi, haqqımızda, İslam təhsili, dini təhsil, Əhli Sünnə, məqsədimiz, vizyonumuz",
   alternates: {
     canonical: `${siteConfig.url}/about`,
   },
   openGraph: {
     title: `Haqqımızda | ${siteConfig.name}`,
-    description: "Nizamiyyə Mədrəsəsi haqqında məlumat. İslami təhsil və mənəvi tərbiyə sahəsində xidmət göstəririk.",
+    description:
+      "Nizamiyyə Mədrəsəsi - İslam dininin hikmətini və mənəvi dəyərlərini geniş auditoriyaya çatdırmaq üçün fəaliyyət göstəririk.",
     url: `${siteConfig.url}/about`,
     siteName: siteConfig.name,
     locale: "az_AZ",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: `Haqqımızda | ${siteConfig.name}`,
-    description: "Nizamiyyə Mədrəsəsi haqqında məlumat. İslami təhsil və mənəvi tərbiyə sahəsində xidmət göstəririk.",
-  },
 };
 
 export default function AboutPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "Haqqımızda",
+    description:
+      "Nizamiyyə Mədrəsəsi haqqında məlumat - məqsədimiz, dəyərlərimiz və vizyonumuz.",
+    url: `${siteConfig.url}/about`,
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteConfig.url}/esm_logo.png`,
+      },
+    },
+  };
+
   return (
     <>
       <script
