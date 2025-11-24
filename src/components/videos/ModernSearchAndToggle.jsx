@@ -31,7 +31,7 @@ const ModernSearchAndToggle = ({ playlistId, search, videoId, content }) => {
     const currentContent = content || "videos";
 
     return (
-        <div id="content" className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
+        <div id="content" className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                 {/* Left Section: Title and Toggle Buttons */}
                 <div className="space-y-4">
