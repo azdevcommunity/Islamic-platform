@@ -54,26 +54,26 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
         // })
         // const findPlaylist = await findPlaylistResponse.json()
         // playlistId = findPlaylist?.playlistId ?? process.env.DEFAULT_PLAYLIST_ID
-        playlistId = process.env.DEFAULT_PLAYLIST_ID
+        //playlistId = process.env.DEFAULT_PLAYLIST_ID
     }
 
     // Playlist ve videoları paralel şekilde çek
     try {
         const [playlistRes, videosRes] = await Promise.all([
-            fetch(`${BASE_URL}/playlists/${playlistId}`, { 
+            fetch(`${BASE_URL}/playlists/${playlistId}`, {
                 next: { revalidate: 3600, tags: ['playlists'] },
                 cache: 'force-cache'
             }),
-            fetch(`${BASE_URL}/videos?playlistId=${playlistId}`, { 
+            fetch(`${BASE_URL}/videos?playlistId=${playlistId}`, {
                 next: { revalidate: 3600, tags: ['videos'] },
                 cache: 'force-cache'
             }),
         ])
-      
+
         if (playlistRes.ok && videosRes.ok) {
             playlist = await playlistRes.json()
             const videosData = await videosRes.json()
-            
+
             // Safely extract videos array
             if (Array.isArray(videosData)) {
                 videos = videosData
