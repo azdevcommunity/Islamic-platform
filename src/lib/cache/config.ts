@@ -84,12 +84,12 @@ export const CACHE_CONFIG = {
   videos: {
     list: {
       key: (params: string) => `videos:list:${params}`,
-      ttl: 300,
+      ttl: 3600, // 1 saat - videolar tez-tez dəyişmir
       tags: ['videos:list'] as string[],
     },
     playlists: {
       key: 'videos:playlists',
-      ttl: 600,
+      ttl: 3600, // 1 saat - playlistlər tez-tez dəyişmir
       tags: ['videos:list'] as string[],
     },
   },

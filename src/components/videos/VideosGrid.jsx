@@ -24,8 +24,9 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
             {
                 next: {
                     revalidate: 3600, // 1 saat
-                    tags: ['videos', `videos-${content}`, `videos-page-${backendPage}`]
+                    tags: ['videos', `videos-${content}`]
                 },
+                cache: 'force-cache', // Aggressively cache
             },
         )
 

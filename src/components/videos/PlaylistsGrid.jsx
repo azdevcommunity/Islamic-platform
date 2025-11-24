@@ -5,7 +5,7 @@ import Image from "next/image";
 import {Calendar} from "lucide-react";
 
 
-export const revalidate = 60
+export const revalidate = 3600 // 1 saat
 
 const PlaylistsGrid = async ({playlistId, search, videoId, content}) => {
     console.log("search", search ?? "")
@@ -13,7 +13,10 @@ const PlaylistsGrid = async ({playlistId, search, videoId, content}) => {
     
     try {
         const res = await fetch(`${BASE_URL}/playlists?search=${search ?? ""}`, {
-            next: {revalidate: 60},
+            next: {
+                revalidate: 3600, // 1 saat
+                tags: ['playlists']
+            },
         })
         
         if (!res.ok) {

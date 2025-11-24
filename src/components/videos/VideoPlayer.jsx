@@ -12,7 +12,7 @@ const formatDate = (dateString, options = { year: "numeric", month: "short", day
     }
 };
 
-export const revalidate = 60
+export const revalidate = 3600 // 1 saat
 
 const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
     // Geçerliliği kontrol eden yardımcı fonksiyon
@@ -23,7 +23,8 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
     if (isValid(videoId)) {
         try {
             const findPlaylistResponse = await fetch(`${BASE_URL}/playlists/of-video/${videoId}`, {
-                next: { revalidate: 60 },
+                next: { revalidate: 3600, tags: ['playlists'] },
+                cache: 'force-cache',
             })
             if (findPlaylistResponse.ok) {
                 const findPlaylist = await findPlaylistResponse.json()
@@ -59,8 +60,14 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
     // Playlist ve videoları paralel şekilde çek
     try {
         const [playlistRes, videosRes] = await Promise.all([
-            fetch(`${BASE_URL}/playlists/${playlistId}`, { next: { revalidate: 60 } }),
-            fetch(`${BASE_URL}/videos?playlistId=${playlistId}`, { next: { revalidate: 60 } }),
+            fetch(`${BASE_URL}/playlists/${playlistId}`, { 
+                next: { revalidate: 3600, tags: ['playlists'] },
+                cache: 'force-cache'
+            }),
+            fetch(`${BASE_URL}/videos?playlistId=${playlistId}`, { 
+                next: { revalidate: 3600, tags: ['videos'] },
+                cache: 'force-cache'
+            }),
         ])
       
         if (playlistRes.ok && videosRes.ok) {
@@ -108,7 +115,8 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
         if (isValid(videoId) && isValid(playlistId)) {
             try {
                 const selectedVideoResponse = await fetch(`${BASE_URL}/videos/${videoId}`, {
-                    next: { revalidate: 60 },
+                    next: { revalidate: 3600, tags: ['videos'] },
+                    cache: 'force-cache',
                 })
 
                 if (selectedVideoResponse.ok) {

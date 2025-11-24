@@ -32,5 +32,11 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 
+# Create cache directory for Next.js ISR
+RUN mkdir -p /app/.next/cache && chown -R node:node /app/.next/cache
+
+# Use non-root user
+USER node
+
 EXPOSE 3000
 CMD ["node", "server.js"]
