@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import Pagination from "@/components/common/Pagination";
 import { apiClient } from "@/lib/api-client";
-import { Search, Grid, List, Link } from "lucide-react";
+import { Search, Grid, List } from "lucide-react";
+import Link from "next/link";
 
 interface Question {
     id: number;

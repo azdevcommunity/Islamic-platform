@@ -12,6 +12,41 @@ import { formatDate } from "@/util/DateUtil";
 
 export const revalidate = 3600;
 
+// Generate static params for all questions
+export async function generateStaticParams() {
+  try {
+    const res = await fetch(`${apiConfig.baseUrl}/questions/ids`, {
+      next: { revalidate: 3600 },
+    });
+
+    if (!res.ok) {
+      console.error("Failed to fetch question IDs:", res.status);
+      return [];
+    }
+
+    const ids = await res.json();
+
+    // Handle different response formats
+    if (Array.isArray(ids)) {
+      return ids.map((id) => ({
+        id: String(id),
+      }));
+    }
+
+    // If response is an object with data property
+    if (ids && Array.isArray(ids.data)) {
+      return ids.data.map((id: number | string) => ({
+        id: String(id),
+      }));
+    }
+
+    return [];
+  } catch (error) {
+    console.error("Error generating static params for questions:", error);
+    return [];
+  }
+}
+
 interface Question {
   id: string | number;
   question: string;
