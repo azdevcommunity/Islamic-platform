@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, Calendar } from "lucide-react";
-import { getBestThumbnailUrl } from "@/util/Thumbnail.js";
+import { getThumbnailPair } from "@/util/Thumbnail.js";
 import Pagination from "@/components/common/Pagination";
 import { BASE_URL } from "@/util/Const.js";
 
@@ -173,13 +173,34 @@ export default function VideosGridClient({
               href={`/videos/${video.videoId}`}
               className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
             >
-              <div className="relative aspect-video">
-                <Image
-                  src={getBestThumbnailUrl(video.thumbnail) || "/placeholder.svg"}
-                  alt={video.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+              <div className="relative aspect-video overflow-hidden">
+                {(() => {
+                  const { high, low } = getThumbnailPair(video.thumbnail);
+                  return (
+                    <>
+                      {/* Düşük kaliteli blur - hızlı yüklenir */}
+                      <Image
+                        src={low || "/placeholder.svg"}
+                        alt=""
+                        fill
+                        priority
+                        className="object-cover blur-lg scale-105"
+                        aria-hidden="true"
+                      />
+                      {/* Yüksek kaliteli - yavaşça açılır */}
+                      <Image
+                        src={high || "/placeholder.svg"}
+                        alt={video.title}
+                        fill
+                        className="object-cover transition-opacity duration-700 group-hover:scale-110 opacity-0 data-[loaded=true]:opacity-100"
+                        loading="lazy"
+                        onLoadingComplete={(img) => {
+                          img.setAttribute("data-loaded", "true");
+                        }}
+                      />
+                    </>
+                  );
+                })()}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                 <div className="absolute top-3 left-3">

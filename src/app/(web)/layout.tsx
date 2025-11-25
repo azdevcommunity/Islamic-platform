@@ -82,7 +82,7 @@ export default async function WebLayout({
           </div>
         }
       >
-        {children}
+         {children}
       </Suspense>
       <IslamicFooter />
     </>

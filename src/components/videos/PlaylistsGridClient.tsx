@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar } from "lucide-react";
-import { getBestThumbnailUrl } from "@/util/Thumbnail.js";
+import { getThumbnailPair } from "@/util/Thumbnail.js";
 import { BASE_URL } from "@/util/Const.js";
 
 interface Playlist {
@@ -244,16 +244,34 @@ export default function PlaylistsGridClient({
               href={`/videos/playlist/${playlist.playlistId}`}
               className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
             >
-              <div className="relative aspect-video">
-                <Image
-                  src={
-                    getBestThumbnailUrl(playlist.thumbnail) ||
-                    "/placeholder.svg"
-                  }
-                  alt={playlist.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+              <div className="relative aspect-video overflow-hidden">
+                {(() => {
+                  const { high, low } = getThumbnailPair(playlist.thumbnail);
+                  return (
+                    <>
+                      {/* Düşük kaliteli blur - hızlı yüklenir */}
+                      <Image
+                        src={low || "/placeholder.svg"}
+                        alt=""
+                        fill
+                        priority
+                        className="object-cover blur-lg scale-105"
+                        aria-hidden="true"
+                      />
+                      {/* Yüksek kaliteli - yavaşça açılır */}
+                      <Image
+                        src={high || "/placeholder.svg"}
+                        alt={playlist.title}
+                        fill
+                        className="object-cover transition-opacity duration-700 group-hover:scale-110 opacity-0 data-[loaded=true]:opacity-100"
+                        loading="lazy"
+                        onLoadingComplete={(img) => {
+                          img.setAttribute("data-loaded", "true");
+                        }}
+                      />
+                    </>
+                  );
+                })()}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                 <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-lg font-medium">

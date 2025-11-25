@@ -1,0 +1,22 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="20"/>
+    </filter>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e2e6ecff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#babfc6ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e6ecff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Blurred background -->
+  <rect width="800" height="600" fill="url(#grad1)"/>
+  
+  
+  <!-- Center icon (slightly blurred) -->
+  <g opacity="0.3">
+    <circle cx="400" cy="300" r="60" fill="#9ca3af"/>
+    <polygon points="380,280 380,320 420,300" fill="white"/>
+  </g>
+</svg>

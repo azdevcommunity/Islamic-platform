@@ -46,7 +46,7 @@ export default function VideoDetailPage({
 
   return (
     <>
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white scroll-mt-20">
         <div className="container mx-auto py-12 px-4 max-w-7xl">
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             {/* Main Video Player Section */}

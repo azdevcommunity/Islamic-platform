@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import VideoPageHeader from "./VideoPageHeader";
 import ModernSearchAndToggle from "./ModernSearchAndToggle";
 import VideosGrid from "./VideosGridClient";
@@ -20,6 +20,11 @@ export default function VideosClientPage({
   const [content, setContent] = useState(initialContent);
   const [search, setSearch] = useState(initialSearch);
   const [page, setPage] = useState(initialPage);
+
+  // Sayfa değiştiğinde yukarı scroll
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page, content, search]);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
