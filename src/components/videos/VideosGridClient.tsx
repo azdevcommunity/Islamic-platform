@@ -184,8 +184,9 @@ export default function VideosGridClient({
                         alt=""
                         fill
                         priority
-                        className="object-cover blur-lg scale-105"
+                        className="object-cover blur-lg scale-105 transition-opacity duration-700 data-[hidden=true]:opacity-0"
                         aria-hidden="true"
+                        data-low-quality="true"
                       />
                       {/* Yüksek kaliteli - yavaşça açılır */}
                       <Image
@@ -196,6 +197,11 @@ export default function VideosGridClient({
                         loading="lazy"
                         onLoadingComplete={(img) => {
                           img.setAttribute("data-loaded", "true");
+                          // Yüksək keyfiyyətli şəkil yükləndikdə blur-lu şəkili gizlət
+                          const lowQualityImg = img.parentElement?.querySelector('[data-low-quality="true"]');
+                          if (lowQualityImg) {
+                            lowQualityImg.setAttribute("data-hidden", "true");
+                          }
                         }}
                       />
                     </>
