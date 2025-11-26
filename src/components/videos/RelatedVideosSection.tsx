@@ -173,40 +173,17 @@ export default function RelatedVideosSection({
                   href={`/videos/${video.videoId}`}
                   className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
                 >
-                  <div className="relative aspect-video overflow-hidden">
-                    {(() => {
-                      const { high, low } = getThumbnailPair(video.thumbnail);
-                      return (
-                        <>
-                          {/* Düşük kaliteli blur - hızlı yüklenir */}
-                          <Image
-                            src={low || "/placeholder.svg"}
-                            alt=""
-                            fill
-                            priority
-                            className="object-cover blur-lg scale-105 transition-opacity duration-700 data-[hidden=true]:opacity-0"
-                            aria-hidden="true"
-                            data-low-quality="true"
-                          />
-                          {/* Yüksek kaliteli - yavaşça açılır */}
-                          <Image
-                            src={high || "/placeholder.svg"}
-                            alt={video.title}
-                            fill
-                            className="object-cover transition-opacity duration-700 group-hover:scale-110 opacity-0 data-[loaded=true]:opacity-100"
-                            loading="lazy"
-                            onLoadingComplete={(img) => {
-                              img.setAttribute("data-loaded", "true");
-                              // Yüksək keyfiyyətli şəkil yükləndikdə blur-lu şəkili gizlət
-                              const lowQualityImg = img.parentElement?.querySelector('[data-low-quality="true"]');
-                              if (lowQualityImg) {
-                                lowQualityImg.setAttribute("data-hidden", "true");
-                              }
-                            }}
-                          />
-                        </>
-                      );
-                    })()}
+                  <div className="relative aspect-video overflow-hidden bg-gray-100">
+                    <Image
+                      src={getThumbnailPair(video.thumbnail).high || "/placeholder.svg"}
+                      alt={video.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      className="object-cover transition-all duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                     <div className="absolute top-3 left-3">
@@ -271,40 +248,17 @@ export default function RelatedVideosSection({
                   href={`/videos/playlist/${playlist.playlistId}`}
                   className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
                 >
-                  <div className="relative aspect-video overflow-hidden">
-                    {(() => {
-                      const { high, low } = getThumbnailPair(playlist.thumbnail);
-                      return (
-                        <>
-                          {/* Düşük kaliteli blur - hızlı yüklenir */}
-                          <Image
-                            src={low || "/placeholder.svg"}
-                            alt=""
-                            fill
-                            priority
-                            className="object-cover blur-lg scale-105 transition-opacity duration-700 data-[hidden=true]:opacity-0"
-                            aria-hidden="true"
-                            data-low-quality="true"
-                          />
-                          {/* Yüksek kaliteli - yavaşça açılır */}
-                          <Image
-                            src={high || "/placeholder.svg"}
-                            alt={playlist.title}
-                            fill
-                            className="object-cover transition-opacity duration-700 group-hover:scale-110 opacity-0 data-[loaded=true]:opacity-100"
-                            loading="lazy"
-                            onLoadingComplete={(img) => {
-                              img.setAttribute("data-loaded", "true");
-                              // Yüksək keyfiyyətli şəkil yükləndikdə blur-lu şəkili gizlət
-                              const lowQualityImg = img.parentElement?.querySelector('[data-low-quality="true"]');
-                              if (lowQualityImg) {
-                                lowQualityImg.setAttribute("data-hidden", "true");
-                              }
-                            }}
-                          />
-                        </>
-                      );
-                    })()}
+                  <div className="relative aspect-video overflow-hidden bg-gray-100">
+                    <Image
+                      src={getThumbnailPair(playlist.thumbnail).high || "/placeholder.svg"}
+                      alt={playlist.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      className="object-cover transition-all duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                     <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-lg font-medium">

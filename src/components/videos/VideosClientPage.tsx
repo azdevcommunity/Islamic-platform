@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import VideoPageHeader from "./VideoPageHeader";
 import ModernSearchAndToggle from "./ModernSearchAndToggle";
@@ -20,23 +20,44 @@ export default function VideosClientPage({
 }: VideosClientPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  
   const [content, setContent] = useState(initialContent);
   const [search, setSearch] = useState(initialSearch);
   const [page, setPage] = useState(initialPage);
 
-  // Sayfa və axtarış dəyişdikdə yukarı scroll (tab dəyişdikdə yox)
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [ search]);
-
-  // URL-i yeniləmək üçün helper funksiya
-  const updateURL = (newContent: string, newSearch: string, newPage: number) => {
+  const handleContentChange = (newContent: string) => {
+    setContent(newContent);
+    setPage(1);
+    
     const params = new URLSearchParams();
     params.set("content", newContent);
-    if (newSearch) params.set("search", newSearch);
-    if (newPage > 1) params.set("page", newPage.toString());
+    if (search) params.set("search", search);
+    params.set("page", "1");
     
     router.push(`/videos?${params.toString()}`, { scroll: false });
+  };
+
+  const handleSearchChange = (newSearch: string) => {
+    setSearch(newSearch);
+    setPage(1);
+    
+    const params = new URLSearchParams();
+    params.set("content", content);
+    if (newSearch) params.set("search", newSearch);
+    params.set("page", "1");
+    
+    router.push(`/videos?${params.toString()}`, { scroll: false });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    
+    const params = new URLSearchParams();
+    params.set("content", content);
+    if (search) params.set("search", search);
+    params.set("page", newPage.toString());
+    
+    router.push(`/videos?${params.toString()}`);
   };
 
   return (
@@ -49,16 +70,8 @@ export default function VideosClientPage({
             <ModernSearchAndToggle
               content={content}
               search={search}
-              onContentChange={(newContent) => {
-                setContent(newContent);
-                setPage(1);
-                updateURL(newContent, search, 1);
-              }}
-              onSearchChange={(newSearch) => {
-                setSearch(newSearch);
-                setPage(1);
-                updateURL(content, newSearch, 1);
-              }}
+              onContentChange={handleContentChange}
+              onSearchChange={handleSearchChange}
             />
           </div>
 
@@ -69,10 +82,7 @@ export default function VideosClientPage({
                 content={content}
                 search={search}
                 page={page}
-                onPageChange={(newPage) => {
-                  setPage(newPage);
-                  updateURL(content, search, newPage);
-                }}
+                onPageChange={handlePageChange}
               />
             )}
           </div>

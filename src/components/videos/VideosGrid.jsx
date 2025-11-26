@@ -25,8 +25,7 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
                 next: {
                     revalidate: 3600, // 1 saat
                     tags: ['videos', `videos-${content}`]
-                },
-                cache: 'force-cache', // Aggressively cache
+                }
             },
         )
 
@@ -146,12 +145,15 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
                                     href={buildPageLink(clientPage, video.videoId)}
                                     className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
                                 >
-                                    <div className="relative aspect-video">
+                                    <div className="relative aspect-video bg-gray-100">
                                         <Image
                                             src={getBestThumbnailUrl(video.thumbnail) || "/placeholder.svg"}
                                             alt={video.title}
                                             fill
+                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                            placeholder="blur"
+                                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
                                         />
                                         {/* Gradient overlay */}
                                         <div

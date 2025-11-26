@@ -27,8 +27,7 @@ interface Article {
 async function getArticle(id: string): Promise<Article | null> {
   try {
     const res = await fetch(`${apiConfig.baseUrl}/articles/${id}`, {
-      next: { revalidate: 3600 },
-      cache: "force-cache",
+      next: { revalidate: 3600 }
     });
 
     if (!res.ok) {

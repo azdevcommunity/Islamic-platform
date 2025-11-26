@@ -184,14 +184,17 @@ export default function VideoPlayerPlaylistItems({
                 : ""
             }`}
           >
-            <div className="flex-shrink-0 relative w-24 h-16 rounded-md overflow-hidden">
+            <div className="flex-shrink-0 relative w-24 h-16 rounded-md overflow-hidden bg-gray-700">
               <Image
                 src={
                   getBestThumbnailUrl(video.thumbnail) || "/placeholder.svg"
                 }
                 alt={video.title}
                 fill
+                sizes="96px"
                 className="object-cover"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
               />
             </div>
             <div className="ml-3 flex-1 min-w-0">
