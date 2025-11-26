@@ -1,11 +1,12 @@
 /**
- * Videos Page - Client-side Grid List
- * Displays videos and playlists with client-side pagination, search, and toggle
+ * Videos Page - Server-side Rendering
+ * Displays videos and playlists with server-side data fetching
  */
 
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-import VideosClientPage from "@/components/videos/VideosClientPage";
+import VideosServerPage from "@/components/videos/VideosServerPage";
+import { BASE_URL } from "@/util/Const.js";
 
 export const metadata: Metadata = {
   title: "İslami Videolar | Nizamiyyə Mədrəsəsi",
@@ -51,8 +52,71 @@ interface VideosPageProps {
   }>;
 }
 
+const LIMIT = 12;
+
+async function fetchVideos(content: string, search: string, page: number) {
+  try {
+    const isShorts = content === "shorts" ? 1 : 0;
+    const backendPage = page - 1;
+    const res = await fetch(
+      `${BASE_URL}/videos?page=${backendPage}&size=${LIMIT}&search=${search || ""}&shorts=${isShorts}`,
+      { next: { revalidate: 300 } }
+    );
+
+    if (!res.ok) return { videos: [], totalPages: 1 };
+
+    const data = await res.json();
+    const videosList = Array.isArray(data) ? data : data.content || data.data || [];
+    const totalPages = data?.page?.totalPages || data?.totalPages || 1;
+
+    return { videos: videosList, totalPages };
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+    return { videos: [], totalPages: 1 };
+  }
+}
+
+async function fetchPlaylists(search: string) {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/playlists?page=0&size=${LIMIT}&search=${search || ""}`,
+      { next: { revalidate: 300 } }
+    );
+
+    if (!res.ok) return { playlists: [], hasMore: false };
+
+    const data = await res.json();
+    
+    if (Array.isArray(data)) {
+      return { playlists: data, hasMore: false };
+    }
+
+    const playlists = data.content || data.data || [];
+    const pageInfo = data.page || {};
+    const hasMore = (pageInfo.number || 0) < (pageInfo.totalPages || 1) - 1;
+
+    return { playlists, hasMore };
+  } catch (error) {
+    console.error("Error fetching playlists:", error);
+    return { playlists: [], hasMore: false };
+  }
+}
+
 export default async function VideosPage({ searchParams }: VideosPageProps) {
   const params = await searchParams;
+  const content = params.content || "videos";
+  const search = params.search || "";
+  const page = parseInt(params.page || "1");
+
+  // Fetch data based on content type
+  let videosData = null;
+  let playlistsData = null;
+
+  if (content === "playlists") {
+    playlistsData = await fetchPlaylists(search);
+  } else {
+    videosData = await fetchVideos(content, search, page);
+  }
   
   const jsonLd = {
     "@context": "https://schema.org",
@@ -77,10 +141,12 @@ export default async function VideosPage({ searchParams }: VideosPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <VideosClientPage
-        initialContent={params.content || "videos"}
-        initialSearch={params.search || ""}
-        initialPage={parseInt(params.page || "1")}
+      <VideosServerPage
+        content={content}
+        search={search}
+        page={page}
+        videosData={videosData}
+        playlistsData={playlistsData}
       />
     </>
   );
