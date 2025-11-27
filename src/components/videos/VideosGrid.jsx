@@ -1,15 +1,15 @@
-import {BASE_URL} from "@/util/Const"
+import { BASE_URL } from "@/util/Const"
 import Link from "next/link"
 import Pagination from "@/components/common/Pagination"
-import {getBestThumbnailUrl} from "@/util/Thumbnail"
+import { getLowQualityThumbnail, getThumbnailPair, ThumbnailManager } from "@/util/Thumbnail"
 import Image from "next/image"
-import {Clock, Calendar} from "lucide-react"
+import { Clock, Calendar } from "lucide-react"
 
 export const revalidate = 3600 // 1 saat
 
 const LIMIT = 12
 
-const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
+const VideosGrid = async ({ playlistId, search, videoId, page, content }) => {
 
 
     const clientPage = Number.parseInt(page, 10) || 1
@@ -25,8 +25,7 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
                 next: {
                     revalidate: 3600, // 1 saat
                     tags: ['videos', `videos-${content}`]
-                },
-                cache: 'force-cache', // Aggressively cache
+                }
             },
         )
 
@@ -36,7 +35,7 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
         }
 
         const data = await res.json()
-        
+
         // Safely extract videos array
         if (Array.isArray(data)) {
             videos = data
@@ -48,7 +47,7 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
             console.error('Unexpected API response format:', data)
             videos = []
         }
-        
+
         // Safely extract totalPages
         if (data && data.page && typeof data.page.totalPages === 'number') {
             totalPages = data.page.totalPages
@@ -80,7 +79,7 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
         if (content) {
             params.set("content", content)
         }
-        
+
         if (search) {
             params.set("search", search)
         }
@@ -88,7 +87,7 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
         if (playlistId) {
             params.set("playlistId", playlistId)
         }
-        
+
         return `?${params.toString()}`
     }
 
@@ -136,82 +135,90 @@ const VideosGrid = async ({playlistId, search, videoId, page, content}) => {
 
                     {/* Videos Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {videos?.map((video, index) => (
-                            <div
-                                key={`${video.videoId}-${index}`}
-                                className="animate-fadeInUp"
-                                style={{animationDelay: `${index * 0.1}s`}}
-                            >
-                                <Link
-                                    href={buildPageLink(clientPage, video.videoId)}
-                                    className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
-                                >
-                                    <div className="relative aspect-video">
-                                        <Image
-                                            src={getBestThumbnailUrl(video.thumbnail) || "/placeholder.svg"}
-                                            alt={video.title}
-                                            fill
-                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                        {/* Gradient overlay */}
-                                        <div
-                                            className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        {await Promise.all(videos?.map(async (video, index) => {
+                           const { high: src ,low : lowQualitySrc} =getThumbnailPair(video.thumbnail);
+                           const blur = ThumbnailManager.fetchBlurDataURL(lowQualitySrc);
 
-                                        {/* Duration badge */}
-                                        {/* <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-lg font-medium">
+                            return (
+                                <div
+                                    key={`${video.videoId}-${index}`}
+                                    className="animate-fadeInUp"
+                                    style={{ animationDelay: `${index * 0.1}s` }}
+                                >
+                                    <Link
+                                        href={buildPageLink(clientPage, video.videoId)}
+                                        className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
+                                    >
+                                        <div className="relative aspect-video bg-gray-100">
+                                            <Image
+                                                src={src}
+                                                alt={video.title}
+                                                fill
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                                placeholder="blur"
+                                                blurDataURL={blur}
+                                            />
+                                            {/* Gradient overlay */}
+                                            <div
+                                                className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                            {/* Duration badge */}
+                                            {/* <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-lg font-medium">
                       12:34
                     </div> */}
 
-                                        {/* Type badge */}
-                                        <div className="absolute top-3 left-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-red-500 text-white`}>
-                        {content === "shorts" ? "Short" : "Video"}
-                      </span>
-                                        </div>
+                                            {/* Type badge */}
+                                            <div className="absolute top-3 left-3">
+                                                <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-red-500 text-white`}>
+                                                    {content === "shorts" ? "Short" : "Video"}
+                                                </span>
+                                            </div>
 
-                                        {/* Play button overlay */}
-                                        <div
-                                            className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            {/* Play button overlay */}
                                             <div
-                                                className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                                                <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
-                                                     viewBox="0 0 24 24">
-                                                    <path d="M8 5v14l11-7z"/>
-                                                </svg>
+                                                className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <div
+                                                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path d="M8 5v14l11-7z" />
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="p-6">
-                                        <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-red-600 transition-colors duration-300 text-lg leading-tight">
-                                            {video.title}
-                                        </h3>
-                                        <div className="flex items-center text-sm text-gray-500 space-x-4">
-                                            <div className="flex items-center">
-                                                <Calendar className="w-4 h-4 mr-2"/>
-                                                <span>
-                          {new Date(video.publishedAt).toLocaleDateString("az-AZ", {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                          })}
-                        </span>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <Clock className="w-4 h-4 mr-2"/>
-                                                <span>12:34</span>
+                                        <div className="p-6">
+                                            <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-red-600 transition-colors duration-300 text-lg leading-tight">
+                                                {video.title}
+                                            </h3>
+                                            <div className="flex items-center text-sm text-gray-500 space-x-4">
+                                                <div className="flex items-center">
+                                                    <Calendar className="w-4 h-4 mr-2" />
+                                                    <span>
+                                                        {new Date(video.publishedAt).toLocaleDateString("az-AZ", {
+                                                            year: "numeric",
+                                                            month: "short",
+                                                            day: "numeric",
+                                                        })}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center">
+                                                    <Clock className="w-4 h-4 mr-2" />
+                                                    <span>12:34</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
+                                    </Link>
+                                </div>
+                            )
+                        })) || []}
                     </div>
-                   
+
                     {/* Pagination */}
                     {totalPages > 1 && (
                         <div className="mt-16">
-                            <Pagination clientPage={clientPage} totalPages={totalPages} buildPageLink={buildPageLink}/>
+                            <Pagination clientPage={clientPage} totalPages={totalPages} buildPageLink={buildPageLink} />
                         </div>
                     )}
                 </>

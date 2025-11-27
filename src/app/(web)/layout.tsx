@@ -12,15 +12,14 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import type { MenuItem } from "@/types";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 300; // Revalidate menu every 5 minutes
+export const revalidate = 3600; // Revalidate menu every 5 minutes
 
 async function getMenuData(): Promise<MenuItem[]> {
   try {
       const res = await fetch(
       `${apiConfig.baseUrl}${apiConfig.endpoints.categories.menu}`,
       { 
-        next: { revalidate: 300 },
-        cache: "force-cache"
+        next: { revalidate: 3600 }
       }
     );
     

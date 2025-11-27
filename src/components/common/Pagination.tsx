@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
@@ -6,9 +8,28 @@ interface PaginationProps {
   totalPages: number;
   buildPageLink?: (page: number) => string;
   onPageChange?: (page: number) => void;
+  baseUrl?: string;
+  queryParams?: Record<string, string>;
 }
 
-const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange }: PaginationProps) => {
+const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange, baseUrl, queryParams }: PaginationProps) => {
+  // Build page link from baseUrl and queryParams if provided
+  const createPageLink = (page: number): string => {
+    if (buildPageLink) {
+      return buildPageLink(page);
+    }
+    if (baseUrl) {
+      const params = new URLSearchParams();
+      if (queryParams) {
+        Object.entries(queryParams).forEach(([key, value]) => {
+          if (value) params.set(key, value);
+        });
+      }
+      params.set('page', page.toString());
+      return `${baseUrl}?${params.toString()}`;
+    }
+    return '#';
+  };
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pageNumbers = []
@@ -74,7 +95,7 @@ const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange }: Pag
       <PaginationButton
         disabled={clientPage <= 1}
         onClick={() => handlePageClick(clientPage - 1)}
-        href={buildPageLink ? (clientPage > 1 ? buildPageLink(clientPage - 1) : undefined) : undefined}
+        href={clientPage > 1 ? createPageLink(clientPage - 1) : undefined}
         className="p-2.5 sm:p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-all duration-300 flex items-center justify-center"
         aria-label="Əvvəlki səhifə"
       >
@@ -85,7 +106,7 @@ const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange }: Pag
       {pageNumbers[0] > 1 && (
         <PaginationButton
           onClick={() => handlePageClick(1)}
-          href={buildPageLink ? buildPageLink(1) : undefined}
+          href={createPageLink(1)}
           className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm font-medium transition-all duration-300"
           aria-label="Birinci səhifə"
         >
@@ -106,7 +127,7 @@ const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange }: Pag
           ) : (
             <PaginationButton
               onClick={() => handlePageClick(page)}
-              href={buildPageLink ? buildPageLink(page) : undefined}
+              href={createPageLink(page as number)}
               className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                 clientPage === page
                   ? "bg-primary-500 text-white shadow-md shadow-primary-500/20 scale-105 hover:bg-primary-600"
@@ -130,7 +151,7 @@ const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange }: Pag
       {pageNumbers[pageNumbers.length - 1] < totalPages && (
         <PaginationButton
           onClick={() => handlePageClick(totalPages)}
-          href={buildPageLink ? buildPageLink(totalPages) : undefined}
+          href={createPageLink(totalPages)}
           className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm font-medium transition-all duration-300"
           aria-label="Sonuncu səhifə"
         >
@@ -142,7 +163,7 @@ const Pagination = ({ clientPage, totalPages, buildPageLink, onPageChange }: Pag
       <PaginationButton
         disabled={clientPage >= totalPages}
         onClick={() => handlePageClick(clientPage + 1)}
-        href={buildPageLink ? (clientPage < totalPages ? buildPageLink(clientPage + 1) : undefined) : undefined}
+        href={clientPage < totalPages ? createPageLink(clientPage + 1) : undefined}
         className="p-2.5 sm:p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-all duration-300 flex items-center justify-center"
         aria-label="Növbəti səhifə"
       >

@@ -64,8 +64,7 @@ interface Question {
 async function getQuestion(id: string): Promise<Question | null> {
   try {
     const res = await fetch(`${apiConfig.baseUrl}/questions/${id}`, {
-      next: { revalidate: 3600 },
-      cache: "force-cache",
+      next: { revalidate: 3600 }
     });
 
     if (!res.ok) {
@@ -98,8 +97,7 @@ async function getQuestion(id: string): Promise<Question | null> {
 async function getRelatedQuestions(id: string) {
   try {
     const res = await fetch(`${apiConfig.baseUrl}/questions/${id}/related`, {
-      next: { revalidate: 3600 },
-      cache: "force-cache",
+      next: { revalidate: 3600 }
     });
 
     if (!res.ok) return [];

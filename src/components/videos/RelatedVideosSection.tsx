@@ -1,12 +1,9 @@
-"use client";
-
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock } from "lucide-react";
-import { getThumbnailPair } from "@/util/Thumbnail.js";
+import { getThumbnailPair, ThumbnailManager } from "@/util/Thumbnail.js";
 import { BASE_URL } from "@/util/Const.js";
+import RelatedVideosTabs from "./RelatedVideosTabs";
 
 interface Video {
   videoId: string;
@@ -28,104 +25,70 @@ interface RelatedVideosSectionProps {
 }
 
 async function fetchVideos(currentVideoId?: string): Promise<Video[]> {
-  const res = await fetch(`${BASE_URL}/videos?page=0&size=8`);
-  
+  const res = await fetch(`${BASE_URL}/videos?page=0&size=8`, {
+    next: { revalidate: 300 },
+  });
+
   if (!res.ok) {
-    throw new Error("Failed to fetch videos");
+    return [];
   }
 
   const vData = await res.json();
   let videosList = Array.isArray(vData)
     ? vData
     : vData.content || vData.data || [];
-  
+
   // Filter out current video
   if (currentVideoId) {
     videosList = videosList.filter(
       (v: Video) => v.videoId !== currentVideoId
     );
   }
-  
+
   return videosList.slice(0, 8);
 }
 
 async function fetchPlaylists(): Promise<Playlist[]> {
-  const res = await fetch(`${BASE_URL}/playlists`);
-  
+  const res = await fetch(`${BASE_URL}/playlists`, {
+    next: { revalidate: 300 },
+  });
+
   if (!res.ok) {
-    throw new Error("Failed to fetch playlists");
+    return [];
   }
 
   const pData = await res.json();
   const playlistsList = Array.isArray(pData)
     ? pData
     : pData.content || pData.data || [];
-  
+
   return playlistsList.slice(0, 8);
 }
 
-export default function RelatedVideosSection({
+export default async function RelatedVideosSection({
   currentVideoId,
 }: RelatedVideosSectionProps) {
-  const [activeTab, setActiveTab] = useState<"videos" | "playlists">("videos");
+  const [videos, playlists] = await Promise.all([
+    fetchVideos(currentVideoId),
+    fetchPlaylists(),
+  ]);
 
-  const { data: videos = [], isLoading: videosLoading } = useQuery({
-    queryKey: ["related-videos", currentVideoId],
-    queryFn: () => fetchVideos(currentVideoId),
-  });
+  // Pre-fetch blur data URLs for all images
+  const videosWithBlur = await Promise.all(
+    videos.map(async (video) => {
+      const { high, low } = getThumbnailPair(video.thumbnail);
+      const blur = await ThumbnailManager.fetchBlurDataURL(low);
+      return { ...video, high, blur };
+    })
+  );
 
-  const { data: playlists = [], isLoading: playlistsLoading } = useQuery({
-    queryKey: ["related-playlists"],
-    queryFn: fetchPlaylists,
-  });
-
-  const loading = videosLoading || playlistsLoading;
-
-  if (loading) {
-    return (
-      <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-gray-50">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="mb-12">
-            <div className="h-10 w-64 bg-gray-200 rounded animate-pulse mb-6"></div>
-            <div className="flex gap-4 border-b border-gray-200">
-              <div className="h-12 w-32 bg-gray-200 rounded-t animate-pulse"></div>
-              <div className="h-12 w-32 bg-gray-200 rounded-t animate-pulse"></div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <div
-                key={index}
-                className="animate-fadeInUp"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="group block bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
-                  <div className="relative aspect-video bg-gray-200">
-                    <div className="absolute top-3 left-3">
-                      <div className="h-6 w-16 bg-gray-300 rounded-full"></div>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="space-y-2 mb-3">
-                      <div className="h-5 bg-gray-200 rounded w-full"></div>
-                      <div className="h-5 bg-gray-200 rounded w-3/4"></div>
-                    </div>
-                    <div className="flex items-center text-sm space-x-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="h-4 w-4 bg-gray-200 rounded"></div>
-                        <div className="h-4 w-20 bg-gray-200 rounded"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const playlistsWithBlur = await Promise.all(
+    playlists.map(async (playlist) => {
+      const { high, low } = getThumbnailPair(playlist.thumbnail);
+      const blur = await ThumbnailManager.fetchBlurDataURL(low);
+      return { ...playlist, high, blur };
+    })
+  );
 
   return (
     <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-gray-50">
@@ -135,35 +98,17 @@ export default function RelatedVideosSection({
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             Digər Məzmunlar
           </h2>
-          
-          <div className="flex gap-4 border-b border-gray-200">
-            <button
-              onClick={() => setActiveTab("videos")}
-              className={`px-6 py-3 font-semibold transition-all duration-300 border-b-2 ${
-                activeTab === "videos"
-                  ? "border-red-500 text-red-600"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              Videolar ({videos.length})
-            </button>
-            <button
-              onClick={() => setActiveTab("playlists")}
-              className={`px-6 py-3 font-semibold transition-all duration-300 border-b-2 ${
-                activeTab === "playlists"
-                  ? "border-red-500 text-red-600"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              Playlistlər ({playlists.length})
-            </button>
-          </div>
+
+          <RelatedVideosTabs
+            videosCount={videos.length}
+            playlistsCount={playlists.length}
+          />
         </div>
 
         {/* Videos Grid */}
-        {activeTab === "videos" && (
+        <div data-tab="videos" className="tab-content">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {videos.map((video, index) => (
+            {videosWithBlur.map((video, index) => (
               <div
                 key={`${video.videoId}-${index}`}
                 className="animate-fadeInUp"
@@ -173,40 +118,17 @@ export default function RelatedVideosSection({
                   href={`/videos/${video.videoId}`}
                   className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
                 >
-                  <div className="relative aspect-video overflow-hidden">
-                    {(() => {
-                      const { high, low } = getThumbnailPair(video.thumbnail);
-                      return (
-                        <>
-                          {/* Düşük kaliteli blur - hızlı yüklenir */}
-                          <Image
-                            src={low || "/placeholder.svg"}
-                            alt=""
-                            fill
-                            priority
-                            className="object-cover blur-lg scale-105 transition-opacity duration-700 data-[hidden=true]:opacity-0"
-                            aria-hidden="true"
-                            data-low-quality="true"
-                          />
-                          {/* Yüksek kaliteli - yavaşça açılır */}
-                          <Image
-                            src={high || "/placeholder.svg"}
-                            alt={video.title}
-                            fill
-                            className="object-cover transition-opacity duration-700 group-hover:scale-110 opacity-0 data-[loaded=true]:opacity-100"
-                            loading="lazy"
-                            onLoadingComplete={(img) => {
-                              img.setAttribute("data-loaded", "true");
-                              // Yüksək keyfiyyətli şəkil yükləndikdə blur-lu şəkili gizlət
-                              const lowQualityImg = img.parentElement?.querySelector('[data-low-quality="true"]');
-                              if (lowQualityImg) {
-                                lowQualityImg.setAttribute("data-hidden", "true");
-                              }
-                            }}
-                          />
-                        </>
-                      );
-                    })()}
+                  <div className="relative aspect-video overflow-hidden bg-gray-100">
+                    <Image
+                      src={video.high || "/placeholder.svg"}
+                      alt={video.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      className="object-cover transition-all duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL={video.blur}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                     <div className="absolute top-3 left-3">
@@ -256,12 +178,12 @@ export default function RelatedVideosSection({
               </div>
             ))}
           </div>
-        )}
+        </div>
 
         {/* Playlists Grid */}
-        {activeTab === "playlists" && (
+        <div data-tab="playlists" className="tab-content hidden">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {playlists.map((playlist, index) => (
+            {playlistsWithBlur.map((playlist, index) => (
               <div
                 key={`${playlist.playlistId}-${index}`}
                 className="animate-fadeInUp"
@@ -271,40 +193,17 @@ export default function RelatedVideosSection({
                   href={`/videos/playlist/${playlist.playlistId}`}
                   className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-red-200"
                 >
-                  <div className="relative aspect-video overflow-hidden">
-                    {(() => {
-                      const { high, low } = getThumbnailPair(playlist.thumbnail);
-                      return (
-                        <>
-                          {/* Düşük kaliteli blur - hızlı yüklenir */}
-                          <Image
-                            src={low || "/placeholder.svg"}
-                            alt=""
-                            fill
-                            priority
-                            className="object-cover blur-lg scale-105 transition-opacity duration-700 data-[hidden=true]:opacity-0"
-                            aria-hidden="true"
-                            data-low-quality="true"
-                          />
-                          {/* Yüksek kaliteli - yavaşça açılır */}
-                          <Image
-                            src={high || "/placeholder.svg"}
-                            alt={playlist.title}
-                            fill
-                            className="object-cover transition-opacity duration-700 group-hover:scale-110 opacity-0 data-[loaded=true]:opacity-100"
-                            loading="lazy"
-                            onLoadingComplete={(img) => {
-                              img.setAttribute("data-loaded", "true");
-                              // Yüksək keyfiyyətli şəkil yükləndikdə blur-lu şəkili gizlət
-                              const lowQualityImg = img.parentElement?.querySelector('[data-low-quality="true"]');
-                              if (lowQualityImg) {
-                                lowQualityImg.setAttribute("data-hidden", "true");
-                              }
-                            }}
-                          />
-                        </>
-                      );
-                    })()}
+                  <div className="relative aspect-video overflow-hidden bg-gray-100">
+                    <Image
+                      src={playlist.high || "/placeholder.svg"}
+                      alt={playlist.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      className="object-cover transition-all duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL={playlist.blur}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                     <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-lg font-medium">
@@ -359,29 +258,31 @@ export default function RelatedVideosSection({
               </div>
             ))}
           </div>
-        )}
+        </div>
 
-        {/* View All Link */}
+        {/* View All Link - Client Component */}
         <div className="mt-12 text-center">
-          <Link
-            href={`/videos?content=${activeTab}`}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            {activeTab === "videos" ? "Bütün Videolar" : "Bütün Playlistlər"}
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div id="view-all-link">
+            <Link
+              href="/videos?content=videos"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </Link>
+              Bütün Videolar
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

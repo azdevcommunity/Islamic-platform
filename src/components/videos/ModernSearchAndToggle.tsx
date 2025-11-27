@@ -1,21 +1,35 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { FaList, FaVideo, FaPlay } from "react-icons/fa";
 import ModernSearchComponent from "./ModernSearchComponent";
 
 interface ModernSearchAndToggleProps {
   content: string;
   search: string;
-  onContentChange: (content: string) => void;
-  onSearchChange: (search: string) => void;
 }
 
 const ModernSearchAndToggle = ({
   content,
   search,
-  onContentChange,
-  onSearchChange,
 }: ModernSearchAndToggleProps) => {
+  const router = useRouter();
+
+  const handleContentChange = (newContent: string) => {
+    const params = new URLSearchParams();
+    params.set("content", newContent);
+    if (search) params.set("search", search);
+    params.set("page", "1");
+    router.push(`/videos?${params.toString()}`, { scroll: false });
+  };
+
+  const handleSearchChange = (newSearch: string) => {
+    const params = new URLSearchParams();
+    params.set("content", content);
+    if (newSearch) params.set("search", newSearch);
+    params.set("page", "1");
+    router.push(`/videos?${params.toString()}`, { scroll: false });
+  };
   const toggleButtons = [
     { label: "Playlistlər", value: "playlists", icon: FaList, color: "red" },
     { label: "Videolar", value: "videos", icon: FaVideo, color: "red" },
@@ -50,7 +64,7 @@ const ModernSearchAndToggle = ({
               return (
                 <button
                   key={btn.value}
-                  onClick={() => onContentChange(btn.value)}
+                  onClick={() => handleContentChange(btn.value)}
                   className={`
                     group relative inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                     ${
@@ -84,7 +98,7 @@ const ModernSearchAndToggle = ({
           </label>
           <ModernSearchComponent
             initialSearchValue={search}
-            onSearchChange={onSearchChange}
+            onSearchChange={handleSearchChange}
           />
         </div>
       </div>

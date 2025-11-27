@@ -23,8 +23,7 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
     if (isValid(videoId)) {
         try {
             const findPlaylistResponse = await fetch(`${BASE_URL}/playlists/of-video/${videoId}`, {
-                next: { revalidate: 3600, tags: ['playlists'] },
-                cache: 'force-cache',
+                next: { revalidate: 3600, tags: ['playlists'] }
             })
             if (findPlaylistResponse.ok) {
                 const findPlaylist = await findPlaylistResponse.json()
@@ -61,12 +60,10 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
     try {
         const [playlistRes, videosRes] = await Promise.all([
             fetch(`${BASE_URL}/playlists/${playlistId}`, {
-                next: { revalidate: 3600, tags: ['playlists'] },
-                cache: 'force-cache'
+                next: { revalidate: 3600, tags: ['playlists'] }
             }),
             fetch(`${BASE_URL}/videos?playlistId=${playlistId}`, {
-                next: { revalidate: 3600, tags: ['videos'] },
-                cache: 'force-cache'
+                next: { revalidate: 3600, tags: ['videos'] }
             }),
         ])
 
@@ -115,8 +112,7 @@ const VideoPlayer = async ({ playlistId, search, videoId, content, page }) => {
         if (isValid(videoId) && isValid(playlistId)) {
             try {
                 const selectedVideoResponse = await fetch(`${BASE_URL}/videos/${videoId}`, {
-                    next: { revalidate: 3600, tags: ['videos'] },
-                    cache: 'force-cache',
+                    next: { revalidate: 3600, tags: ['videos'] }
                 })
 
                 if (selectedVideoResponse.ok) {
