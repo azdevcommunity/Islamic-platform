@@ -35,15 +35,17 @@ async function getMenuData(): Promise<MenuItem[]> {
   }
 }
 
-function addHrefToMenuItems(menuItems: any[]): MenuItem[] {
-  return menuItems.map((item) => ({
-    ...item,
-    href: `/search?categoryId=${item.id}`,
-    // API returns 'children', but we need 'subcategories'
-    subcategories: item.children && item.children.length > 0
-      ? addHrefToMenuItems(item.children)
-      : [],
-  }));
+function addHrefToMenuItems(menuItems: any[], isArticleCategory = false): MenuItem[] {
+  return menuItems
+    .filter((item) => item.name !== "İslam elmləri") // Filter out "İslam elmləri"
+    .map((item) => ({
+      ...item,
+      href: isArticleCategory ? `/articles?categoryId=${item.id}` : `/search?categoryId=${item.id}`,
+      // API returns 'children', but we need 'subcategories'
+      subcategories: item.children && item.children.length > 0
+        ? addHrefToMenuItems(item.children, isArticleCategory)
+        : [],
+    }));
 }
 
 export default async function WebLayout({
@@ -52,14 +54,30 @@ export default async function WebLayout({
   children: React.ReactNode;
 }) {
   const menusData = await getMenuData();
+  
+  // Find "İslam elmləri" and extract its children for articles
+  const islamElmleriMenu = menusData.find((item: any) => item.name === "İslam elmləri");
+  const islamElmleriChildren = islamElmleriMenu?.children || [];
+  
+  // Filter out "İslam elmləri" from navbar
   const dynamicMenus = addHrefToMenuItems(menusData);
 
   // Combine static and dynamic menus, prioritizing items with submenus
-  const staticMenus: MenuItem[] = navItems.map(item => ({
-    name: item.name,
-    href: item.href,
-    subcategories: [],
-  }));
+  const staticMenus: MenuItem[] = navItems.map(item => {
+    // Add İslam elmləri children to Məqalələr menu
+    if (item.name === "Məqalələr" && islamElmleriChildren.length > 0) {
+      return {
+        name: item.name,
+        href: item.href,
+        subcategories: addHrefToMenuItems(islamElmleriChildren, true), // true = use /articles route
+      };
+    }
+    return {
+      name: item.name,
+      href: item.href,
+      subcategories: [],
+    };
+  });
   
   const combinedMenus = [...staticMenus, ...dynamicMenus];
   const menus: MenuItem[] = [

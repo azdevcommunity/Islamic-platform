@@ -146,7 +146,7 @@ export default async function HomePage() {
         </section>
 
         {/* Testimonials Section - Paralaks effekt */}
-        <section
+        {/* <section
           id="feedbacks"
           className="py-20 md:py-24 relative"
           style={{
@@ -158,7 +158,7 @@ export default async function HomePage() {
           }}
         >
            <Feedbacks />
-        </section>
+        </section> */}
       </main>
     </>
   );

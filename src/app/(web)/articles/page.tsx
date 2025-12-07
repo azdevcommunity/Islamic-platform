@@ -79,6 +79,7 @@ interface ArticlesPageProps {
   searchParams: Promise<{
     page?: string;
     category?: string;
+    categoryId?: string;
   }>;
 }
 
@@ -95,7 +96,7 @@ export default async function ArticlesPage({
       />
       <ArticlesPageClient
         initialPage={params.page}
-        initialCategory={params.category}
+        initialCategory={params.category || params.categoryId}
       />
     </>
   );

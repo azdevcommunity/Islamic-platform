@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FilterProvider } from "@/components/common/Filter/FilterProvider";
 import HttpClient from "@/util/HttpClient";
 import useDebounce from "@/hooks/useDebounce";
@@ -31,7 +32,11 @@ export default function ArticlesPageClient({
     totalReadCount: 0,
   });
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const initialCategoryLoadedRef = useRef(false);
   const PAGE_SIZE = 12;
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Get filter state from Zustand store
   const { selectedCategories, selectedTags, searchQuery, setSelectedCategories } =
@@ -117,19 +122,36 @@ export default function ArticlesPageClient({
     fetchStatistics();
   }, [fetchStatistics]);
 
-  // Handle initial category parameter from URL
+  // Handle initial category parameter from URL (only once on mount)
   useEffect(() => {
-    if (initialCategory) {
+    if (initialCategory && !initialCategoryLoadedRef.current) {
       const categoryId = parseInt(initialCategory);
       if (categoryId && !isNaN(categoryId)) {
         fetchCategoryById(categoryId).then((category) => {
           if (category) {
             setSelectedCategories([category]);
+            initialCategoryLoadedRef.current = true;
           }
         });
       }
     }
   }, [initialCategory, fetchCategoryById, setSelectedCategories]);
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    
+    if (selectedCategories.length > 0) {
+      params.set("categoryId", selectedCategories[0].id.toString());
+    }
+    
+    if (page > 0) {
+      params.set("page", page.toString());
+    }
+
+    const newUrl = params.toString() ? `/articles?${params.toString()}` : "/articles";
+    router.replace(newUrl, { scroll: false });
+  }, [selectedCategories, page, router]);
 
   // Reset page when filters change
   useEffect(() => {
